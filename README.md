@@ -36,8 +36,8 @@
 │   ├── router
 │   │   └── router.js  // 配置api接口文件
 │   └── store
-│         ├── store.js
-│         └── types.js  // vuex types
+│       ├── store.js
+│       └── types.js  // vuex types
 └── webpack.config.js
 ```
 
