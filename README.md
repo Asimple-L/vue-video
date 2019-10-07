@@ -13,6 +13,40 @@
 - [ ] 页面整改美化(持续)
 - [ ] 文件上传插件更换
 
+## 项目结构
+
+```
+.
+├── README.md
+├── dist  // 打包构建后的文件夹
+│   ├── build.js
+│   └── build.js.map
+├── index.html
+├── package.json
+├── src
+│   ├── App.vue
+│   ├── assets
+│   │   ├── css.css
+│   │   ├── icon.css
+│   │   └── logo.png
+│   ├── api
+│   │   └── api.js  // 配置api接口文件
+│   ├── index.vue
+│   ├── main.js
+│   ├── router
+│   │   └── router.js  // 配置api接口文件
+│   └── store
+│         ├── store.js
+│         └── types.js  // vuex types
+└── webpack.config.js
+```
+
+### 技术栈
+* Vue 2.0
+* vue-router
+* vuex
+* axios
+
 ## 运行及构建
 ``` bash
 # install dependencies
