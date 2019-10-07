@@ -1,0 +1,18 @@
+@charset "UTF-8";
+@import "../css/base.css";
+@import "../css/index/index.css";
+
+.el-scrollbar__wrap {
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.float-left {
+  float: left;
+}
+.float-right {
+  float: right;
+}
+.rounded {
+  position: static;
+  height: 160px;
+}
