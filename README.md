@@ -26,9 +26,10 @@
 ├── src
 │   ├── App.vue
 │   ├── assets
-│   │   ├── css.css
-│   │   ├── icon.css
-│   │   └── logo.png
+│   │   ├── css // css文件
+│   │   ├── img // 图片文件
+│   │   ├── js // js文件
+│   │   └── plugins // 插件
 │   ├── api
 │   │   └── api.js  // 配置api接口文件
 │   ├── index.vue
