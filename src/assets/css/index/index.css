@@ -24,7 +24,9 @@ a:active {text-decoration:none ; }
     width: 30%;
     height: auto;
 }
-
+.case {
+  height: 450px;
+}
 .case  h5{
     height: 30px;
     overflow: hidden;

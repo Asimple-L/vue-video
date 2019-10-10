@@ -11,6 +11,13 @@
       </el-col>
     </el-row>
     <el-row>
+      <el-carousel :interval="4000" type="card" height="200px">
+        <el-carousel-item v-for="item in 6" :key="item">
+          <h3 class="medium">广告位招租</h3>
+        </el-carousel-item>
+      </el-carousel>
+    </el-row>
+    <el-row>
       <el-col :span="16">
         <div class="mox" v-for="list in filmTuijian">
           <h5>最新{{ list[0].cataLogName }}推荐<span style="margin-right:10px;cursor:pointer;float: right;" onclick="location.href='#'">更多</span></h5>
@@ -35,7 +42,7 @@
       <el-col :span="8">
         <div class="case" v-for="list in filmPaiHang">
           <ul>
-            <h5>最新{{ list[0].cataLogName }}排行榜</h5>
+            <h5>{{ list[0].cataLogName }}评分排行榜</h5>
             <li v-for="(li, index) in list">
               <el-popover
                 placement="right"
@@ -47,7 +54,7 @@
                   <a :title="li.name" href="xl/detail?film_id=${li.id}" target="_blank">
                     {{ li.name.substr(0, 16)}}
                     <span style="float: right;margin-right: 10px;">
-                        {{ li.updateTime.substr(5, 10)}}
+                        {{ li.updateTime.substr(5, 11)}}
                       </span>
                   </a>
                 </div>
@@ -129,5 +136,21 @@
 <style scoped>
 .indexRightLiDiv {
   padding: 7px 0;
+}
+.el-carousel__item h3 {
+  color: #475669;
+  font-size: 14px;
+  opacity: 0.75;
+  line-height: 200px;
+  margin: 0;
+  text-align: center;
+}
+
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n+1) {
+  background-color: #d3dce6;
 }
 </style>

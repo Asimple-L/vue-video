@@ -20,32 +20,63 @@
             <a @click="collect" href="#">收藏网站</a>
           </el-menu-item>
           <!--  用户信息在这里  -->
-          <el-menu-item v-if="false">
-            用户登录后显示的信息
-          </el-menu-item>
-          <el-menu-item v-else>
-            <!-- 用户未登录显示的信息  -->
-            <a type="text" @click="$store.state.dialogLoginModelVisible = true" href="javascript:void(0)">登录/注册</a>
-          </el-menu-item>
-          <el-dialog title="登录" :visible.sync="$store.state.dialogLoginModelVisible" center>
-            <el-form :model="form">
-              <el-form-item label="用户名/邮箱" :label-width="formLabelWidth">
-                <el-input v-model="form.name" autocomplete="off" placeholder="请输入用户名/邮箱"></el-input>
-              </el-form-item>
-              <el-form-item label="密码" :label-width="formLabelWidth">
-                <el-input v-model="form.password" auto-complete="off" placeholder="请输入密码" show-password></el-input>
-              </el-form-item>
-              <el-form-item>
-                <p style="text-align:center;">
-                  没有账号，去<a style="color:blue;" href="#">注册</a>
-                </p>
-              </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="$store.state.dialogLoginModelVisible = false">取 消</el-button>
-              <el-button type="primary" @click="$store.state.dialogLoginModelVisible = false">登 录</el-button>
-            </div>
-          </el-dialog>
+          <template v-if="user!==null">
+            <el-menu-item>
+              <el-tooltip class="item" effect="dark" :content="user.isVip!==0?$moment(user.expireDate).format('YYYY-MM-DD HH:mm:ss')+'到期':'你的车开到'+$moment(user.expireDate).format('YYYY-MM-DD HH:mm:ss')+'没油了,请加油后继续上路！'" placement="bottom">
+                <a href="#">{{ user.userName }}</a>
+              </el-tooltip>
+            </el-menu-item>
+            <el-menu-item>
+              <a href="https://w.url.cn/s/AGHnGAE"  target="_blank">加点油</a>
+            </el-menu-item>
+            <el-menu-item>
+              <a class="nav-link" @click="showUserVipCode=true"  href="javascript:void(0)">
+                使用加油卡
+              </a>
+            </el-menu-item>
+            <el-dialog title="使用加油卡" :visible.sync="showUserVipCode" center>
+              <el-form>
+                <el-form-item label="加油卡号" :label-width="formLabelWidth">
+                  <el-input v-model="vipCode" autocomplete="off" placeholder="请输入你的加油卡号"></el-input>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="cancelShowUserVipCode">取 消</el-button>
+                <el-button type="primary" @click="useVipCode">确认使用</el-button>
+              </div>
+            </el-dialog>
+            <el-menu-item>
+              <a href="#">个人中心</a>
+              <!--<a href="/video/profile/profilePage">个人中心</a>-->
+            </el-menu-item>
+            <el-menu-item>
+              <a @click="userLoginOut"  href="javascript:void(0)">退出</a>
+            </el-menu-item>
+          </template >
+          <template v-else>
+            <el-menu-item>
+              <a type="text" @click="$store.state.dialogLoginModelVisible = true" href="javascript:void(0)">登录/注册</a>
+            </el-menu-item>
+            <el-dialog title="登录" :visible.sync="$store.state.dialogLoginModelVisible" center>
+              <el-form :model="form" :rules="loginRules">
+                <el-form-item label="用户名/邮箱" :label-width="formLabelWidth">
+                  <el-input v-model="form.account" autocomplete="off" placeholder="请输入用户名/邮箱"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" :label-width="formLabelWidth">
+                  <el-input v-model="form.password" auto-complete="off" placeholder="请输入密码" show-password></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <p style="text-align:center;">
+                    没有账号，去<a style="color:blue;" href="#">注册</a>
+                  </p>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="$store.state.dialogLoginModelVisible = false">取 消</el-button>
+                <el-button type="primary" @click="userLogin">登 录</el-button>
+              </div>
+            </el-dialog>
+          </template>
           <el-menu-item disabled>|</el-menu-item>
           <el-menu-item index="9">
             <a href="/">首页</a>
@@ -61,16 +92,12 @@
           <router-view></router-view>
         </el-main>
       </el-scrollbar>
-      <el-footer>
-        <video-footer/>
-      </el-footer>
     </el-container>
   </div>
 </template>
 
 <script>
-  import {getIndexData} from "../api/api";
-  import videoFooter from '@/components/footer.vue';
+  import { getIndexHeaderInfo, login, dealResult, vipCodeVerification,logOut } from "../api/api";
 export default {
   data() {
     return {
@@ -78,10 +105,29 @@ export default {
       clientHeight:'',
       cataLogList: [],
       form: {
-        name: '',
+        account: '',
         password: '',
       },
       formLabelWidth: '120px',
+      loginRules: {
+        account: [
+          {
+            required: true,
+            message: "请输入用户名",
+            trigger: "blur"
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: '请输入密码',
+            trigger: 'blur'
+          }
+        ]
+      },
+      user: null,
+      vipCode: '',
+      showUserVipCode: false,
     }
   },
   watch: {
@@ -100,10 +146,13 @@ export default {
   },
   methods: {
     init() {
-      getIndexData().then(res => {
-        console.log('header info ...');
-        console.log(res);
-        this.cataLogList = res.data.data.cataLogList;
+      getIndexHeaderInfo().then(res => {
+        const data = dealResult(res.data);
+        if( null!==data ) {
+          this.cataLogList = data.cataLogList;
+          this.$store.state.user = data.user;
+          this.user = this.$store.state.user;
+        }
       }).catch(function (err) {
         console.log(err);
       })
@@ -120,9 +169,47 @@ export default {
     changeFixed(clientHeight){
       this.$refs.homePage.$el.style.height = clientHeight-20+'px';
     },
+    userLogin() {
+      login(this.form).then( res => {
+        const data = dealResult(res.data);
+        if( null!==data ) {
+          this.$store.state.user = data.user;
+          this.user = this.$store.state.user;
+          this.$store.state.dialogLoginModelVisible = false;
+        }
+      }).catch( function (err) {
+        console.log(err);
+      })
+    },
+    useVipCode() {
+      vipCodeVerification(this.vipCode).then( res => {
+        const data = dealResult(res.data);
+        if( null !== data ) {
+          this.$message.success({
+            message: '加油成功,继续前行!',
+            duration: 2000,
+          });
+          this.showUserVipCode = false;
+        }
+      }).catch(function (err) {
+        console.log(err);
+      })
+    },
+    cancelShowUserVipCode() {
+      this.showUserVipCode = false;
+      this.vipCode = '';
+    },
+    userLoginOut() {
+      logOut().then( res => {
+        this.user = null;
+        this.$store.state.user = null;
+        this.$message('登出成功!');
+      }).catch(function (err) {
+        console.log(err);
+      })
+    }
   },
   components: {
-    videoFooter
   }
 }
 </script>

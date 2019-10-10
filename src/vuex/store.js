@@ -9,7 +9,8 @@ Vue.use(Vuex)
 const state = {
   dialogLoginModelVisible: false,
   activeIndex: '9',
-}
+  user: {id: '', userName: '',isVip: '', isManager: '', expireDate: ''}
+};
 
 export default new Vuex.Store({
   state
