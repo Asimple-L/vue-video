@@ -7,15 +7,8 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
-      path: '/',
-      name: 'index',
-      component: Index
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: Register
-    }
+    { path: '/', name: 'index', component: Index },
+    { path: '/register', name: 'register', component: Register },
+    { path: '/index', name: 'index', component: Index}
   ]
 })

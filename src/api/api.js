@@ -70,3 +70,8 @@ export const vipCodeVerification = params => {
   console.log(params);
   return axios.post(url, Qs.stringify({'vipCode':params}));
 };
+
+export const signUp = params => {
+  const url = baseUrl + '/register';
+  return axios.post(url, Qs.stringify(params));
+};

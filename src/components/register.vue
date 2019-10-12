@@ -1,40 +1,169 @@
 <template>
-  <div class="container">
-    <h2 style="margin: 30px auto;">注册</h2>
-    <form id="register_form" action="" method="post" autocomplete="off">
-      <div class="form-group">
-        <label for="email">邮箱：</label>
-        <input type="email" name="userEmail" id="email" value="" placeholder="邮箱" class="form-control reg_email">
-        <span class="tip email_hint"></span>
-      </div>
-      <div class="form-group">
-        <label for="reg_user">用户名：</label>
-        <input type="text" name="userName" class="form-control reg_user" id="reg_user" placeholder="4-12位用户名（数字或字母）">
-        <span class="tip user_hint"></span>
-      </div>
-      <div class="form-group">
-        <label for="pwd">密码：</label>
-        <input type="password" name="userPasswd" class="form-control reg_password" id="pwd"
-               placeholder="6-16位密码（数字或字母）">
-        <span class="tip password_hint"></span>
-      </div>
-      <div class="form-group">
-        <label for="reg_confirm">确认密码：</label>
-        <input type="password" name="" class="form-control reg_confirm" id="reg_confirm" placeholder="确认密码">
-        <span class="tip confirm_hint"></span>
-      </div>
-      <button type="button" class="btn btn-primary red_button">注册</button>
-      <a href="javascript:;" class="btn" onclick="history.back();">返回</a>
-    </form>
-  </div>
-</template>
+  <el-main>
+    <el-form
+      :model="ReginForm"
+      ref="ReginForm"
+      :rules="rule"
+      class="regform"
+      label-width="0">
+        <h3 style="text-align: center;margin-bottom: 15px;">用户注册</h3>
 
+      <el-form-item prop="userEmail">
+        <el-input type="email" v-model="ReginForm.userEmail" placeholder="电子邮件">
+        </el-input>
+      </el-form-item>
+
+      <el-form-item prop="userName">
+        <el-input type="text" v-model="ReginForm.userName" placeholder="用户名"></el-input>
+      </el-form-item>
+
+      <el-form-item prop="userPasswd">
+        <el-input type="password" v-model="ReginForm.userPasswd" placeholder="密码">
+        </el-input>
+      </el-form-item>
+
+      <el-form-item prop="confirmpassword">
+        <el-input type="password" v-model="ReginForm.confirmpassword" placeholder="确认密码">
+        </el-input>
+      </el-form-item>
+
+      <el-form-item >
+        <el-button
+          type="success"
+          class="submitBtn"
+          round
+          @click.native.prevent="submit"
+          :loading="logining">
+          注册
+        </el-button>
+        <el-button
+          type="primary"
+          class="resetBtn"
+          round
+          @click.native.prevent="reset">
+          重置
+        </el-button>
+        <hr>
+        <p style="text-align: center;">
+          已经有账号，马上去<span class="to" @click="toLogin">登录</span>
+        </p>
+      </el-form-item>
+
+    </el-form>
+  </el-main>
+</template>
 <script>
+  import { signUp, dealResult } from '../api/api';
   export default {
-    name: 'register'
+    name: 'register',
+    data () {
+      let confirmpasswordCheck = (rule, value, callback) => {
+        if (value === '') {
+          return callback(new Error('密码是必须的'))
+        } else if (value !== this.ReginForm.userPasswd) {
+          return callback(new Error('两次输入的密码不一致'))
+        } else {
+          return callback()
+        }
+      };
+      return {
+        ReginForm: {
+          userName: '',
+          userPasswd: '',
+          confirmpassword: '',
+          userEmail: ''
+        },
+        logining: false,
+        rule: {
+          userName: [
+            {
+              required: true,
+              max: 14,
+              min: 2,
+              message: '用户名是必须的，长度为2-14位',
+              trigger: 'blur'
+            }
+          ],
+          userPasswd: [
+            {
+              required: true,
+              message: '密码是必须的！',
+              trigger: 'blur'
+            }
+          ],
+          confirmpassword: [
+            {
+              required: true,
+              validator: confirmpasswordCheck,
+              trigger: 'blur'
+            }
+          ],
+          userEmail: [
+            {
+              required: true,
+              type: 'email',
+              message: '请输入正确的电子邮件格式(xxx@xxx.com)',
+              trigger: 'blur'
+            }
+          ],
+        }
+      }
+    },
+    mounted: function () {
+      this.$store.state.activeIndex = '6';
+    },
+    methods: {
+      submit () {
+        this.$refs.ReginForm.validate(valid => {
+          if (valid) {
+            this.logining = true;
+            signUp(this.ReginForm).then( res => {
+              const msg = res.data.message;
+              const data = dealResult(res.data);
+              if( null!==data ) {
+                this.$store.state.user = data.user;
+                this.$message.success({
+                  message: msg,
+                  duration: 2000,
+                });
+                this.$router.push('/');
+              }
+              this.logining = false;
+            }).catch(function (err) {
+              console.log(err);
+            })
+          } else {
+            this.$message.error({
+              message: '请检查输入信息后重试!',
+              duration: 2000,
+            })
+          }
+        })
+      },
+      reset () {
+        this.$refs.ReginForm.resetFields()
+      },
+      toLogin () {
+        this.$store.state.dialogLoginModelVisible=true;
+      }
+    }
   }
 </script>
 
 <style scoped>
-
+  .regform {
+    margin: 20px auto;
+    width: 310px;
+    background: #fff;
+    box-shadow: 0 0 10px #B4BCCC;
+    padding: 30px 30px 0 30px;
+    border-radius: 25px;
+  }
+  .submitBtn {
+    width: 65%;
+  }
+  .to {
+    color: #FA5555;
+    cursor: pointer;
+  }
 </style>

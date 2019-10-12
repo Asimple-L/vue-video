@@ -11,25 +11,25 @@
           text-color="#fff"
           active-text-color="#ffd04b">
           <el-menu-item index="1">
-            <a href="/">欢迎来到爱视最新影片资源</a>
+            <a href="javascript:void(0)" @click="goIndexPage">欢迎来到爱视最新影片资源</a>
           </el-menu-item>
           <el-menu-item index="2">
             <a href="/note">留言</a>
           </el-menu-item>
           <el-menu-item index="3">
-            <a @click="collect" href="#">收藏网站</a>
+            <a @click="collect" href="javascript:void(0)">收藏网站</a>
           </el-menu-item>
           <!--  用户信息在这里  -->
-          <template v-if="user!==null">
+          <template v-if="$store.state.user!==null">
             <el-menu-item>
-              <el-tooltip class="item" effect="dark" :content="user.isVip!==0?$moment(user.expireDate).format('YYYY-MM-DD HH:mm:ss')+'到期':'你的车开到'+$moment(user.expireDate).format('YYYY-MM-DD HH:mm:ss')+'没油了,请加油后继续上路！'" placement="bottom">
-                <a href="#">{{ user.userName }}</a>
+              <el-tooltip class="item" effect="dark" :content="$store.state.user.isVip!==0?$moment($store.state.user.expireDate).format('YYYY-MM-DD HH:mm:ss')+'到期':'你的车开到'+$moment($store.state.user.expireDate).format('YYYY-MM-DD HH:mm:ss')+'没油了,请加油后继续上路！'" placement="bottom">
+                <a href="#">{{ $store.state.user.userName }}</a>
               </el-tooltip>
             </el-menu-item>
             <el-menu-item>
               <a href="https://w.url.cn/s/AGHnGAE"  target="_blank">加点油</a>
             </el-menu-item>
-            <el-menu-item>
+            <el-menu-item index="4">
               <a class="nav-link" @click="showUserVipCode=true"  href="javascript:void(0)">
                 使用加油卡
               </a>
@@ -45,7 +45,7 @@
                 <el-button type="primary" @click="useVipCode">确认使用</el-button>
               </div>
             </el-dialog>
-            <el-menu-item>
+            <el-menu-item index="5">
               <a href="#">个人中心</a>
               <!--<a href="/video/profile/profilePage">个人中心</a>-->
             </el-menu-item>
@@ -54,21 +54,26 @@
             </el-menu-item>
           </template >
           <template v-else>
-            <el-menu-item>
+            <el-menu-item index="6">
               <a type="text" @click="$store.state.dialogLoginModelVisible = true" href="javascript:void(0)">登录/注册</a>
             </el-menu-item>
             <el-dialog title="登录" :visible.sync="$store.state.dialogLoginModelVisible" center>
-              <el-form :model="form" :rules="loginRules">
-                <el-form-item label="用户名/邮箱" :label-width="formLabelWidth">
+              <el-form :model="form" :rules="loginRules" ref="form">
+                <el-form-item label="用户名/邮箱" :label-width="formLabelWidth" prop="account">
                   <el-input v-model="form.account" autocomplete="off" placeholder="请输入用户名/邮箱"></el-input>
                 </el-form-item>
-                <el-form-item label="密码" :label-width="formLabelWidth">
+                <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
                   <el-input v-model="form.password" auto-complete="off" placeholder="请输入密码" show-password></el-input>
                 </el-form-item>
                 <el-form-item>
                   <p style="text-align:center;">
-                    没有账号，去<a style="color:blue;" href="#">注册</a>
+                    没有账号，去
+                    <a style="color:blue;" @click="registerPage" href="Javascript:void(0)">
+                      注册
+                    </a>
                   </p>
+                  <!--<router-link :to="{name:'register'}">注册</router-link>-->
+
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
@@ -79,7 +84,7 @@
           </template>
           <el-menu-item disabled>|</el-menu-item>
           <el-menu-item index="9">
-            <a href="/">首页</a>
+            <a href="javascript:void(0)" @click="goIndexPage">首页</a>
           </el-menu-item>
           <el-menu-item v-for="(vo, index) in cataLogList" :key="index" :index="(index+10+'')" >
             <!--<a :href="'xl/1.html?cataLog_id='+ vo.id ">{{ vo.name }}</a>-->
@@ -87,11 +92,7 @@
           </el-menu-item>
         </el-menu>
       </el-header>
-      <el-scrollbar>
-        <el-main>
-          <router-view></router-view>
-        </el-main>
-      </el-scrollbar>
+      <router-view></router-view>
     </el-container>
   </div>
 </template>
@@ -125,7 +126,6 @@ export default {
           }
         ]
       },
-      user: null,
       vipCode: '',
       showUserVipCode: false,
     }
@@ -151,16 +151,19 @@ export default {
         if( null!==data ) {
           this.cataLogList = data.cataLogList;
           this.$store.state.user = data.user;
-          this.user = this.$store.state.user;
         }
       }).catch(function (err) {
         console.log(err);
       })
     },
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
+    handleSelect(key) {
+      if( null===key || ''===key.trim() ) {
+        key = 9;
+      }
+      this.$store.state.activeIndex = ''+key;
     },
     collect() {
+      this.goIndexPage();
       this.$message({
         message: '请点击Ctrl+D收藏',
         duration: 2000,
@@ -174,8 +177,8 @@ export default {
         const data = dealResult(res.data);
         if( null!==data ) {
           this.$store.state.user = data.user;
-          this.user = this.$store.state.user;
           this.$store.state.dialogLoginModelVisible = false;
+          this.$refs.form.resetFields();
         }
       }).catch( function (err) {
         console.log(err);
@@ -201,12 +204,18 @@ export default {
     },
     userLoginOut() {
       logOut().then( res => {
-        this.user = null;
         this.$store.state.user = null;
         this.$message('登出成功!');
       }).catch(function (err) {
         console.log(err);
       })
+    },
+    registerPage() {
+      this.$router.push('register');
+      this.$store.state.dialogLoginModelVisible = false;
+    },
+    goIndexPage() {
+      this.$router.push('index');
     }
   },
   components: {
