@@ -4,7 +4,7 @@
       <el-row v-if="true">
         <el-col :span="24">
           <marquee onmouseover='this.stop()' onmouseout='this.start()'>
-            <a id="globalLoginBtn_register_input" href="registerInput">注册</a>
+            <a href="javascript:void(0)" @click="registerPage">注册</a>
             |
             <a @click="$store.state.dialogLoginModelVisible=true" href="javascript:void(0)">登录</a>
             后观看更多高清无码视频
@@ -13,7 +13,7 @@
       </el-row>
       <el-row>
         <el-carousel :interval="4000" type="card" height="200px">
-          <el-carousel-item v-for="item in 6" :key="item">
+          <el-carousel-item v-for="item in 4" :key="item">
             <h3 class="medium">广告位招租</h3>
           </el-carousel-item>
         </el-carousel>
@@ -24,13 +24,12 @@
             <h5>最新{{ list[0].cataLogName }}推荐<span style="margin-right:10px;cursor:pointer;float: right;" onclick="location.href='#'">更多</span></h5>
             <ul>
               <li class="float-left" v-for=" li in list">
-                <a href="#" :alt="li.name" :title="li.name">
+                <a @click="goFilmDetail(li.id)" :alt="li.name" :title="li.name">
                   <el-image :src="HOME+li.image" lazy class="lazy rounded img-fluids" fit="contain">
                     <div slot="error" class="image-slot">
                       <i class="el-icon-picture-outline"></i>
                     </div>
                   </el-image>
-                  <!--<img :src="HOME+li.image" class="lazy rounded img-fluids"/>-->
                 </a>
                 <div class="t_info">
                   <p style="color:#00AFE4;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{ li.name }}</p>
@@ -52,7 +51,7 @@
                   <div slot="reference" class="indexRightLiDiv">
                     <span class="ph1" v-if="index<=2">{{index+1}}</span>
                     <span class="ph" v-else>{{index+1}}</span>
-                    <a :title="li.name" href="xl/detail?film_id=${li.id}" target="_blank">
+                    <a :title="li.name" @click="goFilmDetail(li.id)" target="_blank">
                       {{ li.name.substr(0, 16)}}
                       <span style="float: right;margin-right: 10px;">
                           {{ li.updateTime.substr(5, 11)}}
@@ -72,6 +71,7 @@
 
 <script type="es6">
    import {getIndexData} from "../api/api";
+   import {goPage} from "../util/index";
 
   export default {
     name: 'index',
@@ -96,7 +96,24 @@
       });
       this.updateFilmSize();
       $(window).resize(function(){
-        this.updateFilmSize();
+        var w = $(".col-sm-8").width() / 6;
+        var isLi = false;
+        if ($(".col-sm-8").width() < 500) {
+          w = $(".col-sm-8").width() / 3;
+          isLi = true;
+        }
+        w = parseInt(w - 0.5);
+        $(".mox ul li").css("width", w + "px");
+        var h = (w * 160) / 115;
+        $(".t_img").css("height", h + "px");
+        if(isLi){
+          $(".case").css("height", "auto");
+          $(".case").css({"overflow":"hidden"});
+        }else {
+          $(".case").each(function (index,ele) {
+            $(ele).css("height", ($(".mox").eq(index).height()) + "px");
+          });
+        }
       });
     },
     methods: {
@@ -128,6 +145,12 @@
             $(ele).css("height", ($(".mox").eq(index).height()) + "px");
           });
         }
+      },
+      goFilmDetail(filmId) {
+        goPage('/detail/'+filmId);
+      },
+      registerPage() {
+        this.$router.push('register');
       },
     }
   }

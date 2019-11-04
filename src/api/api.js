@@ -32,6 +32,13 @@ axios.interceptors.response.use(function (response) {
   return Promise.reject(error);
 });
 
+export const errorDeal = err => {
+  this.$message.error({
+    message: '系统调用失败,请重试!',
+    duration: 3000,
+  });
+};
+
 export const getIndexData = params => {
   const url = baseUrl + '/index';
   return axios.post(url, params);
@@ -73,5 +80,15 @@ export const vipCodeVerification = params => {
 
 export const signUp = params => {
   const url = baseUrl + '/register';
+  return axios.post(url, Qs.stringify(params));
+};
+
+export const getFilmDetail = params => {
+  const url = baseUrl + '/xl/detail';
+  return axios.post(url, Qs.stringify(params));
+};
+
+export const saveRaty = params => {
+  const url = baseUrl + '/xl/addRaty';
   return axios.post(url, Qs.stringify(params));
 };

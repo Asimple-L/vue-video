@@ -77,7 +77,7 @@
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
-                <el-button @click="$store.state.dialogLoginModelVisible = false">取 消</el-button>
+                <el-button @click="cancelUserLogin">取 消</el-button>
                 <el-button type="primary" @click="userLogin">登 录</el-button>
               </div>
             </el-dialog>
@@ -99,6 +99,7 @@
 
 <script>
   import { getIndexHeaderInfo, login, dealResult, vipCodeVerification,logOut } from "../api/api";
+  import { goPage } from "../util/index";
 export default {
   data() {
     return {
@@ -177,8 +178,7 @@ export default {
         const data = dealResult(res.data);
         if( null!==data ) {
           this.$store.state.user = data.user;
-          this.$store.state.dialogLoginModelVisible = false;
-          this.$refs.form.resetFields();
+          this.cancelUserLogin();
         }
       }).catch( function (err) {
         console.log(err);
@@ -215,7 +215,11 @@ export default {
       this.$store.state.dialogLoginModelVisible = false;
     },
     goIndexPage() {
-      this.$router.push('index');
+      goPage('/');
+    },
+    cancelUserLogin() {
+      this.$store.state.dialogLoginModelVisible = false;
+      this.$refs.form.resetFields();
     }
   },
   components: {
