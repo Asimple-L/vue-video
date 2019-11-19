@@ -1,5 +1,8 @@
 <template>
-  <div id="app">
+  <div id="app"
+       v-loading.fullscreen.lock="$store.state.fullscreenLoading"
+       element-loading-text="数据加载中..."
+       element-loading-background="rgba(0, 0, 0, 0.8)">
     <a-header></a-header>
   </div>
 </template>

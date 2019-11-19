@@ -118,10 +118,12 @@
     },
     methods: {
       init() {
+        this.$store.state.fullscreenLoading = true;
         getIndexData().then(res => {
           this.code = res.data.code;
           this.filmTuijian = res.data.data.filmTuijian;
           this.filmPaiHang = res.data.data.filmPaiHang;
+          this.$store.state.fullscreenLoading = false;
         }).catch(function (err) {
           console.log(err);
         })

@@ -9,7 +9,8 @@ Vue.use(Vuex);
 const state = {
   dialogLoginModelVisible: false,
   activeIndex: '9',
-  user: {id: '', userName: '',isVip: '', isManager: '', expireDate: ''}
+  user: {id: '', userName: '',isVip: '', isManager: '', expireDate: ''},
+  fullscreenLoading: true,
 };
 
 export default new Vuex.Store({
