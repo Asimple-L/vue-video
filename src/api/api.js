@@ -13,14 +13,14 @@ axios.defaults.withCredentials = true;
 axios.interceptors.response.use(function (response) {
   return response
 }, function (error) {
-  var message = '';
+  let message = '';
   switch (error.response.status) {
     case 401:
-      message: '授权错误';
+      message = '授权错误';
       router.push({path: '/'});
       break;
     default :
-      message: '系统错误';
+      message = '系统错误';
       router.push({path: '/error'});
       break;
   }

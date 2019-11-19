@@ -163,23 +163,21 @@
       </el-row>
       <el-row>
         <el-col>
-          <div class="mox" v-if="checkList()">
-            <a id="down"></a>
-            <div style="background: white;width: 100%;height: auto;padding: 5px;" v-if="resListEd2k!==null && resListEd2k.length!==0">
+          <div v-if="checkListAll()">
+            <div class="download_list_div" v-if="resListEd2k!==null && resListEd2k.length!==0">
               <el-row>
-                  <el-col :span="12">
-                    <span class="title-icon">下载地址</span>
-                  </el-col>
-                  <el-col :span="12">
-                    <span class="title-con">
-                      此处支持迅雷、QQ旋风、小米路由下载，同时支持迅雷影音播放，若不能下载请点击
-                      <a href="javascript:void(0);" onclick="fk('x2')" style="color:red;">
-                        失效一键反馈
-                      </a>
-                    </span>
-                  </el-col>
-                </el-row>
-
+                <el-col :span="12">
+                  <span class="title-icon">下载地址</span>
+                </el-col>
+                <el-col :span="12">
+                  <span class="title-con">
+                    此处支持迅雷、QQ旋风、小米路由下载，同时支持迅雷影音播放，若不能下载请点击
+                    <a href="javascript:void(0);" @click="fk('x2')" style="color:red;">
+                      失效一键反馈
+                    </a>
+                  </span>
+                </el-col>
+              </el-row>
               <el-row>
                   <el-col>
                     <div class="ndownlist">
@@ -190,73 +188,78 @@
                   </el-col>
                 </el-row>
 
-            <c:if test="${resListHttp.size()!=0||resListOther.size()!=0||resListThunder.size()!=0}">
-              <div style="background: white;width: 100%;height: auto;padding: 5px;">
-                <div class="row">
-                  <div class="col-sm-6">
+              <div class="download_list_div" v-if="checkList()">
+                <el-row>
+                  <el-col :span="12">
                     <span class="title-icon">下载地址</span>
-                  </div>
-                  <div class="col-sm-6">
-                                    <span class="title-con">
-                                        此处支持本地下载、迅雷下载，若不能下载请点击
-                                        <a href="javascript:void(0);" onclick="fk('x2')" style="color:red;">失效一键反馈</a>
-                                    </span>
-                  </div>
-                </div>
+                  </el-col>
+                  <el-col :span="12">
+                    <span class="title-con">
+                      此处支持本地下载、迅雷下载，若不能下载请点击
+                      <a href="javascript:void(0);" @click="fk('x2')" style="color:red;">
+                        失效一键反馈
+                      </a>
+                  </span>
+                  </el-col>
+                </el-row>
+
+                <el-row>
+                  <el-col>
+                    <div class="ndownlist">
+                      <ul class="thunder">
+                        <li v-for="relist in resListHttp">
+                          <el-row>
+                            <el-col :span="12">
+                              <i><input type="checkbox" :value="relist.id" name="CopyAddr1"/></i>
+                              <p style="width:300px;height: auto;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                                {{relist.name}}
+                              </p>
+                            </el-col>
+                            <el-col :span="12" style="padding-right: 2%;">
+                              <a :href="relist.link" style="float: right" class="btn">下载</a>
+                            </el-col>
+                          </el-row>
+                        </li>
+
+                        <li v-for="relist in resListThunder">
+                          <el-row>
+                            <el-col :span="12">
+                              <i><input type="checkbox" :value="relist.id" name="CopyAddr1"/></i>
+                              <p style="width:300px;height: auto;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                                {{relist.name}}
+                              </p>
+                            </el-col>
+                            <el-col :span="12" style="padding-right: 2%;">
+                              <a :href="relist.link" style="float: right" class="btn">下载</a>
+                            </el-col>
+                          </el-row>
+                        </li>
+
+                        <li v-for="relist in resListOther">
+                          <el-row>
+                            <el-col :span="12">
+                              <i><input type="checkbox" :value="relist.id" name="CopyAddr1"/></i>
+                              <p style="width:300px;height: auto;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{relist.name}}</p>
+                            </el-col>
+                            <el-col :span="12" style="padding-right: 2%;">
+                              <a :href="relist.link" style="float: right" class="btn">下载</a>
+                            </el-col>
+                          </el-row>
+                        </li>
+                      </ul>
+                    </div>
+                  </el-col>
+                </el-row>
               </div>
-              <div class="row">
-                <div class="col">
-                  <div class="ndownlist">
-                    <ul class="thunder">
-                      <c:forEach items="${resListHttp}" var="relist">
-                        <li>
-                          <div class="row">
-                            <div class="col-sm-6">
-                              <i><input type="checkbox" value="${relist.id}" name="CopyAddr1"/></i>
-                              <p style="width:300px;height: auto;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">${relist.name}</p>
-                            </div>
-
-                            <div class="col-sm-6">
-                              <a href="${relist.link}" style="float: right" class="btn">下载</a>
-                            </div>
-                          </div>
-                        </li>
-                      </c:forEach>
-
-                      <c:forEach items="${resListThunder}" var="relist">
-                        <li>
-                          <div class="row">
-                            <div class="col-sm-6">
-                              <i><input type="checkbox" value="${relist.id}" name="CopyAddr1"/></i>
-                              <p style="width:300px;height: auto;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">${relist.name}</p>
-                            </div>
-                            <div class="col-sm-6">
-                              <a href="${relist.link}" style="float: right" class="btn">下载</a>
-                            </div>
-                          </div>
-                        </li>
-                      </c:forEach>
-
-                      <c:forEach items="${resListOther}" var="relist">
-                        <li>
-                          <div class="row">
-                            <div class="col-sm-6">
-                              <i><input type="checkbox" value="${relist.id}" name="CopyAddr1"/></i>
-                              <p style="width:300px;height: auto;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">${relist.name}</p>
-                            </div>
-
-                            <div class="col-sm-6">
-                              <a href="${relist.link}" style="float: right" class="btn">下载</a>
-                            </div>
-                          </div>
-                        </li>
-                      </c:forEach>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </c:if>
+            </div>
           </div>
+        </el-col>
+      </el-row>
+      <el-row style="margin-top: 10px;">
+        <el-col>
+          <div class="endtext">
+            <div class="title"><span>剧情介绍</span></div>
+            {{film.plot}}
           </div>
         </el-col>
       </el-row>
@@ -368,8 +371,15 @@
         goFilmDetail(filmId) {
           goPage('/detail/'+filmId);
         },
-        checkList() {
+        checkListAll() {
           return ( this.resListHttp!==null && this.resListHttp.length!==0) || (this.resListOther!==null && this.resListOther.length!==0) || (this.resListThunder!==null && this.resListThunder.length!==0) || (this.resListEd2k!==null && this.resListEd2k.length!==0);
+        },
+        checkList() {
+          return ( this.resListHttp!==null && this.resListHttp.length!==0) || (this.resListOther!==null && this.resListOther.length!==0) || (this.resListThunder!==null && this.resListThunder.length!==0);
+        },
+        fk(type) {
+          console.log(type);
+          this.$message.success('反馈成功...');
         }
       },
       watch :{
