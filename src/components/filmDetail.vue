@@ -48,7 +48,9 @@
                     <span>更新日期：</span>{{film.updateTime}}&nbsp;&nbsp;
                   </li>
                   <li>
-                    <span>剧情：</span>{{film.plot.substring(0, 150)}}[<a href="#desc">详细</a>]
+                    <span>剧情：</span>{{film.plot.substring(0, 150)}}[
+                    <a @click="goAnchor('#plotDetail')" class="goAnchor">详细</a>
+                    ]
                   </li>
                   <div class="pfen">
                     <p>影片评价</p>
@@ -158,6 +160,17 @@
                 </div>
               </el-col>
             </el-row>
+            <el-row>
+              <el-col>
+                <div class="player" v-if="src!=null">
+                  <iframe src="xl/pc.html" height="100%" width="100%" frameborder="0" scrolling="no"></iframe>
+                  </div>
+                <div class="mad-box-form">
+                    <a v-for="li in resListFlh" class="mad-a" :j="li.episodes" :id="'flh'+li.episodes" @click="Flh(this)" >{{li.episodes }}集
+                    </a>
+                </div>
+              </el-col>
+            </el-row>
           </div>
         </el-col>
       </el-row>
@@ -182,7 +195,19 @@
                   <el-col>
                     <div class="ndownlist">
                       <ul v-if="resListEd2k!==null && resListEd2k.length!==0">
-                        列表
+                        <li v-for="relist in resListEd2k">
+                          <el-row>
+                            <el-col :span="12">
+                              <!--<i><input type="checkbox" :value="relist.id" name="CopyAddr1"/></i>-->
+                              <p style="width:300px;height: auto;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                                {{ getSubstr(relist.link) }}
+                              </p>
+                            </el-col>
+                            <el-col :span="12" style="padding-right: 2%;">
+                              <a :href="relist.link" style="float: right" class="btn">下载</a>
+                            </el-col>
+                          </el-row>
+                        </li>
                       </ul>
                     </div>
                   </el-col>
@@ -210,7 +235,7 @@
                         <li v-for="relist in resListHttp">
                           <el-row>
                             <el-col :span="12">
-                              <i><input type="checkbox" :value="relist.id" name="CopyAddr1"/></i>
+                              <!--<i><input type="checkbox" :value="relist.id" name="CopyAddr1"/></i>-->
                               <p style="width:300px;height: auto;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
                                 {{relist.name}}
                               </p>
@@ -224,7 +249,7 @@
                         <li v-for="relist in resListThunder">
                           <el-row>
                             <el-col :span="12">
-                              <i><input type="checkbox" :value="relist.id" name="CopyAddr1"/></i>
+                              <!--<i><input type="checkbox" :value="relist.id" name="CopyAddr1"/></i>-->
                               <p style="width:300px;height: auto;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
                                 {{relist.name}}
                               </p>
@@ -238,7 +263,7 @@
                         <li v-for="relist in resListOther">
                           <el-row>
                             <el-col :span="12">
-                              <i><input type="checkbox" :value="relist.id" name="CopyAddr1"/></i>
+                              <!--<i><input type="checkbox" :value="relist.id" name="CopyAddr1"/></i>-->
                               <p style="width:300px;height: auto;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{relist.name}}</p>
                             </el-col>
                             <el-col :span="12" style="padding-right: 2%;">
@@ -255,7 +280,7 @@
           </div>
         </el-col>
       </el-row>
-      <el-row style="margin-top: 10px;">
+      <el-row style="margin-top: 10px;" id="plotDetail">
         <el-col>
           <div class="endtext">
             <div class="title"><span>剧情介绍</span></div>
@@ -380,6 +405,36 @@
         fk(type) {
           console.log(type);
           this.$message.success('反馈成功...');
+        },
+        goAnchor(selector) {
+          this.$el.querySelector(selector).scrollIntoView()
+        },
+        getSubstr(downurl) {
+          let resultStr = downurl;
+          if (downurl.indexOf("ed2k://|file|") === 0) {
+            const tmpStr = resultStr.split('|');
+            if (tmpStr.length > 3) {
+              if (tmpStr[2].length > 0) {
+                resultStr = decodeURIComponent(tmpStr[2]);
+              }
+            }
+            return resultStr;
+          } else {
+            return resultStr;
+          }
+        },
+        /**
+         * 解析成迅雷URL
+         * @return {string}
+         */
+        ThunderEncode(t_url) {
+          const thunderPrefix = "AA";
+          const thunderPosix = "ZZ";
+          const thunderTitle = "thunder://";
+          return thunderTitle + encode64(strUnicode2Ansi(thunderPrefix + t_url + thunderPosix));
+        },
+        Flh() {
+
         }
       },
       watch :{
@@ -401,3 +456,21 @@
 <style lang="css">
 @import "../assets/css/index/detail.css";
 </style>
+
+
+<!--<c:forEach items="${resListEd2k}" var="relist" varStatus="s">-->
+  <!--<c:if test="${s.index>0}">###${relist.link}</c:if>-->
+  <!--<c:if test="${s.index==0}">${relist.link}</c:if>-->
+  <!--<li>-->
+    <!--<div class="row" style="padding: 4px 0px;">-->
+      <!--<div class="col-sm-6">-->
+        <!--<a style="margin-left: 10px;" oncontextmenu=ThunderNetwork_SetHref_b(this) onclick="return xunbotask(this)" href="javascript:void(0)" thunderResTitle="" thunderType="" thunderPid="20369" thunderHref="ThunderEncode(GvodUrlArray[i])">-->
+          <!--getSubstr(GvodUrlArray[i])</a>-->
+      <!--</div>-->
+      <!--<div class="col-sm-6">-->
+        <!--<span>-->
+          <!--<a class=d5 href="ThunderEncode(GvodUrlArray[i])" target=_blank title="迅雷高速下载">迅雷</a>-->
+          <!--<a class=d1 href="javascript:video(0);" onclick="start(GvodUrlArray[i])" title="迅雷影音播放">看看</a>-->
+          <!--<a class=d2 href="http://lixian.vip.xunlei.com/lixian_login?referfrom=union&ucid=20369&furl=encodeURIComponent(ThunderEncode(GvodUrlArray[i]))" target=_blank title="迅雷离线下载">离线</a>-->
+          <!--<a href="###" qhref="GvodUrlArray[i]" onclick="XFLIB.startDownload(this,event,21590)" oncontextmenu = "OnContextClick(this, event)" class=d3 title="QQ旋风下载">旋风</a><a href=" + xmhref " target=_blank class=d4 title="小米路由下载">小米</a></span></div></div></li>-->
+<!--</c:forEach>-->

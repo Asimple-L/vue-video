@@ -175,10 +175,6 @@ body {
   vertical-align: middle;
   margin-right: 10px;
 }
-.ndownlist{
-  background: white;
-}
-
 .ndownlist ul {
   padding: 6px 6px;
   height: auto;
@@ -187,25 +183,21 @@ body {
   overflow: hidden;
   margin-bottom: 0px;
 }
-
 .ndownlist li {
   height: auto;
   border-bottom: 1px solid #EBE6ED;
   line-height: 26px;
   overflow: hidden;
 }
-
 .ndownlist li i {
   display: block;
   float: left;
   width: 30px;
   text-align: center;
 }
-
 .ndownlist li i input {
   vertical-align: middle;
 }
-
 .ndownlist p {
   float: left;
   padding-left: 10px;
@@ -219,7 +211,7 @@ body {
 }
 .title-icon{
   padding-left: 25px;
-  background: white url('../../img/filmDetail/xzdd.jpg') no-repeat 0 6px;
+  background: #F2F2F2 url('../../img/filmDetail/xzdd.jpg') no-repeat 0 6px;
   display: inline-block;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -233,7 +225,6 @@ body {
   float: right;
 }
 .download_list_div {
-  background: white;
   height: auto;
   padding: 5px;
 }
@@ -285,4 +276,7 @@ body {
   background: url("../../img/filmDetail/i.png") no-repeat 0 -150px;
   margin: 0 10px 0 0;
   color: #464646;
+}
+.goAnchor {
+  cursor: pointer;
 }

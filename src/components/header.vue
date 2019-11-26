@@ -72,8 +72,6 @@
                       注册
                     </a>
                   </p>
-                  <!--<router-link :to="{name:'register'}">注册</router-link>-->
-
                 </el-form-item>
               </el-form>
               <div slot="footer" class="dialog-footer">
