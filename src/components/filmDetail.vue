@@ -21,8 +21,7 @@
                   <i class="el-icon-picture-outline"></i>
                 </div>
               </el-image>
-              <!--<el-button type="info">立即播放</el-button>-->
-              <a href="#kan">立即播放</a>
+              <a @click="goAnchor('#kan')">立即播放</a>
             </el-col>
             <el-col :span="16" style="">
               <div class="info" style="padding: 10px;">
@@ -157,17 +156,6 @@
                 </div>
                 <div class="mad-box-form" v-if="resListFlh===null || resListFlh.length===0">
                   暂无资源
-                </div>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col>
-                <div class="player" v-if="src!=null">
-                  <iframe src="xl/pc.html" height="100%" width="100%" frameborder="0" scrolling="no"></iframe>
-                  </div>
-                <div class="mad-box-form">
-                    <a v-for="li in resListFlh" class="mad-a" :j="li.episodes" :id="'flh'+li.episodes" @click="Flh(this)" >{{li.episodes }}集
-                    </a>
                 </div>
               </el-col>
             </el-row>
@@ -456,21 +444,3 @@
 <style lang="css">
 @import "../assets/css/index/detail.css";
 </style>
-
-
-<!--<c:forEach items="${resListEd2k}" var="relist" varStatus="s">-->
-  <!--<c:if test="${s.index>0}">###${relist.link}</c:if>-->
-  <!--<c:if test="${s.index==0}">${relist.link}</c:if>-->
-  <!--<li>-->
-    <!--<div class="row" style="padding: 4px 0px;">-->
-      <!--<div class="col-sm-6">-->
-        <!--<a style="margin-left: 10px;" oncontextmenu=ThunderNetwork_SetHref_b(this) onclick="return xunbotask(this)" href="javascript:void(0)" thunderResTitle="" thunderType="" thunderPid="20369" thunderHref="ThunderEncode(GvodUrlArray[i])">-->
-          <!--getSubstr(GvodUrlArray[i])</a>-->
-      <!--</div>-->
-      <!--<div class="col-sm-6">-->
-        <!--<span>-->
-          <!--<a class=d5 href="ThunderEncode(GvodUrlArray[i])" target=_blank title="迅雷高速下载">迅雷</a>-->
-          <!--<a class=d1 href="javascript:video(0);" onclick="start(GvodUrlArray[i])" title="迅雷影音播放">看看</a>-->
-          <!--<a class=d2 href="http://lixian.vip.xunlei.com/lixian_login?referfrom=union&ucid=20369&furl=encodeURIComponent(ThunderEncode(GvodUrlArray[i]))" target=_blank title="迅雷离线下载">离线</a>-->
-          <!--<a href="###" qhref="GvodUrlArray[i]" onclick="XFLIB.startDownload(this,event,21590)" oncontextmenu = "OnContextClick(this, event)" class=d3 title="QQ旋风下载">旋风</a><a href=" + xmhref " target=_blank class=d4 title="小米路由下载">小米</a></span></div></div></li>-->
-<!--</c:forEach>-->
