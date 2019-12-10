@@ -148,7 +148,6 @@
             <el-row>
               <el-col>
                 <div class="player" v-if="src!=null">
-                  <!--<iframe src="#" height="100%" width="100%" frameborder="0" scrolling="no"></iframe>-->
                   <video-player  class="video-player-box vjs-custom-skin content"
                                  ref="videoPlayer"
                                  :options="playerOptions"
@@ -440,7 +439,7 @@
           }
         },
         Flh() {
-
+          // 方法待完成
         },
         palyVideo(url) {
           this.playerOptions.sources[0].src = url;
