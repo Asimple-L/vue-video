@@ -4,6 +4,7 @@ body {
 }
 .pic {
   text-align: center;
+  cursor: pointer;
 }
 
 .pic a, .pic a:visited {
@@ -279,4 +280,22 @@ body {
 }
 .goAnchor {
   cursor: pointer;
+}
+/*集数显示框*/
+/*播放器插件*/
+.player {
+  height: auto;
+  background-color: black;
+}
+
+.player .content {
+  height: 746px;
+}
+.video-js .vjs-big-play-button {
+  width: 72px;
+  height: 72px;
+  border-radius: 100%;
+  z-index: 100;
+  background-color: #ffffff;
+  border: solid 1px #979797;
 }

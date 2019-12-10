@@ -130,7 +130,6 @@
       </el-row>
       <el-row style="background: #dcdfe2;height: 3px;"></el-row>
       <el-row>
-        <a id="kan"></a>
         <el-col>
           <div v-if="resListFlh!==null && resListFlh.length!==0">
             <el-row>
@@ -149,10 +148,16 @@
             <el-row>
               <el-col>
                 <div class="player" v-if="src!=null">
-                  <iframe src="#" height="100%" width="100%" frameborder="0" scrolling="no"></iframe>
+                  <!--<iframe src="#" height="100%" width="100%" frameborder="0" scrolling="no"></iframe>-->
+                  <video-player  class="video-player-box vjs-custom-skin content"
+                                 ref="videoPlayer"
+                                 :options="playerOptions"
+                                 :playsinline="true"
+                  >
+                  </video-player>
                 </div>
                 <div class="mad-box-form" v-if="resListFlh!==null && resListFlh.length!==0">
-                  <a class="mad-a" href="javascript:void(0)" :id="'flh'+li.episodes" v-for="li in resListFlh" :data="li.link">{{li.episodes}}集</a>
+                  <a class="mad-a" href="javascript:void(0)" v-for="li in resListFlh" @click="palyVideo(li.link)">{{li.episodes}}集</a>
                 </div>
                 <div class="mad-box-form" v-if="resListFlh===null || resListFlh.length===0">
                   暂无资源
@@ -161,6 +166,7 @@
             </el-row>
           </div>
         </el-col>
+        <a id="kan"></a>
       </el-row>
       <el-row>
         <el-col>
@@ -282,7 +288,7 @@
 
 <script>
   import { getFilmDetail, errorDeal, dealResult, saveRaty } from '../api/api';
-  import {goPage} from "../util/index";
+  import {goPage, ThunderEncode} from "../util/index";
   import {toFixed} from "../filter/numberFilter";
   export default {
       name: "film-detail",
@@ -323,6 +329,29 @@
           resListOther:[],
           resListThunder:[],
           resListEd2k:[],
+          playerOptions: {
+            playbackRates: [ 0.5, 0.75, 1.0, 1.5, 2.0, 3.0], //播放速度
+            autoplay: false, //如果true,浏览器准备好时开始回放。
+            muted: false, // 默认情况下将会消除任何音频。
+            loop: false, // 导致视频一结束就重新开始。
+            preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+            language: 'zh-CN',
+            aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+            fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+            sources: [{
+              // type: "video/mp4",
+              type: "video/ogg",
+              src: this.src //url地址
+            }],
+            width: 500,
+            notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+            controlBar: {
+              timeDivider: true,
+              durationDisplay: true,
+              remainingTimeDisplay: false,
+              fullscreenToggle: true  //全屏按钮
+            }
+          }
         }
       },
       mounted() {
@@ -346,7 +375,6 @@
           this.$store.state.fullscreenLoading = true;
           getFilmDetail({'filmId':this.film.id}).then( res => {
             const data = dealResult(res.data);
-            console.log(data);
             if( null!=data ) {
               this.film = data.film;
               this.totalRatys = data.totalRatys;
@@ -411,18 +439,12 @@
             return resultStr;
           }
         },
-        /**
-         * 解析成迅雷URL
-         * @return {string}
-         */
-        ThunderEncode(t_url) {
-          const thunderPrefix = "AA";
-          const thunderPosix = "ZZ";
-          const thunderTitle = "thunder://";
-          return thunderTitle + encode64(strUnicode2Ansi(thunderPrefix + t_url + thunderPosix));
-        },
         Flh() {
 
+        },
+        palyVideo(url) {
+          this.playerOptions.sources[0].src = url;
+          this.src = url;
         }
       },
       watch :{

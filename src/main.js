@@ -6,7 +6,12 @@ import router from './router'
 import moment from 'moment'
 import store from './vuex/store'
 import './assets/css/index.css'
+import 'video.js/dist/video-js.css'
+import 'vue-video-player/src/custom-theme.css'
+import 'videojs-contrib-hls'
+import VideoPlayer from 'vue-video-player'
 
+Vue.use(VideoPlayer);
 Vue.config.productionTip = false;
 Vue.prototype.HOME='http://localhost:8080/video/';
 Vue.use(ElementUI);

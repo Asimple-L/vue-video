@@ -20,7 +20,7 @@
       </el-row>
       <el-row>
         <el-col :span="16">
-          <div class="mox" v-for="list in filmTuijian">
+          <div class="moxIndex" v-for="list in filmTuijian">
             <h5>最新{{ list[0].cataLogName }}推荐<span style="margin-right:10px;cursor:pointer;float: right;" onclick="location.href='#'">更多</span></h5>
             <ul>
               <li class="float-left" v-for=" li in list">
@@ -103,7 +103,7 @@
           isLi = true;
         }
         w = parseInt(w - 0.5);
-        $(".mox ul li").css("width", w + "px");
+        $(".moxIndex ul li").css("width", w + "px");
         var h = (w * 160) / 115;
         $(".t_img").css("height", h + "px");
         if(isLi){
@@ -111,7 +111,7 @@
           $(".case").css({"overflow":"hidden"});
         }else {
           $(".case").each(function (index,ele) {
-            $(ele).css("height", ($(".mox").eq(index).height()) + "px");
+            $(ele).css("height", ($(".moxIndex").eq(index).height()) + "px");
           });
         }
       });
@@ -136,7 +136,7 @@
           isLi = true;
         }
         w = parseInt(w - 0.5);
-        $(".mox ul li").css("width", w + "px");
+        $(".moxIndex ul li").css("width", w + "px");
         var h = (w * 160) / 115;
         $(".t_img").css("height", h + "px");
         if(isLi){
@@ -144,7 +144,7 @@
           $(".case").css({"overflow":"hidden"});
         }else {
           $(".case").each(function (index,ele) {
-            $(ele).css("height", ($(".mox").eq(index).height()) + "px");
+            $(ele).css("height", ($(".moxIndex").eq(index).height()) + "px");
           });
         }
       },
