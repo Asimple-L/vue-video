@@ -9,7 +9,7 @@ a:hover {
     width:1000px;
     height: auto;
     overflow: hidden;
-    margin: 0px auto;
+    margin: 0 auto;
     background: #fff;
 }
 /*左侧*/
@@ -56,6 +56,7 @@ a:hover {
     font-size: 16px;
     padding-left:30%;
     color: white;
+    cursor: pointer;
 }
 /*影片列表*/
 .film-list {
@@ -63,7 +64,7 @@ a:hover {
     height: auto;
     overflow: hidden;
     background: #fff;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     border: 1px solid #ddd;
 }
 
@@ -105,7 +106,7 @@ a:hover {
 
 .film-info p {
     color: #A9A8A8;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     width: 100%;
     overflow: hidden;
     text-overflow:ellipsis;
@@ -142,19 +143,19 @@ a:hover {
     margin-bottom: 3px;
 }
 .info .star1 {
-    background-position: 0px -64px;
+    background-position: 0 -64px;
 }
 .info .star2 {
-    background-position: 0px -46px;
+    background-position: 0 -46px;
 }
 .info .star3 {
-    background-position: 0px -32px;
+    background-position: 0 -32px;
 }
 .info .star4 {
-    background-position: 0px -16px;
+    background-position: 0 -16px;
 }
 .info .star5 {
-    background-position: 0px -0px;
+    background-position: 0 -0px;
 }
 .info p {
     color: #5E5E5E;
@@ -217,7 +218,7 @@ a:hover {
     padding: 10px;
 }
 .user-box-right-search ul{
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 .user-box-right-search li{
     list-style: none;
@@ -274,6 +275,6 @@ a:hover {
 }
 .cr {
     clear: both;
-    height: 0px;
+    height: 0;
     overflow: hidden;
 }

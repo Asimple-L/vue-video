@@ -86,7 +86,7 @@
           </el-menu-item>
           <el-menu-item v-for="(vo, index) in cataLogList" :key="index" :index="(index+10+'')" >
             <!--<a :href="'xl/1.html?cataLog_id='+ vo.id ">{{ vo.name }}</a>-->
-            <a href="#">{{ vo.name }}</a>
+            <a @click="toSearchPage(vo.id)">{{ vo.name }}</a>
           </el-menu-item>
         </el-menu>
       </el-header>
@@ -97,7 +97,7 @@
 
 <script>
   import { getIndexHeaderInfo, login, dealResult, vipCodeVerification,logOut } from "../api/api";
-  import { goPage } from "../util/index";
+  import { goPage, goPageParam } from "../util/index";
 export default {
   data() {
     return {
@@ -218,6 +218,10 @@ export default {
     cancelUserLogin() {
       this.$store.state.dialogLoginModelVisible = false;
       this.$refs.form.resetFields();
+    },
+    toSearchPage(cataLog_id) {
+      const param = {cataLog_id: cataLog_id};
+      goPageParam("/xl", param);
     }
   },
   components: {

@@ -10,7 +10,10 @@
 
 <script>
     export default {
-        name: "error"
+      name: "error",
+      mounted() {
+        this.$store.state.fullscreenLoading = false;
+      }
     }
 </script>
 

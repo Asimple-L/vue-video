@@ -24,7 +24,7 @@ axios.interceptors.response.use(function (response) {
       router.push({path: '/error'});
       break;
   }
-  Notification({
+  Notification(new {
     title: '出错了',
     type: error,
     message: message
@@ -74,7 +74,6 @@ export const logOut = params => {
 
 export const vipCodeVerification = params => {
   const url = baseUrl + '/vipCodeVerification';
-  console.log(params);
   return axios.post(url, Qs.stringify({'vipCode':params}));
 };
 
@@ -91,4 +90,10 @@ export const getFilmDetail = params => {
 export const saveRaty = params => {
   const url = baseUrl + '/xl/addRaty';
   return axios.post(url, Qs.stringify(params));
+};
+
+export const searchFilm = param => {
+  console.log(param);
+  const url = baseUrl + '/xl/index';
+  return axios.post(url, Qs.stringify(param));
 };

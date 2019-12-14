@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar>
     <el-main>
-      <el-row v-if="true">
+      <el-row v-if="$store.state.user===null">
         <el-col :span="24">
           <marquee onmouseover='this.stop()' onmouseout='this.start()'>
             <a href="javascript:void(0)" @click="registerPage">注册</a>

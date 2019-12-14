@@ -10,6 +10,11 @@ const keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
 export const goPage = params => {
   router.push({path: params});
 };
+
+export const goPageParam = (url, params) => {
+  router.push({path: url, query: params});
+};
+
 /**
  * 加密算法
  * @param input
