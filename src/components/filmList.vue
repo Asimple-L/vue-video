@@ -13,11 +13,96 @@
     <el-row>
       <el-col :span="4">
         <ul class="user-nav">
-          <!--<a href="${pageurl}"><div class="user-nav-title">全部分类</div></a>-->
           <div class="user-nav-title">全部分类</div>
-          <li v-for="list in cataLogList" v-bind:class="{'isCheckShow':list.id === cataLog_id,}" >
+          <li
+            v-for="(list, index) in cataLogList"
+            v-bind:class="{'isCheckShow':list.id === cataLog_id}"
+            @click="reloadPage(list.id, index+10+'')"
+          >
             {{ list.name }}
           </li>
+        </ul>
+      </el-col>
+      <el-col :span="20">
+        <ul class="user-box-right-search" style="margin-top: 10px;">
+          <li v-if="cataLogList!==null && cataLogList.length!==0">
+            <div class="user-box-right-search-left">分类</div>
+            <div class="user-box-right-search-right">
+              <ul v-if="cataLogList!==null && cataLogList.length!==0">
+                <li
+                  v-for="(item, index) in cataLogList"
+                  v-bind:class="{'search-info':item.id === cataLog_id}"
+                  @click="reloadPage(item.id, index+10+'')">
+                  {{ item.name }}
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="user-box-right-search-left">子类</div>
+            <div class="user-box-right-search-right">
+              <ul v-if="subClassList!==null && subClassList.length!==0">
+                <li v-bind:class="{'search-info':subClass_id || subClass_id===''}">全部</li>
+                <li
+                  v-for="item in subClassList"
+                  v-bind:class="{'search-info':item.id === subClass_id}"
+                >
+                  {{ item.name }}
+                </li>
+              </ul>
+              <ul v-else>
+                <li class="search-info">全部</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="user-box-right-search-left">类型</div>
+            <div class="user-box-right-search-right">
+              <ul v-if="typeList!==null && typeList">
+                <li v-bind:class="{'search-info':type_id || type_id===''}">全部</li>
+                <li
+                  v-for="item in typeList"
+                  v-bind:class="{'search-info':item.id === type_id}"
+                >
+                  {{ item.name }}
+                </li>
+              </ul>
+              <ul v-else>
+                <li class="search-info">全部</li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="user-box-right-search-left">地区</div>
+            <div class="user-box-right-search-right">
+              <ul>
+                <li v-bind:class="{'search-info':loc_id || loc_id===''}">全部</li>
+                <li
+                  v-for="item in locList"
+                  v-bind:class="{'search-info':item.id === loc_id}"
+                >
+                  {{ item.name }}
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="user-box-right-search-left">年份</div>
+            <div class="user-box-right-search-right">
+              <ul>
+                <li v-bind:class="{'search-info':decade_id || decade_id===''}">全部</li>
+                <li
+                  v-for="item in decadeList"
+                  v-bind:class="{'search-info':item.id === decade_id}"
+                >
+                  {{ item.name }}
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <ul class="film-list">
+          电影显示列表
         </ul>
       </el-col>
     </el-row>
@@ -26,17 +111,29 @@
 
 <script>
   import { searchFilm, dealResult } from '../api/api';
+  import { goPage, goPageParam } from "../util/index";
     export default {
       name: "film-list",
       data() {
         return {
-          cataLogList: [],
-          cataLog_id: this.$route.query.cataLog_id,
+          cataLogList: [], // 分类列表
+          cataLog_id: this.$route.query.cataLog_id, // 当前选择的分类id
+          subClassList: [], // 子类列表
+          subClass_id: "", // 当前选择的子类id
+          typeList: [], // 类型列表
+          type_id: "", // 当前选择类型id
+          locList: [], // 地区列表
+          loc_id: "", // 当前选择的地区id
+          decadeList: [], // 年份列表
+          decade_id: "", // 当前选择的id
+          filmList: [], // 影片列表
         }
       },
       mounted() {
         if( this.checkInit() ) {
+          this.$store.state.activeIndex = this.$route.query.index;
           this.init();
+          this.cataLog_id = this.$route.query.cataLog_id;
           this.$store.state.fullscreenLoading = false;
         }
       },
@@ -54,10 +151,15 @@
         },
         init() {
           searchFilm({cataLogId: this.cataLog_id}).then( res => {
-            console.log(res);
             const data = dealResult(res.data);
+            console.log(data);
             if( null!==data ) {
               this.cataLogList = data.cataLogList;
+              this.subClassList = data.subClassList;
+              this.typeList = data.typeList;
+              this.locList = data.locList;
+              this.decadeList = data.decadeList;
+              this.filmList = data.filmList;
             }
           }).catch(function (error) {
             console.log(error);
@@ -65,6 +167,13 @@
         },
         registerPage() {
           this.$router.push('register');
+        },
+        reloadPage(cataLog_id, index) {
+          if( null!==index && index>=10 ) {
+            this.$store.state.activeIndex = index;
+          }
+          this.cataLog_id = cataLog_id;
+          this.init();
         },
       }
     }
@@ -77,171 +186,3 @@
     background: #b5b5b5;
   }
 </style>
-
-
-
-
-  <!--
-  <div class="col-sm-10">
-    <ul class="user-box-right-search" style="margin-top: 10px;">
-      <c:if test="${!fn:contains(pb.url, 'cataLog=')}">
-        <c:if test="${cataLogList.size()!=0}">
-          <li>
-            <div class="user-box-right-search-left">分类</div>
-            <div class="user-box-right-search-right">
-              <ul>
-                <c:forEach items="${cataLogList}" var="l1">
-                  <a href="${pageurl}?<%--之前有参数--%><c:if test="${pb.url!=null}"><%--包含自己--%><c:if test="${fn:indexOf(pb.url, 'cataLog_id')!=-1}"><%--自己不在头部--%><c:if test="${fn:indexOf(pb.url, 'cataLog_id')>0}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "cataLog_id")-1, fn:indexOf(pb.url, "cataLog_id")+43),"") }&cataLog_id=${l1.id}</c:if><%--自己不在头部--%><%--自己在头部--%><c:if test="${fn:indexOf(pb.url, 'cataLog_id')==0}"><c:if test="${pb.url.length()>45}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "cataLog_id"), fn:indexOf(pb.url, "cataLog_id")+44),"") }&cataLog_id=${l1.id}</c:if><c:if test="${pb.url.length()<45}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "cataLog_id"), fn:indexOf(pb.url, "cataLog_id")+44),"") }cataLog_id=${l1.id}</c:if></c:if><%--自己在头部--%></c:if><%--包含自己--%><%--不包含自己--%><c:if test="${fn:indexOf(pb.url, 'cataLog_id')==-1}">${pb.url}&cataLog_id=${l1.id}</c:if><%--不包含自己--%></c:if><%--之前有参数--%><%--之前没有参数--%><c:if test="${pb.url==null}">cataLog_id=${l1.id}</c:if>"><%--之前没有参数--%>
-        <li id="cataLog_id${l1.id}">${l1.name}</li></a>
-        </c:forEach>
-    </ul>
-  </div>
-  </li>
-  </c:if>
-
-  <c:if test="${subClassList!=null&&subClassList.size()!=0}">
-    <li>
-      <div class="user-box-right-search-left">子类</div>
-      <div class="user-box-right-search-right">
-        <ul>
-          <c:forEach items="${subClassList}" var="l1">
-            <a href="${pageurl}?<%--之前有参数--%><c:if test="${pb.url!=null}"><%--包含自己--%><c:if test="${fn:indexOf(pb.url, 'subClass_id')!=-1}"><%--自己不在头部--%><c:if test="${fn:indexOf(pb.url, 'subClass_id')>0}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "subClass_id")-1, fn:indexOf(pb.url, "subClass_id")+44),"") }&subClass_id=${l1.id}</c:if><%--自己不在头部--%><%--自己在头部--%><c:if test="${fn:indexOf(pb.url, 'subClass_id')==0}"><c:if test="${pb.url.length()>45}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "subClass_id"), fn:indexOf(pb.url, "subClass_id")+45),"") }&subClass_id=${l1.id}</c:if><c:if test="${pb.url.length()<45}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "subClass_id"), fn:indexOf(pb.url, "subClass_id")+45),"") }subClass_id=${l1.id}</c:if></c:if><%--自己在头部--%></c:if><%--包含自己--%><%--不包含自己--%><c:if test="${fn:indexOf(pb.url, 'subClass_id')==-1}">${pb.url}&subClass_id=${l1.id}</c:if><%--不包含自己--%></c:if><%--之前有参数--%><%--之前没有参数--%><c:if test="${pb.url==null}">subClass_id=${l1.id}</c:if>"><%--之前没有参数--%>
-  <li id="subClass_id${l1.id}">${l1.name}</li></a>
-  </c:forEach>
-  </ul>
-</div>
-</li>
-</c:if>
-</c:if>
-<c:if test="${typeList!=null&&typeList.size()!=0}">
-  <li>
-    <div class="user-box-right-search-left">类型</div>
-    <div class="user-box-right-search-right">
-      <ul>
-        <c:forEach items="${typeList}" var="l1">
-          <a href="${pageurl}?<%--之前有参数--%><c:if test="${pb.url!=null}"><%--包含自己--%><c:if test="${fn:indexOf(pb.url, 'type_id')!=-1}"><%--自己不在头部--%><c:if test="${fn:indexOf(pb.url, 'type_id')>0}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "type_id")-1, fn:indexOf(pb.url, "type_id")+40),"") }&type_id=${l1.id}</c:if><%--自己不在头部--%><%--自己在头部--%><c:if test="${fn:indexOf(pb.url, 'type_id')==0}"><c:if test="${pb.url.length()>45}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "type_id"), fn:indexOf(pb.url, "type_id")+41),"") }&type_id=${l1.id}</c:if><c:if test="${pb.url.length()<45}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "type_id"), fn:indexOf(pb.url, "type_id")+41),"") }type_id=${l1.id}</c:if></c:if><%--自己在头部--%></c:if><%--包含自己--%><%--不包含自己--%><c:if test="${fn:indexOf(pb.url, 'type_id')==-1}">${pb.url}&type_id=${l1.id}</c:if><%--不包含自己--%></c:if><%--之前有参数--%><%--之前没有参数--%><c:if test="${pb.url==null}">type_id=${l1.id}</c:if>"><%--之前没有参数--%>
-<li id="type_id${l1.id}">${l1.name}</li></a>
-</c:forEach>
-</ul>
-</div>
-</li>
-</c:if>
-<li>
-<div class="user-box-right-search-left">地区</div>
-<div class="user-box-right-search-right">
-  <ul>
-    <c:forEach items="${locList}" var="l1">
-      <a href="${pageurl}?<%--之前有参数--%><c:if test="${pb.url!=null}"><%--包含自己--%><c:if test="${fn:indexOf(pb.url, 'loc_id')!=-1}"><%--自己不在头部--%><c:if test="${fn:indexOf(pb.url, 'loc_id')>0}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "loc_id")-1, fn:indexOf(pb.url, "loc_id")+39),"") }&loc_id=${l1.id}</c:if><%--自己不在头部--%><%--自己在头部--%><c:if test="${fn:indexOf(pb.url, 'loc_id')==0}"><c:if test="${pb.url.length()>45}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "loc_id"), fn:indexOf(pb.url, "loc_id")+40),"") }&loc_id=${l1.id}</c:if><c:if test="${pb.url.length()<45}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "loc_id"), fn:indexOf(pb.url, "loc_id")+39),"") }loc_id=${l1.id}</c:if></c:if><%--自己在头部--%></c:if><%--包含自己--%><%--不包含自己--%><c:if test="${fn:indexOf(pb.url, 'loc_id')==-1}">${pb.url}&loc_id=${l1.id}</c:if><%--不包含自己--%></c:if><%--之前有参数--%><%--之前没有参数--%><c:if test="${pb.url==null}">loc_id=${l1.id}</c:if>"><%--之前没有参数--%>
-        <li id="loc_id${l1.id}">${l1.name}</li></a>
-    </c:forEach>
-  </ul>
-</div>
-</li>
-<li>
-<div class="user-box-right-search-left">年代</div>
-<div class="user-box-right-search-right">
-  <ul>
-    <c:forEach items="${decadeList}" var="l1">
-      <a href="${pageurl}?<%--之前有参数--%><c:if test="${pb.url!=null}"><%--包含自己--%><c:if test="${fn:indexOf(pb.url, 'onDecade')!=-1}"><%--自己不在头部--%><c:if test="${fn:indexOf(pb.url, 'onDecade')>0}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "onDecade")-1, fn:indexOf(pb.url, "onDecade")+41),"") }&onDecade=${l1.name}</c:if><%--自己不在头部--%><%--自己在头部--%><c:if test="${fn:indexOf(pb.url, 'onDecade')==0}"><c:if test="${pb.url.length()>45}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "onDecade"), fn:indexOf(pb.url, "onDecade")+42),"") }&onDecade=${l1.name}</c:if><c:if test="${pb.url.length()<45}">${fn:replace(pb.url,fn:substring(pb.url,fn:indexOf(pb.url, "onDecade"), fn:indexOf(pb.url, "onDecade")+41),"") }onDecade=${l1.name}</c:if></c:if><%--自己在头部--%></c:if><%--包含自己--%><%--不包含自己--%><c:if test="${fn:indexOf(pb.url, 'onDecade')==-1}">${pb.url}&onDecade=${l1.name}</c:if><%--不包含自己--%></c:if><%--之前有参数--%><%--之前没有参数--%><c:if test="${pb.url==null}">onDecade=${l1.name}</c:if>"><%--之前没有参数--%>
-        <li id="onDecade${l1.name}">${l1.name}</li></a>
-    </c:forEach>
-  </ul>
-</div>
-</li>
-</ul>
-<c:if test="${pb.tr!=0}">
-<ul class="film-list">
-  <c:forEach items="${pb.beanList}" var="list">
-    <li>
-      <a href="xl/detail?film_id=${list.id}">
-        <div  class="note-left" title="${list.name}"><img class="lazy rounded img-fluids" data-original="${list.image}" /></div>
-      </a>
-      <div class="film-info">
-        <div class="info">
-          <h2><a class="film-info-a" href="xl/detail?film_id=${list.id}"
-                 title="${list.name}"
-                 target="_blank">${list.name}</a><em> ${list.onDecade}</em></h2>
-          <em class="star star<c:if test="${list.evaluation>=1&&list.evaluation<2}">1</c:if><c:if test="${list.evaluation>=2&&list.evaluation<4}">2</c:if><c:if test="${list.evaluation>=4&&list.evaluation<6}">3</c:if><c:if test="${list.evaluation>=6&&list.evaluation<8}">4</c:if><c:if test="${list.evaluation>=8&&list.evaluation<=10}">5</c:if>"></em>
-<p>主演：${list.actor}</p>
-<p><i>状态：${list.status}</i>&nbsp;<i>地区：${list.locName}</i></p>
-<p><i>类型：${list.typeName}</i><i>更新：${fn:substring(list.updateTime,5,10)}</i></p>
-<p></p>
-<span>
-                          <a href="xl/detail?film_id=${list.id}#kan" class="watch-btn" target="_blank">观看</a>
-                          <a href="xl/detail?film_id=${list.id}#down" class="download-btn" target="_blank">下载</a>
-                      </span>
-</div>
-</div>
-</li>
-</c:forEach>
-</ul>
-</c:if>
-<c:if test="${pb.tr==0}">
-<ul class="mlist">对不起，没有找到任何记录,<a target="_blank" href="/video/note"><font color="red"><b>请您在此留言</b></font></a>，我们尽快为你添加喜欢的数据<div class="cr"></div></ul>
-</c:if>
-<div style="width:100%;margin: 5px auto;height: auto;overflow: hidden;">
-<c:if test="${pb.tr!=0}">
-  <p style="text-align: right;">
-    <script type="text/javascript">
-      function _change() {
-        var select = document.getElementById("select");
-        location = "${pageurl}?${pb.url}&pc=" + select.value;
-      }
-    </script>
-
-    第${pb.pc }页/共${pb.tp }页
-
-    <c:if test="${pb.pc > 1 }"><a href="${pageurl}?${pb.url }&pc=1" class="use-btn">首页</a>&nbsp;<a href="${pageurl}?${pb.url }&pc=${pb.pc-1 }" class="use-btn">上一页</a></c:if>
-    <c:if test="${pb.pc == 1 }"><a href="javascript:;" class="nouse-btn">首页</a>&nbsp;<a href="javascript:;" class="nouse-btn">上一页</a></c:if>
-    <%------------------------------------ --%>
-    <%-- 页码列表的长度自己定，10个长 --%>
-    <c:choose>
-      <%-- 第一条：如果总页数<=10，那么页码列表为1 ~ tp --%>
-      <c:when test="${pb.tp <= 10 }">
-        <c:set var="begin" value="1"/>
-        <c:set var="end" value="${pb.tp }"/>
-      </c:when>
-      <c:otherwise>
-        <%-- 第二条：按公式计算，让列表的头为当前页-4；列表的尾为当前页+5 --%>
-        <c:set var="begin" value="${pb.pc-4 }"/>
-        <c:set var="end" value="${pb.pc+5 }"/>
-
-        <%-- 第三条：第二条只适合在中间，而两端会出问题。这里处理begin出界！ --%>
-        <%-- 如果begin<1，那么让begin=1，相应end=10 --%>
-        <c:if test="${begin<1 }">
-          <c:set var="begin" value="1"/>
-          <c:set var="end" value="10"/>
-        </c:if>
-        <%-- 第四条：处理end出界。如果end>tp，那么让end=tp，相应begin=tp-9 --%>
-        <c:if test="${end>pb.tp }">
-          <c:set var="begin" value="${pb.tp-9 }"/>
-          <c:set var="end" value="${pb.tp }"/>
-        </c:if>
-      </c:otherwise>
-    </c:choose>
-
-    <%-- 循环显示页码列表 --%>
-    <c:forEach begin="${begin }" end="${end }" var="i">
-      <c:choose>
-        <c:when test="${i eq pb.pc }"><a href="javascript:;" class="nouse-btn">${i}</a></c:when>
-        <c:otherwise>
-          <a href="${pageurl}?${pb.url }&pc=${i}" class="use-btn">${i}</a>
-        </c:otherwise>
-      </c:choose>
-    </c:forEach>
-    <c:if test="${pb.pc < pb.tp }"><a href="${pageurl}?${pb.url }&pc=${pb.pc+1 }" class="use-btn">下一页</a>&nbsp;<a href="${pageurl}?${pb.url}&pc=${pb.tp}" class="use-btn">尾页</a></c:if>
-    <c:if test="${pb.pc == pb.tp }"><a href="javascript:;" class="nouse-btn">下一页</a>&nbsp;<a href="javascript:;" class="nouse-btn">尾页</a></c:if>
-    <%--<select name="pc" onchange="_change()" id="select">
-    <c:forEach begin="1" end="${pb.tp }" var="i">
-      <option value="${i }"
-      <c:if test="${i eq pb.pc }">selected="selected"</c:if> >${i}</option>
-    </c:forEach>
-  </select>--%>
-    总共${pb.tr}部　
-  </p>
-
-</c:if>
-</div>
-</div>
-</div>
-  -->

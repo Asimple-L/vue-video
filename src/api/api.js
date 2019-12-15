@@ -93,7 +93,6 @@ export const saveRaty = params => {
 };
 
 export const searchFilm = param => {
-  console.log(param);
   const url = baseUrl + '/xl/index';
   return axios.post(url, Qs.stringify(param));
 };

@@ -85,7 +85,6 @@
             <a href="javascript:void(0)" @click="goIndexPage">首页</a>
           </el-menu-item>
           <el-menu-item v-for="(vo, index) in cataLogList" :key="index" :index="(index+10+'')" >
-            <!--<a :href="'xl/1.html?cataLog_id='+ vo.id ">{{ vo.name }}</a>-->
             <a @click="toSearchPage(vo.id)">{{ vo.name }}</a>
           </el-menu-item>
         </el-menu>
