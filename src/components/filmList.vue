@@ -17,7 +17,7 @@
           <li
             v-for="(list, index) in cataLogList"
             v-bind:class="{'isCheckShow':list.id === cataLog_id}"
-            @click="reloadPage(list.id, index+10+'')"
+            @click="reloadPage('cataLog_id', list.id ,index+10+'')"
           >
             {{ list.name }}
           </li>
@@ -29,10 +29,12 @@
             <div class="user-box-right-search-left">分类</div>
             <div class="user-box-right-search-right">
               <ul v-if="cataLogList!==null && cataLogList.length!==0">
+                <li v-bind:class="{'search-info': cataLog_id===''}"
+                    @click="reloadPage('cataLog_id', '', '')">全部</li>
                 <li
                   v-for="(item, index) in cataLogList"
                   v-bind:class="{'search-info':item.id === cataLog_id}"
-                  @click="reloadPage(item.id, index+10+'')">
+                  @click="reloadPage('cataLog_id', item.id, index+10+'')">
                   {{ item.name }}
                 </li>
               </ul>
@@ -42,10 +44,14 @@
             <div class="user-box-right-search-left">子类</div>
             <div class="user-box-right-search-right">
               <ul v-if="subClassList!==null && subClassList.length!==0">
-                <li v-bind:class="{'search-info':subClass_id || subClass_id===''}">全部</li>
+                <li
+                  v-bind:class="{'search-info': subClass_id===''}"
+                  @click="reloadPage('subClass_id', '', '')">
+                  全部</li>
                 <li
                   v-for="item in subClassList"
                   v-bind:class="{'search-info':item.id === subClass_id}"
+                  @click="reloadPage('subClass_id', item.id, '')"
                 >
                   {{ item.name }}
                 </li>
@@ -59,10 +65,12 @@
             <div class="user-box-right-search-left">类型</div>
             <div class="user-box-right-search-right">
               <ul v-if="typeList!==null && typeList">
-                <li v-bind:class="{'search-info':type_id || type_id===''}">全部</li>
+                <li v-bind:class="{'search-info': type_id===''}"
+                    @click="reloadPage('type_id', '', '')">全部</li>
                 <li
                   v-for="item in typeList"
                   v-bind:class="{'search-info':item.id === type_id}"
+                  @click="reloadPage('type_id', item.id, '')"
                 >
                   {{ item.name }}
                 </li>
@@ -90,10 +98,10 @@
             <div class="user-box-right-search-left">年份</div>
             <div class="user-box-right-search-right">
               <ul>
-                <li v-bind:class="{'search-info':decade_id || decade_id===''}">全部</li>
+                <li v-bind:class="{'search-info': onDecade===''}">全部</li>
                 <li
                   v-for="item in decadeList"
-                  v-bind:class="{'search-info':item.id === decade_id}"
+                  v-bind:class="{'search-info':item.id === onDecade}"
                 >
                   {{ item.name }}
                 </li>
@@ -101,9 +109,40 @@
             </div>
           </li>
         </ul>
-        <ul class="film-list">
-          电影显示列表
+        <ul class="film-list" v-if="filmList!==null && filmList.length>0">
+          <li v-for="li in filmList">
+            <div  class="note-left" :title="li.name">
+              <el-image
+                class="lazy rounded img-fluids"
+                :src="HOME+li.image"
+                :alt="li.name" ></el-image>
+            </div>
+            <div class="film-info">
+              <div class="info">
+                <h2>
+                  <a class="film-info-a" href="xl/detail?film_id=${list.id}"
+                       :title="li.name"
+                       target="_blank">{{li.name}}</a>
+                  <em> {{li.onDecade}}</em>
+                </h2>
+                <!--<em class="star star<c:if test="${list.evaluation>=1&&list.evaluation<2}">1</c:if><c:if test="${list.evaluation>=2&&list.evaluation<4}">2</c:if><c:if test="${list.evaluation>=4&&list.evaluation<6}">3</c:if><c:if test="${list.evaluation>=6&&list.evaluation<8}">4</c:if><c:if test="${list.evaluation>=8&&list.evaluation<=10}">5</c:if>"></em>-->
+                <p>主演：{{li.actor}}</p>
+                <p><i>状态：{{li.status}}</i>&nbsp;<i>地区：{{li.locName}}</i></p>
+                <p><i>类型：{{li.typeName}}</i><i>更新：{{li.updateTime}}</i></p>
+                <p></p>
+                <span>
+                  <a class="watch-btn" target="_blank" @click="goPage('/detail')">观看</a>
+                  <a class="download-btn" target="_blank" @click="goPage('/detail')">下载</a>
+                </span>
+              </div>
+            </div>
+          </li>
         </ul>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total="1000">
+        </el-pagination>
       </el-col>
     </el-row>
   </el-main>
@@ -125,15 +164,18 @@
           locList: [], // 地区列表
           loc_id: "", // 当前选择的地区id
           decadeList: [], // 年份列表
-          decade_id: "", // 当前选择的id
           filmList: [], // 影片列表
+          name: "",// 影片名
+          actor: "", // 演员
+          onDecade: "", // 选择的年份
+          evaluation: "",// 评分
         }
       },
       mounted() {
         if( this.checkInit() ) {
           this.$store.state.activeIndex = this.$route.query.index;
-          this.init();
           this.cataLog_id = this.$route.query.cataLog_id;
+          this.init();
           this.$store.state.fullscreenLoading = false;
         }
       },
@@ -150,7 +192,17 @@
           }
         },
         init() {
-          searchFilm({cataLogId: this.cataLog_id}).then( res => {
+          const param = {
+            cataLog_id: this.cataLog_id,
+            subClass_id: this.subClass_id,
+            type_id: this.type_id,
+            name: this.name,
+            loc_id: this.loc_id,
+            actor: this.actor,
+            onDecade: this.onDecade,
+            evaluation: this.evaluation,
+          };
+          searchFilm(param).then( res => {
             const data = dealResult(res.data);
             console.log(data);
             if( null!==data ) {
@@ -168,11 +220,24 @@
         registerPage() {
           this.$router.push('register');
         },
-        reloadPage(cataLog_id, index) {
+        reloadPage(name, value, index) {
           if( null!==index && index>=10 ) {
             this.$store.state.activeIndex = index;
           }
-          this.cataLog_id = cataLog_id;
+          switch (name) {
+            case "cataLog_id":
+              this.cataLog_id = value;
+              this.typeList = [];
+              this.subClass_id = "";
+              break;
+            case "subClass_id":
+              this.subClass_id = value;
+              this.type_id = "";
+              break;
+            case "type_id":
+              this.type_id = value;
+              break;
+          }
           this.init();
         },
       }
