@@ -69,6 +69,7 @@ a:hover {
     float: left;
     overflow: hidden;
     margin: 5px;
+    width: 19%;
 }
 .film-list li img {
     width: 100%;
@@ -277,4 +278,7 @@ a:hover {
 .search-info {
   background: #343a40;
   color:white !important;
+}
+.mlist a {
+  cursor: pointer;
 }

@@ -138,10 +138,23 @@
             </div>
           </li>
         </ul>
+        <ul class="mlist" v-else>
+            对不起，没有找到任何记录,
+            <a target="_blank" @click="toNote">
+              <font color="red"><b>请您在此留言</b></font>
+            </a>
+            ，我们尽快为你添加喜欢的数据<div class="cr"></div>
+        </ul>
         <el-pagination
+          v-if="pageBean!=null"
           background
           layout="prev, pager, next"
-          :total="1000">
+          :page-size="pageBean.ps"
+          :total="pageBean.tr"
+          hide-on-single-page
+          @prev-click="prevPage"
+          @next-click="nextPage"
+        >
         </el-pagination>
       </el-col>
     </el-row>
@@ -169,6 +182,8 @@
           actor: "", // 演员
           onDecade: "", // 选择的年份
           evaluation: "",// 评分
+          pageBean: null, // 分页信息
+          ps: 15, // 分页展示条数
         }
       },
       mounted() {
@@ -191,17 +206,8 @@
             return true;
           }
         },
-        init() {
-          const param = {
-            cataLog_id: this.cataLog_id,
-            subClass_id: this.subClass_id,
-            type_id: this.type_id,
-            name: this.name,
-            loc_id: this.loc_id,
-            actor: this.actor,
-            onDecade: this.onDecade,
-            evaluation: this.evaluation,
-          };
+        init(pc, ps) {
+          const param = this.getFilmListParams();
           searchFilm(param).then( res => {
             const data = dealResult(res.data);
             console.log(data);
@@ -211,7 +217,10 @@
               this.typeList = data.typeList;
               this.locList = data.locList;
               this.decadeList = data.decadeList;
-              this.filmList = data.filmList;
+              this.pageBean = data.pageBean;
+              if( this.pageBean != null ) {
+                this.filmList = data.pageBean.beanList;
+              }
             }
           }).catch(function (error) {
             console.log(error);
@@ -240,6 +249,34 @@
           }
           this.init();
         },
+        prevPage() {
+          let pc = this.pageBean.pc;
+          this.init(pc-1, this.ps);
+        },
+        nextPage() {
+          let pc = this.pageBean.pc;
+          this.init(pc+1, this.ps);
+        },
+        toNote() {
+          goPage('note');
+        },
+        getFilmListParams(pc, ps) {
+          if( pc == null ) pc = 1;
+          if( ps == null) ps = 15;
+          console.log(pc);
+          return {
+            cataLog_id: this.cataLog_id,
+            subClass_id: this.subClass_id,
+            type_id: this.type_id,
+            name: this.name,
+            loc_id: this.loc_id,
+            actor: this.actor,
+            onDecade: this.onDecade,
+            evaluation: this.evaluation,
+            pc: pc,
+            ps: ps,
+          };
+        }
       }
     }
 </script>
