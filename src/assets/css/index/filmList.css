@@ -2,8 +2,12 @@
 body{
     background:#fff;
 }
+a {
+  cursor: pointer;
+}
 a:hover {
     text-decoration: none;
+    cursor: pointer;
 }
 .user-box{
     width:1000px;
@@ -89,7 +93,7 @@ a:hover {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    text-align: left;
+    text-align: center;
 }
 
 .film-info a {
@@ -115,6 +119,9 @@ a:hover {
 .info {
     float: left;
     width: 100%;
+}
+.film-info-a {
+  cursor: pointer;
 }
 .info h2 {
     height: 26px;
@@ -161,7 +168,7 @@ a:hover {
     overflow: hidden;
 }
 .info span {
-    display: block;
+    display: inline-block;
     height: auto;
     overflow: hidden;
 }
@@ -169,8 +176,8 @@ a:hover {
     display: inline-block;
     float: left;
     width: 50px;
-    line-height: 21px;
-    height: 21px;
+    line-height: 22px;
+    height: 22px;
     overflow: hidden;
     margin-right: 8px;
     color: white;
@@ -281,4 +288,12 @@ a:hover {
 }
 .mlist a {
   cursor: pointer;
+}
+.film-info-desc {
+  font-weight: 700;
+  color: black;
+}
+.film-info-detail {
+  font-weight: 400;
+  color: #5E5E5E;
 }

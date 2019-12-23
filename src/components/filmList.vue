@@ -112,27 +112,49 @@
         <ul class="film-list" v-if="filmList!==null && filmList.length>0">
           <li v-for="li in filmList">
             <div  class="note-left" :title="li.name">
+              <a :title="li.name"
+                 target="_blank"
+                 @click="detailPage(li.id)"
+              >
               <el-image
                 class="lazy rounded img-fluids"
                 :src="HOME+li.image"
-                :alt="li.name" ></el-image>
+                :alt="li.name"
+                fit="contain"
+              ></el-image>
+              </a>
             </div>
             <div class="film-info">
               <div class="info">
                 <h2>
-                  <a class="film-info-a" href="xl/detail?film_id=${list.id}"
+                  <a class="film-info-a"
                        :title="li.name"
-                       target="_blank">{{li.name}}</a>
+                       target="_blank"
+                     @click="detailPage(li.id)"
+                  >{{li.name}}</a>
                   <em> {{li.onDecade}}</em>
                 </h2>
                 <!--<em class="star star<c:if test="${list.evaluation>=1&&list.evaluation<2}">1</c:if><c:if test="${list.evaluation>=2&&list.evaluation<4}">2</c:if><c:if test="${list.evaluation>=4&&list.evaluation<6}">3</c:if><c:if test="${list.evaluation>=6&&list.evaluation<8}">4</c:if><c:if test="${list.evaluation>=8&&list.evaluation<=10}">5</c:if>"></em>-->
-                <p>主演：{{li.actor}}</p>
-                <p><i>状态：{{li.status}}</i>&nbsp;<i>地区：{{li.locName}}</i></p>
-                <p><i>类型：{{li.typeName}}</i><i>更新：{{li.updateTime}}</i></p>
+                <p><i class="film-info-desc">主演：
+                  <i class="film-info-detail">{{li.actor}}</i>
+                </i></p>
+                <p><i class="film-info-desc">状态：
+                    <i class="film-info-detail">{{li.status}}</i>
+                  </i>&nbsp;
+                  <i class="film-info-desc">地区：
+                    <i class="film-info-detail">{{li.locName}}</i>
+                  </i>
+                </p>
+                <p><i class="film-info-desc">类型：
+                  <i class="film-info-detail">{{li.typeName}}</i>
+                </i></p>
+                <p><i class="film-info-desc">更新：
+                  <i class="film-info-detail">{{li.updateTime}}</i>
+                </i></p>
                 <p></p>
                 <span>
-                  <a class="watch-btn" target="_blank" @click="goPage('/detail')">观看</a>
-                  <a class="download-btn" target="_blank" @click="goPage('/detail')">下载</a>
+                  <a class="watch-btn" target="_blank" @click="detailPage(li.id)">观看</a>
+                  <a class="download-btn" target="_blank" @click="detailPage(li.id)">下载</a>
                 </span>
               </div>
             </div>
@@ -154,6 +176,7 @@
           hide-on-single-page
           @prev-click="prevPage"
           @next-click="nextPage"
+          @current-change="selectPage"
         >
         </el-pagination>
       </el-col>
@@ -207,7 +230,7 @@
           }
         },
         init(pc, ps) {
-          const param = this.getFilmListParams();
+          const param = this.getFilmListParams(pc, ps);
           searchFilm(param).then( res => {
             const data = dealResult(res.data);
             console.log(data);
@@ -251,6 +274,7 @@
         },
         prevPage() {
           let pc = this.pageBean.pc;
+          console.log(pc);
           this.init(pc-1, this.ps);
         },
         nextPage() {
@@ -259,6 +283,14 @@
         },
         toNote() {
           goPage('note');
+        },
+        detailPage(filmId) {
+          let routeData = this.$router.resolve({ path: '/detail/'+filmId });
+          window.open(routeData.href, '_blank');
+          // goPage('/detail/'+filmId);
+        },
+        selectPage(selectedPageNo) {
+          this.init(selectedPageNo, this.ps);
         },
         getFilmListParams(pc, ps) {
           if( pc == null ) pc = 1;
@@ -287,4 +319,7 @@
     color: #343a40;
     background: #b5b5b5;
   }
+.el-pagination {
+  text-align: center;
+}
 </style>
