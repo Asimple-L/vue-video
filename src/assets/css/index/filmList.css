@@ -1,286 +1,286 @@
 @charset "UTF-8";
 body{
-    background:#fff;
+  background:#fff;
 }
 a {
   cursor: pointer;
 }
 a:hover {
-    text-decoration: none;
-    cursor: pointer;
+  text-decoration: none;
+  cursor: pointer;
 }
 .user-box{
-    width:1000px;
-    height: auto;
-    overflow: hidden;
-    margin: 0 auto;
-    background: #fff;
+  width:1000px;
+  height: auto;
+  overflow: hidden;
+  margin: 0 auto;
+  background: #fff;
 }
 /*左侧*/
 .user-box-left{
-    height: auto;
-    overflow: hidden;
-    float: left;
+  height: auto;
+  overflow: hidden;
+  float: left;
 }
 .user-nav{
-    height: auto;
-    background:#343a40;
-    margin: 10px auto;
+  height: auto;
+  background:#343a40;
+  margin: 10px auto;
 }
 .user-nav li{
-    height: 40px;
-    line-height: 40px;
-    padding-left:30%;
-    font-size: 14px;
-    color: white;
-    cursor: pointer;
+  height: 40px;
+  line-height: 40px;
+  padding-left:30%;
+  font-size: 14px;
+  color: white;
+  cursor: pointer;
 }
 .user-nav a{
-    color:#444;
+  color:#444;
 }
 .user-nav li:hover{
-    background: #b5b5b5;
-    color: #343a40;
+  background: #b5b5b5;
+  color: #343a40;
 }
 
 /*右侧*/
 .user-box-right{
-    height:auto;
-    overflow: hidden;
-    float: right;
+  height:auto;
+  overflow: hidden;
+  float: right;
 }
 .user-nav-title{
-    width: 100%;
-    height: 40px;
-    line-height: 40px;
-    font-size: 16px;
-    padding-left:30%;
-    color: white;
-    cursor: pointer;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+  padding-left:30%;
+  color: white;
+  cursor: pointer;
 }
 /*影片列表*/
 .film-list {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    background: #fff;
-    margin-bottom: 0;
-    border: 1px solid #ddd;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  margin-bottom: 0;
+  padding-top: 15px;
 }
 
 .film-list li {
-    list-style: none;
-    float: left;
-    overflow: hidden;
-    margin: 5px;
-    width: 19%;
+  list-style: none;
+  float: left;
+  overflow: hidden;
+  margin: 5px;
+  width: 19%;
 }
 .film-list li img {
-    width: 100%;
-    height: 100%;
-    padding: 4px;
-    border: 1px solid #ddd;
+  width: 100%;
+  height: 100%;
+  padding: 4px;
+  border: 1px solid #ddd;
 }
 
 .note-left{
-    float: left;
-    width: 100%;
-    height: auto;
+  float: left;
+  width: 100%;
+  height: auto;
 }
 .film-info {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align: center;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
 }
 
 .film-info a {
-    color: #1d94ff;
-    width: 100%;
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  color: #1d94ff;
+  width: 100%;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .film-info p {
-    color: #A9A8A8;
-    margin-bottom: 0;
-    width: 100%;
-    overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap;
+  color: #A9A8A8;
+  margin-bottom: 0;
+  width: 100%;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
 }
 
 
 /*右侧信息*/
 .info {
-    float: left;
-    width: 100%;
+  float: left;
+  width: 100%;
 }
 .film-info-a {
   cursor: pointer;
 }
 .info h2 {
-    height: 26px;
-    line-height: 26px;
-    color: #A4A4A4;
+  height: 26px;
+  line-height: 26px;
+  color: #A4A4A4;
 }
 .info h2 a{
-    color: #2C89C6;
-    font-size: 14px;
-    font-weight: bold;
-    margin-right: 10px;
+  color: #2C89C6;
+  font-size: 14px;
+  font-weight: bold;
+  margin-right: 10px;
 }
 .info em,.info i{
-    font-style: normal;
+  font-style: normal;
 }
 
 .info .star{
-    height: 16px;
-    overflow: hidden;
-    width: 220px;
-    background: url("../../img/filmList/starr.gif") no-repeat;
-    display: block;
-    margin-bottom: 3px;
+  height: 16px;
+  overflow: hidden;
+  width: 220px;
+  background: url("../../img/filmList/starr.gif") no-repeat;
+  display: block;
+  margin-bottom: 3px;
+  margin-left: 30%;
 }
 .info .star1 {
-    background-position: 0 -64px;
+  background-position: 0 -64px;
 }
 .info .star2 {
-    background-position: 0 -46px;
+  background-position: 0 -46px;
 }
 .info .star3 {
-    background-position: 0 -32px;
+  background-position: 0 -32px;
 }
 .info .star4 {
-    background-position: 0 -16px;
+  background-position: 0 -16px;
 }
 .info .star5 {
-    background-position: 0 -0px;
+  background-position: 0 -0px;
 }
 .info p {
-    color: #5E5E5E;
-    line-height: 20px;
-    height: 20px;
-    overflow: hidden;
+  color: #5E5E5E;
+  line-height: 20px;
+  height: 20px;
+  overflow: hidden;
 }
 .info span {
-    display: inline-block;
-    height: auto;
-    overflow: hidden;
+  display: inline-block;
+  height: auto;
+  overflow: hidden;
 }
 .info span a{
-    display: inline-block;
-    float: left;
-    width: 50px;
-    line-height: 22px;
-    height: 22px;
-    overflow: hidden;
-    margin-right: 8px;
-    color: white;
-    text-align: center;
+  display: inline-block;
+  float: left;
+  width: 50px;
+  line-height: 22px;
+  height: 22px;
+  overflow: hidden;
+  margin-right: 8px;
+  color: white;
+  text-align: center;
 }
 .watch-btn{
-    border-radius: 4px;
-    background: #57d2f2;
+  border-radius: 4px;
+  background: #57d2f2;
 }
 .download-btn{
-    border-radius: 4px;
-    background: #FAD119;
+  border-radius: 4px;
+  background: #FAD119;
 }
 /*影片列表*/
 
 /*页码样式*/
 .use-btn,.nouse-btn{
-    padding: 4px 8px;
-    display: inline-block;
-    border: 1px solid #343a40;
-    border-radius: 3px;
-    text-align: center;
+  padding: 4px 8px;
+  display: inline-block;
+  border: 1px solid #343a40;
+  border-radius: 3px;
+  text-align: center;
 }
 
 .use-btn{
-    background: #fff;
-    color:#444;
+  background: #fff;
+  color:#444;
 }
 .nouse-btn{
-    background: #f2f2f2;
-    color:#ccc;
+  background: #f2f2f2;
+  color:#ccc;
 }
 /*页码样式*/
 
 
 /*右侧检索*/
 .user-box-right-search{
-    height: auto;
-    overflow: hidden;
-    border: 1px solid #ddd;
-    padding: 10px;
+  height: auto;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  padding: 10px;
 }
 .user-box-right-search ul{
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 .user-box-right-search li{
-    list-style: none;
-    height: auto;
-    overflow: hidden;
-    margin-bottom: 5px;
+  list-style: none;
+  height: auto;
+  overflow: hidden;
+  margin-bottom: 5px;
 }
 .user-box-right-search-left{
-    width: auto;
-    height: 22px;
-    float: left;
-    line-height: 30px;
-    overflow: hidden;
-    font-size: 14px;
-    font-weight: 600;
-    text-align: center;
+  width: auto;
+  height: 22px;
+  float: left;
+  line-height: 30px;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
 }
 .user-box-right-search-right{
-    width: auto;
-    height: auto;
-    overflow: hidden;
+  width: auto;
+  height: auto;
+  overflow: hidden;
 }
 .user-box-right-search-right ul{
-    width: auto;
-    height: auto;
-    overflow: hidden;
-    margin-left: 10px;
+  width: auto;
+  height: auto;
+  overflow: hidden;
+  margin-left: 10px;
 }
 .user-box-right-search-right ul li{
-    list-style: none;
-    height: auto;
-    overflow: hidden;
-    float: left;
-    margin-right: 5px;
-    padding: 3px 6px;
-    border-radius: 4px;
-    color:#444;
-    cursor: pointer;
+  list-style: none;
+  height: auto;
+  overflow: hidden;
+  float: left;
+  margin-right: 5px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  color:#444;
+  cursor: pointer;
 }
 .user-box-right-search-right ul li:hover{
-    background: #343a40;
-    color:white;
+  background: #343a40;
+  color:white;
 }
 
 /*检索*/
 
 /*空结果*/
 .mlist {
-    margin: 14px 17px 24px;
-    border: dashed #ddd;
-    border-width: 1px 0;
-    height: 100%;
-    overflow: hidden;
-    padding: 16px 0 16px 3px;
+  margin: 14px 17px 24px;
+  border: dashed #ddd;
+  border-width: 1px 0;
+  height: 100%;
+  overflow: hidden;
+  padding: 16px 0 16px 3px;
 }
 .cr {
-    clear: both;
-    height: 0;
-    overflow: hidden;
+  clear: both;
+  height: 0;
+  overflow: hidden;
 }
 .search-info {
   background: #343a40;
