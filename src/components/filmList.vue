@@ -44,7 +44,7 @@
             <li>
               <div class="user-box-right-search-left">子类</div>
               <div class="user-box-right-search-right">
-                <ul v-if="subClassList!==null && subClassList.length!==0">
+                <ul v-if="subClassList && subClassList.length!==0">
                   <li
                     v-bind:class="{'search-info': subClass_id===''}"
                     @click="reloadPage('subClass_id', '', '')">
@@ -65,7 +65,7 @@
             <li>
               <div class="user-box-right-search-left">类型</div>
               <div class="user-box-right-search-right">
-                <ul v-if="typeList!==null && typeList">
+                <ul v-if="typeList && typeList">
                   <li v-bind:class="{'search-info': type_id===''}"
                       @click="reloadPage('type_id', '', '')">全部</li>
                   <li
@@ -152,16 +152,16 @@
                   </i></p>
                   <p><i class="film-info-desc">状态：
                       <i class="film-info-detail">{{li.status}}</i>
-                    </i>&nbsp;
+                    </i></p>
+                  <p>
                     <i class="film-info-desc">地区：
                       <i class="film-info-detail">{{li.locName}}</i>
-                    </i>
-                  </p>
+                    </i></p>
                   <p><i class="film-info-desc">类型：
                     <i class="film-info-detail">{{li.typeName}}</i>
                   </i></p>
                   <p><i class="film-info-desc">更新：
-                    <i class="film-info-detail">{{li.updateTime}}</i>
+                    <i class="film-info-detail">{{$moment(li.updateTime).format("YYYY-MM-DD")}}</i>
                   </i></p>
                   <p></p>
                   <span>
@@ -306,7 +306,6 @@
         detailPage(filmId) {
           let routeData = this.$router.resolve({ path: '/detail/'+filmId });
           window.open(routeData.href, '_blank');
-          // goPage('/detail/'+filmId);
         },
         selectPage(selectedPageNo) {
           this.init(selectedPageNo, this.ps);
@@ -314,7 +313,6 @@
         getFilmListParams(pc, ps) {
           if( pc == null ) pc = 1;
           if( ps == null) ps = 15;
-          console.log(pc);
           return {
             cataLog_id: this.cataLog_id,
             subClass_id: this.subClass_id,

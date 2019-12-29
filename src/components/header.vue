@@ -14,7 +14,7 @@
             <a href="javascript:void(0)" @click="goIndexPage">欢迎来到爱视最新影片资源</a>
           </el-menu-item>
           <el-menu-item index="2">
-            <a href="/note">留言</a>
+            <a @click="toNote()">留言</a>
           </el-menu-item>
           <el-menu-item index="3">
             <a @click="collect" href="javascript:void(0)">收藏网站</a>
@@ -46,8 +46,7 @@
               </div>
             </el-dialog>
             <el-menu-item index="5">
-              <a href="#">个人中心</a>
-              <!--<a href="/video/profile/profilePage">个人中心</a>-->
+              <a @click="toProfile($store.state.user.id)">个人中心</a>
             </el-menu-item>
             <el-menu-item>
               <a @click="userLoginOut"  href="javascript:void(0)">退出</a>
@@ -221,6 +220,12 @@ export default {
     toSearchPage(cataLog_id) {
       const param = {cataLog_id: cataLog_id};
       goPageParam("/xl", param);
+    },
+    toNote() {
+      goPage('/note');
+    },
+    toProfile(user_id) {
+      goPage("/userProfile/"+user_id)
     }
   },
   components: {
