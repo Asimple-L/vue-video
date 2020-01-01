@@ -418,7 +418,6 @@
           return ( this.resListHttp!==null && this.resListHttp.length!==0) || (this.resListOther!==null && this.resListOther.length!==0) || (this.resListThunder!==null && this.resListThunder.length!==0);
         },
         fk(type) {
-          console.log(type);
           this.$message.success('反馈成功...');
         },
         goAnchor(selector) {

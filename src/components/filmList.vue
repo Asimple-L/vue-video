@@ -246,7 +246,6 @@
           const param = this.getFilmListParams(pc, ps);
           searchFilm(param).then( res => {
             const data = dealResult(res.data);
-            console.log(data);
             if( null!==data ) {
               this.cataLogList = data.cataLogList;
               this.subClassList = data.subClassList;
@@ -293,7 +292,6 @@
         },
         prevPage() {
           let pc = this.pageBean.pc;
-          console.log(pc);
           this.init(pc-1, this.ps);
         },
         nextPage() {

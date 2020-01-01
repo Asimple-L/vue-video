@@ -26,7 +26,7 @@
                 <a href="#">{{ $store.state.user.userName }}</a>
               </el-tooltip>
             </el-menu-item>
-            <el-menu-item>
+            <el-menu-item index="-1">
               <a href="https://w.url.cn/s/AGHnGAE"  target="_blank">加点油</a>
             </el-menu-item>
             <el-menu-item index="4">
@@ -48,7 +48,7 @@
             <el-menu-item index="5">
               <a @click="toProfile($store.state.user.id)">个人中心</a>
             </el-menu-item>
-            <el-menu-item>
+            <el-menu-item index="-2">
               <a @click="userLoginOut"  href="javascript:void(0)">退出</a>
             </el-menu-item>
           </template >
@@ -202,6 +202,7 @@ export default {
       logOut().then( res => {
         this.$store.state.user = null;
         this.$message('登出成功!');
+        this.goIndexPage();
       }).catch(function (err) {
         console.log(err);
       })
