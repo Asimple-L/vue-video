@@ -8,6 +8,10 @@ import FilmList from '@/components/filmList'
 import Note from '@/components/note'
 import UpdateFilm from '@/components/updateFilm'
 import UserProfile from '@/components/userProfile'
+import viewHistory from '@/components/profile/viewHistory'
+import comment from '@/components/profile/comment'
+import videosMine from '@/components/profile/videosMine'
+import updateInfo from '@/components/profile/updateInfo'
 
 Vue.use(Router);
 
@@ -19,7 +23,13 @@ export default new Router({
     { path: '/detail/:filmId', name: 'film-detail', component: FilmDetail},
     { path: '/xl', name: 'film-list', component: FilmList},
     { path: '/note', name: 'note', component: Note},
-    { path: '/userProfile/:uid', name: 'user-profile', component: UserProfile},
+    { path: '/userProfile/:uid', name: 'user-profile', component: UserProfile,children:[
+        { path: 'history', name: 'view-history', component: viewHistory },
+        { path: 'comment', name: 'comment', component: comment },
+        { path: 'videos', name: 'videos-mine', component: videosMine },
+        { path: 'updateInfo', name: 'update-info', component: updateInfo },
+        { path: '', component: videosMine },
+      ]},
     { path: '/upload', name: 'update-film', component: UpdateFilm},
     { path: '/error', name: 'error', component: Error},
     { path: '/**', redirect: '/index'}

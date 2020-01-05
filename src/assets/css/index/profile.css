@@ -13,5 +13,12 @@
 }
 
 .awards {
-  margin-bottom: 0px;
+  margin-bottom: 0;
+}
+
+.empty_info {
+  color: red;
+}
+.padding-left-10 {
+  padding-left: 10px;
 }

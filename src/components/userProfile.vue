@@ -32,8 +32,6 @@
                 </el-row>
               </div>
             </div>
-            <!-- END PROFILE HEADER -->
-            <!-- PROFILE DETAIL -->
             <div class="profile-detail">
               <div class="profile-info">
                 <h4 class="heading">用户信息</h4>
@@ -43,12 +41,11 @@
                 </ul>
               </div>
             </div>
-            <!-- END PROFILE DETAIL -->
           </div>
 
           <!-- 右边 -->
           <div class="profile-right">
-            <h4 class="heading">用户权限</h4>
+            <h4 class="heading padding-left-10">用户权限</h4>
             <div class="awards">
               <el-row>
                 <el-col :span="6" class="center">
@@ -85,106 +82,29 @@
                 </el-col>
               </el-row>
             </div>
-            <!-- TABBED CONTENT -->
+            <!-- 栏目 -->
             <div class="custom-tabs-line tabs-line-bottom left-aligned">
               <ul class="nav" role="tablist">
-                <li class="active"><a href="#video-mine" role="tab" data-toggle="tab">我的视频</a></li>
-                <li><a href="#view-history" role="tab" data-toggle="tab">浏览记录</a></li>
-                <li><a href="#my-comment" role="tab" data-toggle="tab">我的评论</a></li>
-                <li><a href="#update-info" role="tab" data-toggle="tab">修改密码</a></li>
+                <li class="active">
+                  <router-link :to="{ name: videos-mine }">我的视频</router-link>
+                  <!--<a href="#video-mine" role="tab" data-toggle="tab">我的视频</a>-->
+                </li>
+                <li>
+                  <a href="#view-history" role="tab" data-toggle="tab">浏览记录</a>
+                </li>
+                <li>
+                  <a href="#my-comment" role="tab" data-toggle="tab">我的评论</a>
+                </li>
+                <li>
+                  <a href="#update-info" role="tab" data-toggle="tab">修改密码</a>
+                </li>
               </ul>
             </div>
 
             <!-- 详细信息 -->
             <div class="tab-content">
-              <div class="tab-pane in active" id="video-mine">
-                <div class="text-center" style="width: 100%;">
-                  <!--<a href="/video/profile/share">-->
-                  <a href="#">
-                    <button class="btn-primary btn" style="border-radius: 15%;">我要上传</button>
-                  </a>
-                </div>
-                <!--<c:if test="${films!=null && films.size()>0}">-->
-                  <div style="margin: 10px auto;">
-                    <ul class="film-list" id="my-films">
-                      <!--<c:forEach items="${films}" var="list">-->
-                        <!--<li>-->
-                          <!--<a href="/video/profile/share.html?film_id=${list.id}">-->
-                            <!--<div title="${list.name}"><img src="${list.image}" style="height: 175px;width: 126px;"></div>-->
-                          <!--</a>-->
-                          <!--<div class="film-info">-->
-                            <!--<a href="/video/profile/share.html?film_id=${list.id}" title="${list.name}"><p>${list.name}</p></a>-->
-                            <!--<p>${list.onDecade}-${list.typeName}</p>-->
-                          <!--</div>-->
-                        <!--</li>-->
-                      <!--</c:forEach>-->
-                    </ul>
-                  </div>
-                  <div class="margin-top-30 text-center">
-                    <nav aria-label="...">
-                      <ul class="pager" id="my-films-page">
-                        <!-- 分页 -->
-                      </ul>
-                    </nav>
-                  </div>
-                <!--</c:if>-->
-              </div>
-              <!-- 浏览历史 -->
-              <div class="tab-pane" id="view-history">
-                <!--<c:if test="${viewHistoryList!=null && viewHistoryList.size()>0}">-->
-                  <div style="margin: 10px auto;">
-                    <ul class="film-list" id="my-view-history">
-                      <!--<c:forEach items="${viewHistoryList}" var="list">-->
-                        <!--<li>-->
-                          <!--<a href="/video/xl/detail.html?film_id=${list.film.id}">-->
-                            <!--<div title="上次浏览时间:<f:formatDate value="${list.date_view}" pattern="yyyy-MM-dd HH:mm:ss" />"><img src="${list.film.image}" style="height: 175px;width: 126px;"></div>-->
-                  <!--</a>-->
-                  <!--<div class="film-info">-->
-                    <!--<a href="/video/xl/detail.html?film_id=${list.id}" title="${list.film.name}"><p>${list.film.name}</p></a>-->
-                    <!--<p>${list.film.onDecade}-${list.film.typeName}</p>-->
-                  <!--</div>-->
-                  <!--</li>-->
-                  <!--</c:forEach>-->
-                  </ul>
-              </div>
-              <div class="margin-top-30 text-center">
-                <nav aria-label="...">
-                  <ul class="pager" id="my-view-history-page">
-                    <!-- 分页 -->
-                  </ul>
-                </nav>
-              </div>
-              <!--</c:if>-->
+              <router-link></router-link>
             </div>
-            <!-- 我的评论 -->
-            <div class="tab-pane in" id="my-comment">
-              <ul class="list-unstyled activity-timeline">
-                <!--<c:forEach items="${comments}" var="list">-->
-                  <!--<li>-->
-                    <!--<i class="fa fa-comment activity-icon"></i>-->
-                    <!--<p>${list.context} <span class="timestamp"><f:formatDate value="${list.date_update}" pattern="yyyy-MM-dd HH:mm:ss" /></span></p>-->
-                  <!--</li>-->
-                <!--</c:forEach>-->
-              </ul>
-              <!--  分页 -->
-            </div>
-            <!--修改资料-->
-            <div class="tab-pane in" id="update-info">
-              <div class="margin-top-30 text-center">
-                <label for="oldPwd" class="control-label sr-only">旧密码：</label>
-                <input type="password" class="form-control" name="oldPwd" id="oldPwd" placeholder="旧密码" autocomplete="off">
-              </div>
-              <div class="margin-top-30 text-center">
-                <label for="rePwd" class="control-label sr-only">再次输入：</label>
-                <input type="password" class="form-control" name="rePwd" id="rePwd" placeholder="再次输入旧密码" autocomplete="off">
-              </div>
-              <div class="margin-top-30 text-center">
-                <label for="newPwd" class="control-label sr-only">新密码：</label>
-                <input type="password" class="form-control" name="newPwd" id="newPwd" placeholder="新密码" autocomplete="off">
-              </div>
-              <div class="margin-top-30 text-center"><a href="javascript:;" class="btn btn-default" onclick="updatePassword()">提交修改</a></div>
-            </div>
-          </div>
 
             <!-- END TABBED CONTENT -->
           </div>
@@ -213,6 +133,7 @@
           commentCount: 0, // 评论数据
           totalLike: 0, // 点赞数
           viewCount: 0, // 观看视频数目
+          filmList: [],// 上传的视频列表
         }
       },
       mounted() {
@@ -233,6 +154,7 @@
               this.commentCount = data.commentCount;
               this.viewCount = data.viewCount;
               this.totalLike = data.totalLike;
+              // this.filmList = data.films;
             }
           }).catch(function (err) {
             console.log(err);
@@ -275,7 +197,11 @@
           } else {
             return true;
           }
-        }
+        },
+        detailPage(filmId) {
+          let routeData = this.$router.resolve({ path: '/detail/'+filmId });
+          window.open(routeData.href, '_blank');
+        },
       }
     }
 </script>
