@@ -18,20 +18,20 @@ Vue.use(Router);
 export default new Router({
   routes: [
     { path: '/', redirect: '/index'},
-    { path: '/register', name: 'register', component: Register },
-    { path: '/index', name: 'index', component: Index},
-    { path: '/detail/:filmId', name: 'film-detail', component: FilmDetail},
-    { path: '/xl', name: 'film-list', component: FilmList},
-    { path: '/note', name: 'note', component: Note},
+    { path: '/register', name: 'register', component: Register },// 注册页
+    { path: '/index', name: 'index', component: Index},// 首页
+    { path: '/detail/:filmId', name: 'film-detail', component: FilmDetail},// 影片详情
+    { path: '/xl', name: 'film-list', component: FilmList},// 影片查询页
+    { path: '/note', name: 'note', component: Note},// 留言页
     { path: '/userProfile/:uid', name: 'user-profile', component: UserProfile,children:[
-        { path: 'history', name: 'view-history', component: viewHistory },
-        { path: 'comment', name: 'comment', component: comment },
-        { path: 'videos', name: 'videos-mine', component: videosMine },
-        { path: 'updateInfo', name: 'update-info', component: updateInfo },
+        { path: 'history', name: 'view-history', component: viewHistory },// 浏览历史页
+        { path: 'comment', name: 'comment', component: comment },// 我的评论页
+        { path: 'videos', name: 'videos-mine', component: videosMine },// 我上传的视频页
+        { path: 'updateInfo', name: 'update-info', component: updateInfo },// 用户信息更新页
         { path: '', component: videosMine },
-      ]},
-    { path: '/upload', name: 'update-film', component: UpdateFilm},
-    { path: '/error', name: 'error', component: Error},
-    { path: '/**', redirect: '/index'}
+      ]},// 用户中心页
+    { path: '/upload', name: 'update-film', component: UpdateFilm},// 影片信息更新页
+    { path: '/error', name: 'error', component: Error},// 错误页
+    { path: '/**', redirect: '/index'}// 默认访问首页
   ]
 })

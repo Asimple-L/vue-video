@@ -86,7 +86,7 @@
             <div class="custom-tabs-line tabs-line-bottom left-aligned">
               <ul class="nav" role="tablist">
                 <li class="active">
-                  <router-link :to="{ name: videos-mine }">我的视频</router-link>
+                  <router-link :to="{ name: 'videos-mine' }">我的视频</router-link>
                   <!--<a href="#video-mine" role="tab" data-toggle="tab">我的视频</a>-->
                 </li>
                 <li>
@@ -103,10 +103,9 @@
 
             <!-- 详细信息 -->
             <div class="tab-content">
-              <router-link></router-link>
+              <router-view></router-view>
             </div>
 
-            <!-- END TABBED CONTENT -->
           </div>
         </div>
       </div>
@@ -160,6 +159,7 @@
             console.log(err);
           });
         },
+        // 头像显示处理函数
         textToImg(uname) {
           let name = uname.charAt(0).toUpperCase();
           let fontSize = 37;
@@ -179,11 +179,13 @@
           context.fillText(name, fontSize, fontSize);
           $('.headImg').attr('src',canvas.toDataURL("image/png"));
         },
+        // 初始化参数获取
         getInitParam() {
           return {
             uid: this.loginUser.id
           }
         },
+        // 检查是否登录
         checkUid() {
           if( null==this.loginUser.id ||
             ''===this.loginUser.id.trim() ||
@@ -198,6 +200,7 @@
             return true;
           }
         },
+        // 进入详情页
         detailPage(filmId) {
           let routeData = this.$router.resolve({ path: '/detail/'+filmId });
           window.open(routeData.href, '_blank');
