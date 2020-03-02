@@ -2,39 +2,40 @@
   <div class="tab-pane in active" id="video-mine">
     <div class="text-center" style="width: 100%;">
       <!--<a href="/video/profile/share">-->
-      <a href="#">
-        <button class="btn-primary btn" style="border-radius: 15%;">我要上传</button>
-      </a>
+      <el-button type="primary" round @click="test('点击了上传按钮')">
+        我要上传<i class="el-icon-upload el-icon--right"></i>
+      </el-button>
     </div>
     <!--<c:if test="${films!=null && films.size()>0}">-->
     <div style="margin: 10px auto;">
-      <ul class="film-list" v-if="filmList && filmList.length>0">
-        <li v-for="item in filmList">
-          <a @click="detailPage(item.id)">
-            <div :title="item.name">
-              <img :src="HOME+item.image" style="height: 175px;width: 126px;">
-            </div>
-          </a>
-          <div class="film-info">
-            <a @click="detailPage(item.id)" :title="item.name">
-              <p>{{item.name}}</p>
+      <div class="center" v-if="filmList && filmList.length>0">
+        <ul class="film-list" >
+          <li v-for="item in filmList">
+            <a @click="detailPage(item.id)">
+              <div :title="item.name">
+                <img :src="HOME+item.image" style="height: 175px;width: 126px;">
+              </div>
             </a>
-            <p>{{item.onDecade}}-{{item.typeName}}</p>
-          </div>
-        </li>
-      </ul>
+            <div class="film-info">
+              <a @click="detailPage(item.id)" :title="item.name">
+                <p>{{item.name}}</p>
+              </a>
+              <p>{{item.onDecade}}-{{item.typeName}}</p>
+            </div>
+          </li>
+        </ul>
+        <!-- 分页 -->
+        <el-pagination
+          layout="prev, pager, next"
+          :total="50"
+          class="center"
+        >
+        </el-pagination>
+      </div>
       <div v-else class="center empty_info">
         暂无上传视频，请先上传！
       </div>
     </div>
-    <div class="margin-top-30 text-center">
-      <nav aria-label="...">
-        <ul class="pager" id="my-films-page">
-          <!-- 分页 -->
-        </ul>
-      </nav>
-    </div>
-    <!--</c:if>-->
   </div>
 </template>
 
@@ -45,8 +46,10 @@
       name: "videos-mine",
       data() {
         return {
-          filmList: [],
-          uid: "",
+          filmList: [],// 用户上传的视频列表
+          uid: "",// 用户id
+          total: 0,// 我上传的视频总数
+          page: 1, // 当前页
         }
       },
       mounted() {
@@ -60,6 +63,7 @@
           const param = this.getInitParam();
           userProfile(param).then( res => {
             const data = dealResult(res.data);
+            console.log(data);
             if( data!==null ) {
               this.filmList = data.films;
             }
@@ -67,16 +71,60 @@
             console.log(err);
           });
         },
+        // 获取init参数
         getInitParam() {
           return {
             uid: this.uid,
             type: "videos"
           }
+        },
+        // 测试方法
+        test(info) {
+          alert(info);
         }
       }
     }
 </script>
 
 <style scoped>
-
+  @import "../../assets/css/index.css";
+  .film-list {
+    width: 98%;
+    height: auto;
+    padding: 1%;
+    overflow: hidden;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+  }
+  .film-list li {
+    list-style: none;
+    float: left;
+    width: 104px;
+    height: 220px;
+    margin: 6px 50px 6px 6px;
+  }
+  .film-info {
+    width: 98%;
+    padding: 1%;
+    height: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .pager li {
+    display: inline-block;
+  }
+  .pager li>a, .pager li>span {
+    display: inline-block;
+    padding: 5px 14px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+  }
+  .pager .disabled>a, .pager .disabled>a:focus, .pager .disabled>a:hover, .pager .disabled>span {
+    color: #777;
+    cursor: not-allowed;
+    background-color: #fff;
+  }
 </style>

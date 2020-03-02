@@ -87,16 +87,15 @@
               <ul class="nav" role="tablist">
                 <li class="active">
                   <router-link :to="{ name: 'videos-mine' }">我的视频</router-link>
-                  <!--<a href="#video-mine" role="tab" data-toggle="tab">我的视频</a>-->
                 </li>
                 <li>
-                  <a href="#view-history" role="tab" data-toggle="tab">浏览记录</a>
+                  <router-link :to="{ name: 'view-history' }">浏览记录</router-link>
                 </li>
                 <li>
-                  <a href="#my-comment" role="tab" data-toggle="tab">我的评论</a>
+                  <router-link :to="{ name: 'comment' }">我的评论</router-link>
                 </li>
                 <li>
-                  <a href="#update-info" role="tab" data-toggle="tab">修改密码</a>
+                  <router-link :to="{ name: 'update-info' }">修改密码</router-link>
                 </li>
               </ul>
             </div>
@@ -138,7 +137,6 @@
       mounted() {
         if( this.checkUid() ) {
           this.init();
-          console.log(this.$store.state.user.userName);
           this.textToImg(this.$store.state.user.userName);
         }
       },
@@ -147,13 +145,11 @@
           const param = this.getInitParam();
           userProfile(param).then( res => {
             const data = dealResult(res.data);
-            console.log(data);
             if( data!==null ) {
               this.myFilmsCount = data.myFilmsCount;
               this.commentCount = data.commentCount;
               this.viewCount = data.viewCount;
               this.totalLike = data.totalLike;
-              // this.filmList = data.films;
             }
           }).catch(function (err) {
             console.log(err);
@@ -214,43 +210,4 @@
   @import "../assets/plugins/linearicons/style.css";
   @import "../assets/css/manager/main.css";
   @import "../assets/css/index/profile.css";
-  .film-list {
-    width: 98%;
-    height: auto;
-    padding: 1%;
-    overflow: hidden;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-  }
-  .film-list li {
-    list-style: none;
-    float: left;
-    width: 104px;
-    height: 220px;
-    margin: 6px 36px 6px 6px;
-  }
-  .film-info {
-    width: 98%;
-    padding: 1%;
-    height: auto;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align: center;
-  }
-  .pager li {
-    display: inline-block;
-  }
-  .pager li>a, .pager li>span {
-    display: inline-block;
-    padding: 5px 14px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 15px;
-  }
-  .pager .disabled>a, .pager .disabled>a:focus, .pager .disabled>a:hover, .pager .disabled>span {
-    color: #777;
-    cursor: not-allowed;
-    background-color: #fff;
-  }
 </style>
