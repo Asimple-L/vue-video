@@ -15,6 +15,10 @@ export const goPageParam = (url, params) => {
   router.push({path: url, query: params});
 };
 
+export const goPageByName = params => {
+  router.push({name: params})
+};
+
 /**
  * 加密算法
  * @param input

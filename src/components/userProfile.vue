@@ -84,20 +84,28 @@
             </div>
             <!-- 栏目 -->
             <div class="custom-tabs-line tabs-line-bottom left-aligned">
-              <ul class="nav" role="tablist">
-                <li class="active">
-                  <router-link :to="{ name: 'videos-mine' }">我的视频</router-link>
-                </li>
-                <li>
-                  <router-link :to="{ name: 'view-history' }">浏览记录</router-link>
-                </li>
-                <li>
-                  <router-link :to="{ name: 'comment' }">我的评论</router-link>
-                </li>
-                <li>
-                  <router-link :to="{ name: 'update-info' }">修改密码</router-link>
-                </li>
-              </ul>
+              <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal">
+                <el-menu-item index="1">
+                  <router-link :to="{ name: 'videos-mine' }">
+                    <i class="el-icon-film"></i> 我的视频
+                  </router-link>
+                </el-menu-item>
+                <el-menu-item index="2">
+                  <router-link :to="{ name: 'view-history' }">
+                    <i class="el-icon-view"></i> 浏览记录
+                  </router-link>
+                </el-menu-item>
+                <el-menu-item index="3">
+                  <router-link :to="{ name: 'comment' }">
+                    <i class="el-icon-s-comment"></i> 我的评论
+                  </router-link>
+                </el-menu-item>
+                <el-menu-item index="4">
+                  <router-link :to="{ name: 'update-info' }">
+                    <i class="el-icon-setting"></i> 修改密码
+                  </router-link>
+                </el-menu-item>
+              </el-menu>
             </div>
 
             <!-- 详细信息 -->
@@ -114,7 +122,7 @@
 
 <script>
   import { userProfile, dealResult } from '../api/api';
-  import { goPage, goPageParam } from "../util/index";
+  import { goPage } from "../util/index";
   import "../assets/js/jquery-2.0.0.min.js";
   import "../assets/plugins/bootflat-admin/js/bootstrap.min.js";
   import "../assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js";
@@ -132,6 +140,7 @@
           totalLike: 0, // 点赞数
           viewCount: 0, // 观看视频数目
           filmList: [],// 上传的视频列表
+          activeIndex: '1',// 选择的页面
         }
       },
       mounted() {

@@ -26,8 +26,14 @@
         </ul>
         <!-- 分页 -->
         <el-pagination
-          layout="prev, pager, next"
-          :total="50"
+          v-if="total>0"
+          layout="total, prev, pager, next"
+          :total="total"
+          :page-size="pageSize"
+          hide-on-single-page
+          @prev-click="prevPage"
+          @next-click="nextPage"
+          @current-change="selectPage"
           class="center"
         >
         </el-pagination>
@@ -50,6 +56,7 @@
           uid: "",// 用户id
           total: 0,// 我上传的视频总数
           page: 1, // 当前页
+          pageSize: 5, // 页面大小
         }
       },
       mounted() {
@@ -66,6 +73,7 @@
             console.log(data);
             if( data!==null ) {
               this.filmList = data.films;
+              this.total = data.total;
             }
           }).catch(function (err) {
             console.log(err);
@@ -81,6 +89,18 @@
         // 测试方法
         test(info) {
           alert(info);
+        },
+        // 上一页
+        prevPage() {
+
+        },
+        // 下一页
+        nextPage() {
+
+        },
+        // 点击页码
+        selectPage(selectedPageNo) {
+
         }
       }
     }
@@ -101,7 +121,7 @@
     float: left;
     width: 104px;
     height: 220px;
-    margin: 6px 50px 6px 6px;
+    margin: 6px 40px 6px 6px;
   }
   .film-info {
     width: 98%;
