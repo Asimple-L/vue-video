@@ -101,3 +101,8 @@ export const userProfile = param => {
   const url = baseUrl + '/profile/profilePage';
   return axios.post(url, Qs.stringify(param));
 };
+
+export const getFilmsForProfile = param => {
+  const url = baseUrl + '/profile/getFilmAjax';
+  return axios.post(url, Qs.stringify(param));
+};

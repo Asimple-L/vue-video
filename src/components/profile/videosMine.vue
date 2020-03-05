@@ -6,8 +6,7 @@
         我要上传<i class="el-icon-upload el-icon--right"></i>
       </el-button>
     </div>
-    <!--<c:if test="${films!=null && films.size()>0}">-->
-    <div style="margin: 10px auto;">
+    <div style="margin: 10px auto;" v-if="total>0">
       <div class="center" v-if="filmList && filmList.length>0">
         <ul class="film-list" >
           <li v-for="item in filmList">
@@ -31,9 +30,7 @@
           :total="total"
           :page-size="pageSize"
           hide-on-single-page
-          @prev-click="prevPage"
-          @next-click="nextPage"
-          @current-change="selectPage"
+          @current-change="getFilms"
           class="center"
         >
         </el-pagination>
@@ -46,7 +43,7 @@
 </template>
 
 <script>
-  import { userProfile, dealResult } from '../../api/api';
+  import { userProfile, dealResult, getFilmsForProfile } from '../../api/api';
     export default {
       // 我的视频页面
       name: "videos-mine",
@@ -55,52 +52,45 @@
           filmList: [],// 用户上传的视频列表
           uid: "",// 用户id
           total: 0,// 我上传的视频总数
-          page: 1, // 当前页
           pageSize: 5, // 页面大小
         }
       },
       mounted() {
         if( this.$store.state.user.id ) {
           this.uid = this.$store.state.user.id;
-          this.init();
+          this.getFilms();
         }
       },
       methods: {
-        init() {
-          const param = this.getInitParam();
-          userProfile(param).then( res => {
-            const data = dealResult(res.data);
-            console.log(data);
-            if( data!==null ) {
-              this.filmList = data.films;
-              this.total = data.total;
-            }
-          }).catch(function (err) {
-            console.log(err);
-          });
-        },
-        // 获取init参数
-        getInitParam() {
+        // 获取初始化参数
+        getInitParam(pageNo) {
+          console.log('in methods..' + pageNo);
+          if( pageNo==null || pageNo<=0 ) {
+            pageNo = 1;
+          }
+          console.log('end methods..' + pageNo);
           return {
-            uid: this.uid,
-            type: "videos"
+            "type": "my-films",
+            "pc": pageNo
           }
         },
         // 测试方法
         test(info) {
           alert(info);
         },
-        // 上一页
-        prevPage() {
-
-        },
-        // 下一页
-        nextPage() {
-
-        },
-        // 点击页码
-        selectPage(selectedPageNo) {
-
+        // 获取我的视频列表
+        getFilms(selectedPageNo) {
+          const params = this.getInitParam(selectedPageNo);
+          getFilmsForProfile(params).then( res => {
+            const data = dealResult(res.data);
+            console.log(data);
+            if( data !== null ) {
+              this.filmList = data.films;
+              this.total = data.total;
+            }
+          }).catch(function (err) {
+            console.log(err)
+          });
         }
       }
     }
