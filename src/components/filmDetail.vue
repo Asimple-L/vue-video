@@ -47,7 +47,8 @@
                     <span>更新日期：</span>{{film.updateTime}}&nbsp;&nbsp;
                   </li>
                   <li>
-                    <span>剧情：</span>{{film.plot.substring(0, 150)}}[
+                    <span>剧情：</span>
+                    <span v-html="film.plot.substring(0, 200)+'......'"></span>[
                     <a @click="goAnchor('#plotDetail')" class="goAnchor">详细</a>
                     ]
                   </li>
@@ -277,7 +278,7 @@
         <el-col>
           <div class="endtext">
             <div class="title"><span>剧情介绍</span></div>
-            {{film.plot}}
+            <div v-html="film.plot"></div>
           </div>
         </el-col>
       </el-row>

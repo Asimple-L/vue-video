@@ -1,8 +1,8 @@
 <template>
-  <div class="tab-pane in active" id="video-mine">
+  <div>
     <div class="text-center" style="width: 100%;">
       <!--<a href="/video/profile/share">-->
-      <el-button type="primary" round @click="test('点击了上传按钮')">
+      <el-button type="primary" round @click="test('点击了上传按钮')" class="margin-top-10">
         我要上传<i class="el-icon-upload el-icon--right"></i>
       </el-button>
     </div>
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-  import { userProfile, dealResult, getFilmsForProfile } from '../../api/api';
+  import { dealResult, getFilmsForProfile } from '../../api/api';
     export default {
       // 我的视频页面
       name: "videos-mine",
@@ -64,26 +64,19 @@
       methods: {
         // 获取初始化参数
         getInitParam(pageNo) {
-          console.log('in methods..' + pageNo);
           if( pageNo==null || pageNo<=0 ) {
             pageNo = 1;
           }
-          console.log('end methods..' + pageNo);
           return {
             "type": "my-films",
             "pc": pageNo
           }
-        },
-        // 测试方法
-        test(info) {
-          alert(info);
         },
         // 获取我的视频列表
         getFilms(selectedPageNo) {
           const params = this.getInitParam(selectedPageNo);
           getFilmsForProfile(params).then( res => {
             const data = dealResult(res.data);
-            console.log(data);
             if( data !== null ) {
               this.filmList = data.films;
               this.total = data.total;
@@ -91,50 +84,18 @@
           }).catch(function (err) {
             console.log(err)
           });
-        }
+        },
+        // 进入详情页
+        detailPage(filmId) {
+          let routeData = this.$router.resolve({ path: '/detail/'+filmId });
+          window.open(routeData.href, '_blank');
+        },
       }
     }
 </script>
 
 <style scoped>
   @import "../../assets/css/index.css";
-  .film-list {
-    width: 98%;
-    height: auto;
-    padding: 1%;
-    overflow: hidden;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-  }
-  .film-list li {
-    list-style: none;
-    float: left;
-    width: 104px;
-    height: 220px;
-    margin: 6px 40px 6px 6px;
-  }
-  .film-info {
-    width: 98%;
-    padding: 1%;
-    height: auto;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align: center;
-  }
-  .pager li {
-    display: inline-block;
-  }
-  .pager li>a, .pager li>span {
-    display: inline-block;
-    padding: 5px 14px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 15px;
-  }
-  .pager .disabled>a, .pager .disabled>a:focus, .pager .disabled>a:hover, .pager .disabled>span {
-    color: #777;
-    cursor: not-allowed;
-    background-color: #fff;
-  }
+  @import "../../assets/css/index/profile.css";
+  @import "../../assets/css/index/profileFilms.css";
 </style>

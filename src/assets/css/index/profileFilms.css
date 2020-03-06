@@ -1,0 +1,39 @@
+.film-list {
+  width: 98%;
+  height: auto;
+  padding: 1%;
+  overflow: hidden;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+.film-list li {
+  list-style: none;
+  float: left;
+  width: 104px;
+  height: 220px;
+  margin: 6px 40px 6px 6px;
+}
+.film-info {
+  width: 98%;
+  padding: 1%;
+  height: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+.pager li {
+  display: inline-block;
+}
+.pager li>a, .pager li>span {
+  display: inline-block;
+  padding: 5px 14px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+}
+.pager .disabled>a, .pager .disabled>a:focus, .pager .disabled>a:hover, .pager .disabled>span {
+  color: #777;
+  cursor: not-allowed;
+  background-color: #fff;
+}

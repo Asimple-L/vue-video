@@ -22,3 +22,12 @@
 .center {
   text-align: center;
 }
+.font-blue {
+  color: blue;
+}
+.cur-pointer {
+  cursor: pointer;
+}
+.margin-top-10 {
+  margin-top: 10px;
+}
