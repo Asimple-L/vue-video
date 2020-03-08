@@ -8,6 +8,7 @@ import store from './vuex/store'
 import './assets/css/index.css'
 import 'video.js/dist/video-js.css'
 import 'vue-video-player/src/custom-theme.css'
+import 'font-awesome/css/font-awesome.css'
 import 'videojs-contrib-hls'
 import VideoPlayer from 'vue-video-player'
 

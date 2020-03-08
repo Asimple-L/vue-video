@@ -1,26 +1,109 @@
 <template>
   <!--修改资料-->
   <div class="tab-pane in" id="update-info">
-    <div class="margin-top-30 text-center">
-      <label for="oldPwd" class="control-label sr-only">旧密码：</label>
-      <input type="password" class="form-control" name="oldPwd" id="oldPwd" placeholder="旧密码" autocomplete="off">
-    </div>
-    <div class="margin-top-30 text-center">
-      <label for="rePwd" class="control-label sr-only">再次输入：</label>
-      <input type="password" class="form-control" name="rePwd" id="rePwd" placeholder="再次输入旧密码" autocomplete="off">
-    </div>
-    <div class="margin-top-30 text-center">
-      <label for="newPwd" class="control-label sr-only">新密码：</label>
-      <input type="password" class="form-control" name="newPwd" id="newPwd" placeholder="新密码" autocomplete="off">
-    </div>
-    <div class="margin-top-30 text-center"><a href="javascript:void(0);" class="btn btn-default" onclick="updatePassword()">提交修改</a></div>
+    <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+      <el-form-item label="旧密码" prop="oldPwd">
+        <el-input type="password" v-model="ruleForm.oldPwd" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="新密码" prop="pass">
+        <el-input type="password" v-model="ruleForm.pass" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="确认密码" prop="checkPass">
+        <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+        <el-button @click="resetForm('ruleForm')">重置</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
+  import {updatePassword, dealResultWithoutData } from '../../api/api';
+  import {goPage } from '../../util/index';
     export default {
       // 更新信息页面
-      name: "update-info"
+      name: "update-info",
+      data() {
+        let validatePass = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请输入密码'));
+          } else {
+            if (this.ruleForm.checkPass !== '') {
+              this.$refs.ruleForm.validateField('checkPass');
+            }
+            callback();
+          }
+        };
+        let validatePass2 = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请再次输入密码'));
+          } else if (value !== this.ruleForm.pass) {
+            callback(new Error('两次输入密码不一致!'));
+          } else {
+            callback();
+          }
+        };
+        let validatePass3 = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请输入旧密码'));
+          } else {
+            callback();
+          }
+        };
+        return {
+          ruleForm: {// 表单信息
+            oldPwd: '',
+            pass: '',
+            checkPass: '',
+          },
+          rules: { // 校验规则
+            oldPwd: [
+              { validator: validatePass3, trigger: 'blur' }
+            ],
+            pass: [
+              { validator: validatePass, trigger: 'blur' }
+            ],
+            checkPass: [
+              { validator: validatePass2, trigger: 'blur' }
+            ],
+          },
+        }
+      },
+      methods: {
+        submitForm(formName) {
+          this.$refs[formName].validate((valid) => {
+            if (valid) {
+              const param = this.getParam();
+              updatePassword(param).then( res => {
+                const data = dealResultWithoutData(res.data);
+                if( data === true ) {
+                  this.$store.state.user = null;
+                  this.goIndexPage();
+                }
+              }).catch(function (err) {
+                console.log(err);
+              })
+            } else {
+              return false;
+            }
+          });
+        },
+        resetForm(formName) {
+          this.$refs[formName].resetFields();
+        },
+        getParam() {
+          return {
+            "oldPwd": this.ruleForm.oldPwd,
+            "newPwd": this.ruleForm.newPwd,
+            "uid": this.$store.state.user.id,
+          }
+        },
+        goIndexPage() {
+          goPage('/');
+        }
+      }
     }
 </script>
 

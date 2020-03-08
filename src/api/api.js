@@ -51,9 +51,23 @@ export const dealResult = data => {
   } else {
     $message.error({
       message: data.message,
-      duration: 2000.
+      duration: 2000,
     });
     return null;
+  }
+};
+
+export const dealResultWithoutData = data => {
+  const code = data.code;
+  if( '000000'===code ) {
+    $message.success(data.message);
+    return true;
+  } else {
+    $message.error({
+      message: data.message,
+      duration: 2000,
+    });
+    return false;
   }
 };
 
@@ -104,5 +118,15 @@ export const userProfile = param => {
 
 export const getFilmsForProfile = param => {
   const url = baseUrl + '/profile/getFilmAjax';
+  return axios.post(url, Qs.stringify(param));
+};
+
+export const getMyComments = param => {
+  const url = baseUrl + '/profile/getMyComments';
+  return axios.post(url, Qs.stringify(param));
+};
+
+export const updatePassword = param => {
+  const url = baseUrl + '/updatePassword';
   return axios.post(url, Qs.stringify(param));
 };
