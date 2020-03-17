@@ -46,9 +46,8 @@
               <li v-for="(li, index) in list">
                 <el-popover
                   placement="right"
-                  title=""
                   trigger="hover">
-                  <div slot="reference" class="indexRightLiDiv">
+                  <div slot="reference" class="indexRightLiDiv cur-pointer">
                     <span class="ph1" v-if="index<=2">{{index+1}}</span>
                     <span class="ph" v-else>{{index+1}}</span>
                     <a :title="li.name" @click="goFilmDetail(li.id)" target="_blank">
@@ -159,6 +158,7 @@
 </script>
 
 <style scoped>
+  @import "../assets/css/index.css";
 .indexRightLiDiv {
   padding: 7px 0;
 }

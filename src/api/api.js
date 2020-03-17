@@ -130,3 +130,18 @@ export const updatePassword = param => {
   const url = baseUrl + '/updatePassword';
   return axios.post(url, Qs.stringify(param));
 };
+
+export const getNotes = params => {
+  const url = baseUrl + '/note';
+  return axios.post(url, Qs.stringify(params));
+};
+
+export const saveComment = params => {
+  const url = baseUrl + '/saveComment';
+  return axios.post(url, Qs.stringify(params));
+};
+
+export const changeLikeNum = params => {
+  const url = baseUrl + '/changeLikeNum';
+  return axios.post(url, Qs.stringify(params));
+};
