@@ -60,7 +60,7 @@
       methods: {
         // 获取页面信息
         getComments(pageNo) {
-          const param = this.getParams();
+          const param = this.getParams(pageNo);
           getMyComments(param).then( res => {
             const data = dealResult(res.data);
             if( data != null ) {

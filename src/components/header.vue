@@ -212,6 +212,7 @@ export default {
       this.$store.state.dialogLoginModelVisible = false;
     },
     goIndexPage() {
+      this.$store.state.activeIndex = ''+9;
       goPage('/');
     },
     cancelUserLogin() {
