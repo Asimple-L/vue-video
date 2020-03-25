@@ -1,7 +1,4 @@
 @charset "UTF-8";
-body {
-  background-color: #f2f2f2;
-}
 .pic {
   text-align: center;
   cursor: pointer;
@@ -212,7 +209,7 @@ body {
 }
 .title-icon{
   padding-left: 25px;
-  background: #F2F2F2 url('../../img/filmDetail/xzdd.jpg') no-repeat 0 6px;
+  background: #FFFFFF url('../../img/filmDetail/xzdd.jpg') no-repeat 0 6px;
   display: inline-block;
   padding-top: 10px;
   padding-bottom: 10px;

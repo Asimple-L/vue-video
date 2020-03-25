@@ -329,7 +329,7 @@
           resListOther:[],
           resListThunder:[],
           resListEd2k:[],
-          playerOptions: {
+          playerOptions: { // 播放器设置
             playbackRates: [ 0.5, 0.75, 1.0, 1.5, 2.0, 3.0], //播放速度
             autoplay: false, //如果true,浏览器准备好时开始回放。
             muted: false, // 默认情况下将会消除任何音频。
@@ -360,7 +360,7 @@
         }
       },
       methods: {
-        checkFilmId() {
+        checkFilmId() {// 检查初始化参数
           if( null==this.film.id || ''===this.film.id.trim() ) {
             this.$message.error({
               message: '系统错误,请重试!',
@@ -371,7 +371,7 @@
             return true;
           }
         },
-        init() {
+        init() { // 初始化
           this.$store.state.fullscreenLoading = true;
           getFilmDetail({'filmId':this.film.id}).then( res => {
             const data = dealResult(res.data);
@@ -392,7 +392,7 @@
             errorDeal(err);
           })
         },
-        saveRaty() {
+        saveRaty() {// 保存评分
           const params = {"film_id": this.film.id, "score": this.userRaty*2};
           saveRaty(params).then( res => {
             const data = dealResult(res.data);
@@ -418,7 +418,7 @@
         checkList() {
           return ( this.resListHttp!==null && this.resListHttp.length!==0) || (this.resListOther!==null && this.resListOther.length!==0) || (this.resListThunder!==null && this.resListThunder.length!==0);
         },
-        fk(type) {
+        fk(type) {// TODO 反馈接口，页面迁移完成之后会调用后端接口
           this.$message.success('反馈成功...');
         },
         goAnchor(selector) {
@@ -439,11 +439,19 @@
           }
         },
         Flh() {
-          // 方法待完成
+          // TODO 方法待完成
         },
         palyVideo(url) {
           this.playerOptions.sources[0].src = url;
           this.src = url;
+        },
+        get_movie_name(filename, arsg) {// 获取视频名称
+          let tname = filename.split(arsg);
+          if(tname.length>2) {
+            return this.get_movie_name(tname[(tname.length-1)], ']');
+          }  else {
+            return tname[(tname.length-1)];
+          }
         }
       },
       watch :{
