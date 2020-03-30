@@ -41,7 +41,7 @@ export default new Router({
     { path: '/upload', name: 'update-film', component: UpdateFilm},//TODO 影片信息更新页
     { path: '/manager', name: 'manager-page', component: managerPage, children: [
         // 后台管理子页面
-        { path: 'index', name: 'manager-index', component: managerIndex},//TODO 首页
+        { path: 'index', name: 'manager-index', component: managerIndex},
         { path: 'film', name: 'film-manager', component: filmManager},//TODO 影片管理
         { path: 'catalog', name: 'catalog-manager', component: catalogManager},//TODO 目录管理
         { path: 'user', name: 'user-manager', component: userManager},//TODO 用户管理
@@ -50,7 +50,7 @@ export default new Router({
         { path: 'log', name: 'log-manager', component: logManager},//TODO 日志管理
         { path: '', component: managerIndex},// 默认访问首页
       ] },// 后台管理页面
-    { path: '/error', name: 'error', component: Error},// 错误页
+    { path: '/error', name: 'error', component: Error},// TODO 错误页
     { path: '/**', redirect: '/index'}// 默认访问首页
   ]
 })

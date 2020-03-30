@@ -1,5 +1,5 @@
 <template>
-    分类管理页面
+    <div>分类管理页面</div>
 </template>
 
 <script>

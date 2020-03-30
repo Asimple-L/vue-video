@@ -1,0 +1,128 @@
+
+
+.pricing ul {
+  list-style: none;
+  padding: 0
+}
+
+.pricing .unit {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  min-width: 240px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .2)
+}
+
+.pricing .unit.active {
+  top: 5px;
+  margin-left: -36px;
+  margin-right: -36px;
+  z-index: 1;
+  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .6);
+  -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .6);
+  box-shadow: 0 0 8px rgba(0, 0, 0, .6)
+}
+
+.pricing .unit.active .price-title h3 {
+  font-size: 40px
+}
+
+@media screen and (max-width: 767px) {
+  .pricing .unit {
+    display: block;
+    margin-bottom: 20px
+  }
+
+  .pricing .unit.active {
+    top: 0;
+    margin-left: 0;
+    margin-right: 0
+  }
+
+  .pricing .unit.active .price-title h3 {
+    font-size: 30px
+  }
+}
+
+.pricing .price-title {
+  padding: 20px 20px 10px;
+  -webkit-border-top-left-radius: 4px;
+  -moz-border-radius-topleft: 4px;
+  border-top-left-radius: 4px;
+  -webkit-border-top-right-radius: 4px;
+  -moz-border-radius-topright: 4px;
+  border-top-right-radius: 4px;
+  color: #FFF
+}
+
+.pricing .price-title h3, .pricing .price-title h3 > p {
+  margin: 0
+}
+
+.pricing .price-body {
+  padding: 20px 20px 10px
+}
+
+.pricing .price-body ul {
+  padding-top: 10px
+}
+
+.pricing .price-body li {
+  margin-bottom: 10px
+}
+
+.pricing .price-body h4 {
+  margin: 0
+}
+
+.pricing .price-foot {
+  padding: 20px;
+  -webkit-border-bottom-left-radius: 4px;
+  -moz-border-radius-bottomleft: 4px;
+  border-bottom-left-radius: 4px;
+  -webkit-border-bottom-right-radius: 4px;
+  -moz-border-radius-bottomright: 4px;
+  border-bottom-right-radius: 4px;
+  background-color: #E6E9ED
+}
+
+.pricing .price-primary .price-title {
+  background-color: #4FC1E9
+}
+
+.pricing .price-primary .price-body {
+  background-color: #d7f1fa
+}
+
+.pricing .price-primary .price-body ul {
+  border-top: 1px solid #aae1f4
+}
+
+.pricing .price-success .price-title {
+  background-color: #A0D468
+}
+
+.pricing .price-success .price-body {
+  background-color: #ebf6df
+}
+
+.pricing .price-success .price-body ul {
+  border-top: 1px solid #d2ebb7
+}
+
+.pricing .price-warning .price-title {
+  background-color: #F5D76E
+}
+
+.pricing .price-warning .price-body {
+  background-color: #fffefd
+}
+
+.pricing .price-warning .price-body ul {
+  border-top: 1px solid #fcf1cd
+}

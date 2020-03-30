@@ -1,5 +1,5 @@
 <template>
-    VIP卡管理页面
+    <div>VIP卡管理页面</div>
 </template>
 
 <script>

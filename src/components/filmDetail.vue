@@ -245,7 +245,7 @@
                             <el-col :span="12">
                               <!--<i><input type="checkbox" :value="relist.id" name="CopyAddr1"/></i>-->
                               <p style="width:300px;height: auto;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
-                                {{relist.name}}
+                                {{ get_movie_name(relist.name)}}
                               </p>
                             </el-col>
                             <el-col :span="12" style="padding-right: 2%;">

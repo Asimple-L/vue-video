@@ -1,5 +1,5 @@
 <template>
-    影片管理页面
+    <div>影片管理页面</div>
 </template>
 
 <script>

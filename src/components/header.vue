@@ -51,6 +51,9 @@
             <el-menu-item index="-2">
               <a @click="userLoginOut"  href="javascript:void(0)">退出</a>
             </el-menu-item>
+            <el-menu-item index="7" v-if="$store.state.user.isManager===1">
+              <a @click="goBackendPage()"  href="javascript:void(0)">后台管理</a>
+            </el-menu-item>
           </template >
           <template v-else>
             <el-menu-item index="6">
@@ -153,13 +156,13 @@ export default {
         console.log(err);
       })
     },
-    handleSelect(key) {
+    handleSelect(key) {// 点击后显示下划线
       if( null===key || ''===key.trim() ) {
         key = 9;
       }
       this.$store.state.activeIndex = ''+key;
     },
-    collect() {
+    collect() {// 点击收藏方法
       this.goIndexPage();
       this.$message({
         message: '请点击Ctrl+D收藏',
@@ -169,7 +172,7 @@ export default {
     changeFixed(clientHeight){
       this.$refs.homePage.$el.style.height = clientHeight-20+'px';
     },
-    userLogin() {
+    userLogin() {// 用户登录
       login(this.form).then( res => {
         const data = dealResult(res.data);
         if( null!==data ) {
@@ -180,7 +183,7 @@ export default {
         console.log(err);
       })
     },
-    useVipCode() {
+    useVipCode() {// 使用加油卡
       vipCodeVerification(this.vipCode).then( res => {
         const data = dealResult(res.data);
         if( null !== data ) {
@@ -194,11 +197,11 @@ export default {
         console.log(err);
       })
     },
-    cancelShowUserVipCode() {
+    cancelShowUserVipCode() {// 取消使用
       this.showUserVipCode = false;
       this.vipCode = '';
     },
-    userLoginOut() {
+    userLoginOut() {// 用户登出
       logOut().then( res => {
         this.$store.state.user = null;
         this.$message('登出成功!');
@@ -207,27 +210,31 @@ export default {
         console.log(err);
       })
     },
-    registerPage() {
+    registerPage() {// 去注册
       this.$router.push('register');
       this.$store.state.dialogLoginModelVisible = false;
     },
-    goIndexPage() {
+    goIndexPage() {// 去首页
       this.$store.state.activeIndex = ''+9;
       goPage('/');
     },
-    cancelUserLogin() {
+    cancelUserLogin() {// 取消登录
       this.$store.state.dialogLoginModelVisible = false;
       this.$refs.form.resetFields();
     },
-    toSearchPage(cataLog_id) {
+    toSearchPage(cataLog_id) {// 影片搜索页
       const param = {cataLog_id: cataLog_id};
       goPageParam("/xl", param);
     },
-    toNote() {
+    toNote() {// 留言页
       goPage('/note');
     },
-    toProfile(user_id) {
+    toProfile(user_id) {// 个人中心页面
       goPage("/userProfile/"+user_id)
+    },
+    goBackendPage() {// 后台管理页面
+      let routeData = this.$router.resolve({ path: '/manager' });
+      window.open(routeData.href, '_blank');
     }
   },
   components: {
