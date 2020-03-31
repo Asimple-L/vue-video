@@ -1,21 +1,20 @@
 <!-- 左侧导航组件 -->
 <!-- 使用说明：<side-bar></side-bar> -->
 <template>
-  <div id="sidebar-wrap" :class="{ collapsed: toggSiderBar }">
+  <div id="sidebar-wrap" :class="{ collapsed: $store.state.isCollapse }">
     <!-- 顶部图标 -->
     <h3 class="logo">
-      <span class="rythm twist1">{{toggSiderBar ? 'VIDEO': 'VIDEO BACKEND'}}</span>
+      <span class="rythm twist1">{{$store.state.isCollapse ? 'VIDEO': 'VIDEO BACKEND'}}</span>
     </h3>
 
     <!-- 循环生成侧栏菜单 -->
     <el-menu
       background-color="#3f4d67"
       text-color="#fff"
-      :default-active="$route.path"
+      default-active="index"
       :unique-opened="true"
-      :router="true"
       mode="vertical"
-      :collapse="toggSiderBar">
+      :collapse="$store.state.isCollapse">
       <template v-for="item in menu">
 
         <!-- 多级菜单外壳 -->
@@ -31,14 +30,22 @@
           </template>
 
           <!-- 二级菜单选项 -->
-          <el-menu-item v-for="child in item.children" :index="child.router" :key="child.router">
+          <el-menu-item
+            v-for="child in item.children"
+            :index="child.router"
+            :key="child.router"
+            @click="goPageByPath(child.router, child.relative)">
             <i class="fa fa-long-arrow-right"></i>
             <span slot="title">{{langType === 'en'? child.name_en: child.name}}</span>
           </el-menu-item>
         </el-submenu>
 
         <!-- 单级菜单 -->
-        <el-menu-item v-else :index="item.router" :key="item.router">
+        <el-menu-item
+          v-else
+          :index="item.router"
+          :key="item.router"
+          @click="goPageByPath(item.router, item.relative)">
           <i :class="item.icon"></i>
           <span slot="title">{{langType === 'en'? item.name_en: item.name}}</span>
         </el-menu-item>
@@ -65,9 +72,6 @@ export default {
     };
   },
   computed: {
-    toggSiderBar() {
-      return this.$store.state.isCollapse;
-    },
     langType() {
       return this.$i18n.locale;
     }
@@ -80,7 +84,6 @@ export default {
     });
     // 初始化侧边栏
     this.menu = this.$store.state.menu;
-    console.log(this.menu);
   },
   methods: {
     initRythm() {
@@ -98,6 +101,14 @@ export default {
       } else {
         this.isMusicOn = true;
         rythm.start();
+      }
+    },
+    goPageByPath(router,relative) {
+      if( !relative ) {
+        let routeData = this.$router.resolve({ path: router });
+        window.open(routeData.href, '_blank');
+      } else {
+        this.$router.push({ path: router });
       }
     }
   }
@@ -151,7 +162,7 @@ export default {
 #sidebar-wrap .imgWrap .gif :hover {
   cursor: pointer;
 }
-#sidebar-wrap .collapsed {
+#sidebar-wrap.collapsed {
   width: 64px;
   transition: all 0.3s;
 }

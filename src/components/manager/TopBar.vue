@@ -9,7 +9,7 @@
       <el-col :span="12">
         <el-row type="flex" class="row-right" justify="end" style="margin-right:-15px">
           <el-col :span="5">
-            <a class="animated fadeIn">{{$t('m.topbar.sayHi')}}，{{ userName }}</a>
+            <a class="animated fadeIn">{{$t('m.topbar.sayHi')}}，{{ $store.state.user.userName }}</a>
           </el-col>
           <el-col :span="2">
             <i class="fa fa-language" title="切换语言" @click="toggleLanguage"></i>
@@ -32,6 +32,8 @@
 <script>
 import "@/assets/libs/screenfull.js";
 import "../../../static/css/iconfont.css";
+import { logOut } from "../../api/api";
+import { goPage } from "../../util/index";
 export default {
   name: "topbar",
   data() {
@@ -42,7 +44,6 @@ export default {
   },
   mounted() {
     this.userName = this.$store.state.user.userName;
-    console.log(this.userName);
   },
   computed: {
     isCollapse() {
@@ -58,7 +59,7 @@ export default {
   },
   methods: {
     toggleSiderBar() {
-      this.$store.commit("toggleSiderBar");
+      this.$store.state.isCollapse = !this.$store.state.isCollapse;
     },
     toggleLanguage() {
       let locale = this.$i18n.locale;
@@ -75,9 +76,18 @@ export default {
       this.isFullscreen = !screenfull.isFullscreen;
     },
     logout() {
-      localStorage.clear();
       this.$bus.$emit("stopMusic");
-      this.$router.push("signin");
+      logOut().then( res => {
+        this.$store.state.user = null;
+        this.$message('登出成功!');
+        this.$store.state.headerDisplay = false;
+        this.goIndexPage();
+      }).catch(function (err) {
+        console.log(err);
+      })
+    },
+    goIndexPage() {
+      goPage('/');
     }
   },
   watch: {

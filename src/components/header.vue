@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-container ref="homePage">
-      <el-header>
+      <el-header :class="{manager: $store.state.headerDisplay}">
         <el-menu
           :default-active="$store.state.activeIndex"
           class="el-menu-header"
