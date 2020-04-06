@@ -39,3 +39,12 @@
 .padding-top-10 {
   padding-top: 10px;
 }
+
+.padding-left-10 {
+  padding-left: 10px;
+}
+
+.context-manager {
+  padding-top: 10px;
+  width: 100%;
+}

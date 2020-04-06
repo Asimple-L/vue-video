@@ -108,7 +108,7 @@ export default {
         let routeData = this.$router.resolve({ path: router });
         window.open(routeData.href, '_blank');
       } else {
-        this.$router.push({ path: router });
+        this.$router.push({ path: '/manager/'+ router });
       }
     }
   }

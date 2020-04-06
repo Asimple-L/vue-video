@@ -7,6 +7,9 @@ import Qs from 'qs'
 import { Message } from 'element-ui';
 
 const baseUrl = 'http://localhost:8080/video';
+const baseProfileUrl = baseUrl+'/profile';
+const baseXlUrl = baseUrl+'/xl';
+const baseManagerUrl = baseUrl+'/admin';
 const $message = Message;
 axios.defaults.withCredentials = true;
 
@@ -97,32 +100,32 @@ export const signUp = params => {
 };
 
 export const getFilmDetail = params => {
-  const url = baseUrl + '/xl/detail';
+  const url = baseXlUrl + '/detail';
   return axios.post(url, Qs.stringify(params));
 };
 
 export const saveRaty = params => {
-  const url = baseUrl + '/xl/addRaty';
+  const url = baseXlUrl + '/addRaty';
   return axios.post(url, Qs.stringify(params));
 };
 
 export const searchFilm = param => {
-  const url = baseUrl + '/xl/index';
+  const url = baseXlUrl + '/index';
   return axios.post(url, Qs.stringify(param));
 };
 
 export const userProfile = param => {
-  const url = baseUrl + '/profile/profilePage';
+  const url = baseProfileUrl + '/profilePage';
   return axios.post(url, Qs.stringify(param));
 };
 
 export const getFilmsForProfile = param => {
-  const url = baseUrl + '/profile/getFilmAjax';
+  const url = baseProfileUrl + '/getFilmAjax';
   return axios.post(url, Qs.stringify(param));
 };
 
 export const getMyComments = param => {
-  const url = baseUrl + '/profile/getMyComments';
+  const url = baseProfileUrl + '/getMyComments';
   return axios.post(url, Qs.stringify(param));
 };
 
@@ -143,5 +146,10 @@ export const saveComment = params => {
 
 export const changeLikeNum = params => {
   const url = baseUrl + '/changeLikeNum';
+  return axios.post(url, Qs.stringify(params));
+};
+
+export const managerFilm = params => {
+  const url = baseManagerUrl + '/list';
   return axios.post(url, Qs.stringify(params));
 };

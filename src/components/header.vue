@@ -62,10 +62,10 @@
             <el-dialog title="登录" :visible.sync="$store.state.dialogLoginModelVisible" center>
               <el-form :model="form" :rules="loginRules" ref="form">
                 <el-form-item label="用户名/邮箱" :label-width="formLabelWidth" prop="account">
-                  <el-input v-model="form.account" autocomplete="off" placeholder="请输入用户名/邮箱"></el-input>
+                  <el-input v-model="form.account" autocomplete="off" placeholder="请输入用户名/邮箱" @change="userLogin"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
-                  <el-input v-model="form.password" auto-complete="off" placeholder="请输入密码" show-password></el-input>
+                  <el-input v-model="form.password" auto-complete="off" placeholder="请输入密码" show-password @change="userLogin"></el-input>
                 </el-form-item>
                 <el-form-item>
                   <p style="text-align:center;">
