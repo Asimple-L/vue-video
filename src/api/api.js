@@ -153,3 +153,8 @@ export const managerFilm = params => {
   const url = baseManagerUrl + '/list';
   return axios.post(url, Qs.stringify(params));
 };
+
+export const managerCatalog = params => {
+  const url = baseManagerUrl + '/catalog';
+  return axios.post(url, Qs.stringify(params));
+};

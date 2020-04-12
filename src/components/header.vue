@@ -173,6 +173,9 @@ export default {
       this.$refs.homePage.$el.style.height = clientHeight-20+'px';
     },
     userLogin() {// 用户登录
+      if( !( this.form.account && this.form.password) ) {
+        return ;
+      }
       login(this.form).then( res => {
         const data = dealResult(res.data);
         if( null!==data ) {
