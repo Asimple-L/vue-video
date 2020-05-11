@@ -158,3 +158,8 @@ export const managerCatalog = params => {
   const url = baseManagerUrl + '/catalog';
   return axios.post(url, Qs.stringify(params));
 };
+
+export const addCataLog = params => {
+  const url = baseManagerUrl + '/addCataLog';
+  return axios.post(url, Qs.stringify(params));
+};

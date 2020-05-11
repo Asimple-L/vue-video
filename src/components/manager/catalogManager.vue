@@ -1,12 +1,5 @@
 <template>
     <div class="context-manager">
-      <!-- TODO
-          1、操作，后面添加 新增 按钮，点击可以创建当前层级的目录
-          2、显示当前层级
-          3、点击名称，进入下一层级，如果是最后一层，提示
-          4、表格可编辑，点击编辑之后，名称变成输入框，是否可使用变成开关
-          5、分页
-       -->
       <el-row class="padding-top-10 padding-bottom-10 padding-left-10">
         <el-col :span="16">
           <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -27,11 +20,31 @@
           </el-button>
         </el-col>
       </el-row>
+      <el-dialog :title="title" :visible.sync="dialogFormVisible" width="30%">
+        <el-form :model="form">
+          <el-form-item label="分类名称" :label-width="formLabelWidth">
+            <el-input v-model="form.name" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="是否可用" :label-width="formLabelWidth" v-if="form.id!==''">
+            <el-switch
+              v-model="form.isUse"
+              active-text="可用"
+              inactive-text="弃用">
+            </el-switch>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="submitDialog(false)">取 消</el-button>
+          <el-button type="primary" @click="submitDialog(true)">确 定</el-button>
+        </div>
+      </el-dialog>
       <el-table
         :data="tableData"
         border
         stripe
         row-key="id"
+        highlight-current-row
+        @row-dblclick="goNext"
         style="width: 99%; padding-left: 10px; margin-bottom: 20px;cursor: pointer;">
         <el-table-column label="No" type="index"></el-table-column>
         <el-table-column
@@ -63,14 +76,14 @@
 </template>
 
 <script>
-  import {managerCatalog, dealResult} from '../../api/api';
+  import {managerCatalog, dealResult, addCataLog, dealResultWithoutData} from '../../api/api';
     export default {
       name: "catalog-manager",
       data() {
         return {
           tableData: [],// 表格展示内容
           cataLogList: [], // 分类列表
-          level: 2,// 当前层级
+          level: 1,// 当前层级
           breadcrumbList: [
             {
               level: 0, // 层级
@@ -88,6 +101,14 @@
               url: '',
             }
           ], // 面包屑列表显示
+          title: "新增分类",// 弹窗标题
+          dialogFormVisible: false, // 弹窗是否显示
+          formLabelWidth: '20%',// 弹窗字体宽度
+          form: {
+            id: "",// 分类id
+            name: "",// 分类名称
+            isUse: true,// 分类是否可用
+          }
         }
       },
       mounted() {
@@ -108,13 +129,61 @@
           })
         },
         handleEdit(index, row) {
-          console.log(index, row);
+          console.log('修改', index, row);
+          this.form.name = row.name;
+          this.form.id = row.id;
+          this.form.isUse = row.isUse===1;
+          this.dialogFormVisible = true;
         },
         handleDelete(index, row) {
-          console.log(index, row);
+          console.log('删除', index, row);
         },
-        goNext() {
+        goNext(row, event, column) {
+          console.log(row);
+          console.log(event);
+          console.log(column);
+          console.log('------------');
           console.log('当前层级：' + this.level);
+          this.level ++;
+        },
+        // 新增分类
+        addCatalog() {
+          this.form.name = "";
+          this.form.id = "";
+          this.form.isUse = false;
+          this.dialogFormVisible = true;
+        },
+        submitDialog(isSubmit) {
+          this.dialogFormVisible = false;
+          this.form.name = "";
+          this.form.isUse = false;
+          if( isSubmit ) {
+            // 如果是提交，调用后端接口创建或者修改分类
+          }
+        },
+        updateCatalog(level) {
+          // 分层级调用接口
+          const params = {
+            "id": this.from.id,
+            "name": this.form.name,
+            "isUse": this.form.isUse===true ?1:0
+          };
+          switch (level) {
+            case 1:
+              // 添加一级分类
+              addCataLog(params).then( res => {
+                dealResultWithoutData(res.data);
+              }).catch(function (error) {
+                console.log(error);
+              });
+              break;
+            case 2:
+              // 添加二级分类
+              break;
+            case 3:
+              // 添加三级分类
+              break;
+          }
         }
       }
     }
