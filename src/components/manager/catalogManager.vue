@@ -12,7 +12,7 @@
           </el-breadcrumb>
         </el-col>
         <el-col :span="8" style="text-align: right;padding-right: 10px;">
-          <el-button type="primary" @click="addCatalog('1')" size="small">
+          <el-button type="primary" @click="addCatalog('add')" size="small">
             新增分类
           </el-button>
           <el-button v-if="level>0" size="small">
@@ -22,10 +22,14 @@
       </el-row>
       <el-dialog :title="title" :visible.sync="dialogFormVisible" width="30%">
         <el-form :model="form">
-          <el-form-item label="分类名称" :label-width="formLabelWidth">
+          <el-form-item label="分类名称" :label-width="formLabelWidth" prop="name">
             <el-input v-model="form.name" autocomplete="off"></el-input>
           </el-form-item>
-          <el-form-item label="是否可用" :label-width="formLabelWidth" v-if="form.id!==''">
+          <el-form-item
+            label="是否可用"
+            :label-width="formLabelWidth"
+            v-if="form.id!==''"
+            prop="isUse">
             <el-switch
               v-model="form.isUse"
               active-text="可用"
@@ -76,7 +80,7 @@
 </template>
 
 <script>
-  import {managerCatalog, dealResult, addCataLog, dealResultWithoutData} from '../../api/api';
+  import {managerCatalog, dealResult, updateCatalog, dealResultWithoutData} from '../../api/api';
     export default {
       name: "catalog-manager",
       data() {
@@ -147,42 +151,55 @@
           this.level ++;
         },
         // 新增分类
-        addCatalog() {
+        addCatalog(type) {
           this.form.name = "";
           this.form.id = "";
           this.form.isUse = false;
           this.dialogFormVisible = true;
+          if( type !== 'add' ) {
+            this.title = '修改分类信息';
+          }
         },
         submitDialog(isSubmit) {
           this.dialogFormVisible = false;
-          this.form.name = "";
-          this.form.isUse = false;
           if( isSubmit ) {
             // 如果是提交，调用后端接口创建或者修改分类
+            this.updateCatalogInfo(this.level);
+            // 初始化数据
+            this.getCatalog();
           }
+          this.form.name = "";
+          this.form.isUse = false;
         },
-        updateCatalog(level) {
+        updateCatalogInfo(level) {
           // 分层级调用接口
+          console.log(this.form);
           const params = {
-            "id": this.from.id,
+            "id": this.form.id,
             "name": this.form.name,
             "isUse": this.form.isUse===true ?1:0
           };
+          let url = "";
           switch (level) {
             case 1:
               // 添加一级分类
-              addCataLog(params).then( res => {
-                dealResultWithoutData(res.data);
-              }).catch(function (error) {
-                console.log(error);
-              });
+              url = "/addCataLog";
               break;
             case 2:
               // 添加二级分类
+              url = "/addSubClass";
               break;
             case 3:
-              // 添加三级分类
+              // 添加类型
+              url = "/addType";
               break;
+          }
+          if( url !== "" ) {
+            updateCatalog(url, params).then( res => {
+              dealResultWithoutData(res.data);
+            }).catch(function (error) {
+              console.log(error);
+            });
           }
         }
       }
