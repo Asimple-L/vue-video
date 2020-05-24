@@ -12,7 +12,7 @@
           </el-breadcrumb>
         </el-col>
         <el-col :span="8" style="text-align: right;padding-right: 10px;">
-          <el-button type="primary" @click="addCatalog('add')" size="small">
+          <el-button type="primary" @click="addCatalog('add', null, null)" size="small">
             新增分类
           </el-button>
           <el-button v-if="level>0" size="small">
@@ -68,11 +68,20 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              @click="addCatalog('update', scope.$index, scope.row)">编辑</el-button>
+            <el-popconfirm
+              confirmButtonText='确定'
+              cancelButtonText='取消'
+              icon="el-icon-info"
+              iconColor="red"
+              title="是否删除?"
+              @onConfirm="handleDelete(scope.$index, scope.row)"
+            >
+              <el-button
+                size="mini"
+                type="danger"
+                slot="reference">删除</el-button>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -133,14 +142,28 @@
           })
         },
         handleEdit(index, row) {
-          console.log('修改', index, row);
           this.form.name = row.name;
           this.form.id = row.id;
           this.form.isUse = row.isUse===1;
           this.dialogFormVisible = true;
         },
+        // 删除选择的行
         handleDelete(index, row) {
-          console.log('删除', index, row);
+          let type = '';
+          switch ( this.level ) {
+            case 1:
+              type = 'catalog';
+              break;
+            case 2:
+              type = '';
+              break;
+          }
+          const param = { "id": row.id, "type": type};
+          updateCatalog('/deleteCatalogById', param).then( res => {
+            dealResultWithoutData(res.data);
+          }).catch(function (error) {
+            console.log(error);
+          });
         },
         goNext(row, event, column) {
           console.log(row);
@@ -150,16 +173,21 @@
           console.log('当前层级：' + this.level);
           this.level ++;
         },
-        // 新增分类
-        addCatalog(type) {
+        // 新增/修改分类
+        addCatalog(type, index, row) {
           this.form.name = "";
           this.form.id = "";
           this.form.isUse = false;
           this.dialogFormVisible = true;
-          if( type !== 'add' ) {
+          this.title = '新增分类';
+          if( type === 'update' ) {
             this.title = '修改分类信息';
+            this.form.name = row.name;
+            this.form.id = row.id;
+            this.form.isUse = row.isUse===1;
           }
         },
+        // 新增/修改分类 提交
         submitDialog(isSubmit) {
           this.dialogFormVisible = false;
           if( isSubmit ) {

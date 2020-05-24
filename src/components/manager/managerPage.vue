@@ -32,7 +32,6 @@
       methods: {
         init() {// 初始化检查
           this.$store.state.fullscreenLoading = false;
-          // TODO 尝试在这里做下鉴权
           this.$store.state.activeIndex = '7';
           this.$store.state.headerDisplay = true;
         },
