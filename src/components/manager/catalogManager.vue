@@ -15,7 +15,7 @@
           <el-button type="primary" @click="addCatalog('add', null, null)" size="small">
             新增分类
           </el-button>
-          <el-button v-if="level>0" size="small">
+          <el-button v-if="level>1" size="small" @click="goPre()">
             返回上一级
           </el-button>
         </el-col>
@@ -121,7 +121,9 @@
             id: "",// 分类id
             name: "",// 分类名称
             isUse: true,// 分类是否可用
-          }
+          },
+          parentId: '', // 父类id
+          grandfatherId: '',// 爷爷节点
         }
       },
       mounted() {
@@ -135,7 +137,6 @@
             if( data != null ) {
               this.cataLogList = data.cataLogList;
               this.tableData = this.cataLogList;
-              console.log(this.tableData);
             }
           }).catch(function (error) {
             console.log(error);
@@ -161,6 +162,8 @@
           const param = { "id": row.id, "type": type};
           updateCatalog('/deleteCatalogById', param).then( res => {
             dealResultWithoutData(res.data);
+            // TODO 这里不能调用初始化方法，需要对应调用获取对应等级的分类
+            this.getCatalog();
           }).catch(function (error) {
             console.log(error);
           });
@@ -172,6 +175,19 @@
           console.log('------------');
           console.log('当前层级：' + this.level);
           this.level ++;
+          this.grandfatherId = this.parentId;
+          this.parentId = row.id;
+          if( this.level === 2 ) {
+            // 二级分类
+          } else if( this.level === 3 ) {
+            // 三级分类
+          }
+        },
+        goPre() {
+          if (this.level > 1) {
+            this.level--;
+            // 返回上一级需要调用查询上一级的列表
+          }
         },
         // 新增/修改分类
         addCatalog(type, index, row) {
@@ -193,15 +209,12 @@
           if( isSubmit ) {
             // 如果是提交，调用后端接口创建或者修改分类
             this.updateCatalogInfo(this.level);
-            // 初始化数据
-            this.getCatalog();
           }
           this.form.name = "";
           this.form.isUse = false;
         },
         updateCatalogInfo(level) {
           // 分层级调用接口
-          console.log(this.form);
           const params = {
             "id": this.form.id,
             "name": this.form.name,
@@ -225,9 +238,20 @@
           if( url !== "" ) {
             updateCatalog(url, params).then( res => {
               dealResultWithoutData(res.data);
+              this.getTableData();
             }).catch(function (error) {
               console.log(error);
             });
+          }
+        },
+        // 获取表格数据
+        getTableData() {
+          if( this.level === 1 ) {
+            this.getCatalog();
+          } else if ( this.level === 2 ) {
+            // 二级分类
+          } else if( this.level === 3 ) {
+            // 三级分类
           }
         }
       }
