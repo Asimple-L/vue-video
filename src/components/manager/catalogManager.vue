@@ -96,6 +96,8 @@
         return {
           tableData: [],// 表格展示内容
           cataLogList: [], // 分类列表
+          subClassList: [], // 二级分类列表
+          typeList: [], // 类型分类列表
           level: 1,// 当前层级
           breadcrumbList: [
             {
@@ -127,21 +129,10 @@
         }
       },
       mounted() {
-        this.getCatalog();
+        this.getTableData();
       },
       methods: {
-        // 获取目录
-        getCatalog() {
-          managerCatalog().then( res => {
-            const data = dealResult(res.data);
-            if( data != null ) {
-              this.cataLogList = data.cataLogList;
-              this.tableData = this.cataLogList;
-            }
-          }).catch(function (error) {
-            console.log(error);
-          })
-        },
+        // 点击编辑事件处理
         handleEdit(index, row) {
           this.form.name = row.name;
           this.form.id = row.id;
@@ -156,37 +147,37 @@
               type = 'catalog';
               break;
             case 2:
-              type = '';
+              type = 'subClass';
+              break;
+            case 3:
+              type = 'type';
               break;
           }
           const param = { "id": row.id, "type": type};
           updateCatalog('/deleteCatalogById', param).then( res => {
             dealResultWithoutData(res.data);
-            // TODO 这里不能调用初始化方法，需要对应调用获取对应等级的分类
-            this.getCatalog();
+            this.getTableData(this.parentId);
           }).catch(function (error) {
             console.log(error);
           });
         },
+        // 进入下一级
         goNext(row, event, column) {
           console.log(row);
-          console.log(event);
-          console.log(column);
-          console.log('------------');
           console.log('当前层级：' + this.level);
+          console.log(this.cataLogList);
           this.level ++;
           this.grandfatherId = this.parentId;
           this.parentId = row.id;
-          if( this.level === 2 ) {
-            // 二级分类
-          } else if( this.level === 3 ) {
-            // 三级分类
-          }
+          this.getTableData(row.id);
         },
+        // 返回上一级
         goPre() {
           if (this.level > 1) {
             this.level--;
-            // 返回上一级需要调用查询上一级的列表
+            this.parentId = this.grandfatherId;
+            this.grandfatherId = '';
+            this.getTableData(this.parentId);
           }
         },
         // 新增/修改分类
@@ -213,46 +204,80 @@
           this.form.name = "";
           this.form.isUse = false;
         },
+        // 更新或者修改分类
         updateCatalogInfo(level) {
           // 分层级调用接口
-          const params = {
-            "id": this.form.id,
-            "name": this.form.name,
-            "isUse": this.form.isUse===true ?1:0
-          };
+          let params = {};
           let url = "";
           switch (level) {
             case 1:
               // 添加一级分类
+              params = {
+                "id": this.form.id,
+                "name": this.form.name,
+                "isUse": this.form.isUse===true ?1:0
+              };
               url = "/addCataLog";
               break;
             case 2:
               // 添加二级分类
+              params = {
+                "id": this.form.id,
+                "name": this.form.name,
+                "isUse": this.form.isUse===true ?1:0,
+                "cataLogId": this.parentId
+              };
               url = "/addSubClass";
               break;
             case 3:
               // 添加类型
+              params = {
+                "id": this.form.id,
+                "name": this.form.name,
+                "isUse": this.form.isUse===true ?1:0,
+                "subClassId": this.parentId
+              };
               url = "/addType";
               break;
           }
           if( url !== "" ) {
             updateCatalog(url, params).then( res => {
               dealResultWithoutData(res.data);
-              this.getTableData();
+              this.getTableData(this.parentId);
             }).catch(function (error) {
               console.log(error);
             });
           }
         },
         // 获取表格数据
-        getTableData() {
-          if( this.level === 1 ) {
-            this.getCatalog();
-          } else if ( this.level === 2 ) {
-            // 二级分类
-          } else if( this.level === 3 ) {
-            // 三级分类
-          }
+        getTableData(id) {
+          managerCatalog().then( res => {
+            const data = dealResult(res.data);
+            if( data != null ) {
+              this.cataLogList = data.cataLogList;
+              if( this.level === 1 ) {
+                this.tableData = this.cataLogList;
+              } else if ( this.level === 2 ) {
+                // 二级分类
+                this.cataLogList.forEach( item => {
+                  if( item.id === id ) {
+                    this.subClassList = item.subClassList;
+                    this.tableData = item.subClassList;
+                  }
+                })
+              } else if( this.level === 3 ) {
+                // 三级分类
+                this.subClassList.forEach( item => {
+                  if( item.id === id ) {
+                    this.typeList = item.typeList;
+                    this.tableData = item.typeList;
+                  }
+                })
+              }
+            }
+          }).catch(function (error) {
+            console.log(error);
+          })
         }
       }
     }
