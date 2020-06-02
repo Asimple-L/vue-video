@@ -163,9 +163,6 @@
         },
         // 进入下一级
         goNext(row, event, column) {
-          console.log(row);
-          console.log('当前层级：' + this.level);
-          console.log(this.cataLogList);
           this.level ++;
           this.grandfatherId = this.parentId;
           this.parentId = row.id;
@@ -266,11 +263,17 @@
                   }
                 })
               } else if( this.level === 3 ) {
+                // 二级分类
+                this.cataLogList.forEach( item => {
+                  if( item.id === this.grandfatherId ) {
+                    this.subClassList = item.subClassList;
+                  }
+                });
                 // 三级分类
                 this.subClassList.forEach( item => {
                   if( item.id === id ) {
-                    this.typeList = item.typeList;
-                    this.tableData = item.typeList;
+                    this.typeList = item.types;
+                    this.tableData = item.types;
                   }
                 })
               }

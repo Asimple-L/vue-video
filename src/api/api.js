@@ -163,3 +163,8 @@ export const updateCatalog = (urlStr, params) => {
   const url = baseManagerUrl + urlStr;
   return axios.post(url, Qs.stringify(params));
 };
+
+export const getUsers = params => {
+  const url = baseManagerUrl + '/userList';
+  return axios.post(url, Qs.stringify(params));
+};
