@@ -168,3 +168,8 @@ export const getUsers = params => {
   const url = baseManagerUrl + '/userList';
   return axios.post(url, Qs.stringify(params));
 };
+
+export const updateUserInfo = params => {
+  const url = baseManagerUrl + '/updateUser';
+  return axios.post(url, Qs.stringify(params));
+};
