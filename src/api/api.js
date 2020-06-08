@@ -173,3 +173,8 @@ export const updateUserInfo = params => {
   const url = baseManagerUrl + '/updateUser';
   return axios.post(url, Qs.stringify(params));
 };
+
+export const vipPage = (urlStr, param) => {
+  const url = baseManagerUrl + urlStr;
+  return axios.post(url, Qs.stringify(param));
+};
