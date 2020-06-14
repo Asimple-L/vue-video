@@ -13,8 +13,17 @@
       </el-row>
       <el-row>
         <el-carousel :interval="4000" type="card" height="200px">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <h3 class="medium">广告位招租</h3>
+          <el-carousel-item
+            v-for="item in $store.state.banner"
+            :key="item.name"
+            :name="item.name"
+            @click.native="goUrl(item.link)">
+            <img
+              v-if="item.url!==''"
+              style="width:100%;height:100%;"
+              :src="item.url"
+              :alt="item.title"/>
+            <h3 v-if="item.url===''" class="medium">{{item.content}}</h3>
           </el-carousel-item>
         </el-carousel>
       </el-row>
@@ -93,7 +102,6 @@
           $(this).parent().removeClass("lihover");
         });
       });
-      this.updateFilmSize();
       $(window).resize(function(){
         var w = $(".col-sm-8").width() / 6;
         var isLi = false;
@@ -127,32 +135,17 @@
           console.log(err);
         })
       },
-      updateFilmSize() {
-        var w = $(".col-sm-8").width() / 6;
-        var isLi = false;
-        if ($(".col-sm-8").width() < 500) {
-          w = $(".col-sm-8").width() / 3;
-          isLi = true;
-        }
-        w = parseInt(w - 0.5);
-        $(".moxIndex ul li").css("width", w + "px");
-        var h = (w * 160) / 115;
-        $(".t_img").css("height", h + "px");
-        if(isLi){
-          $(".case").css("height", "auto");
-          $(".case").css({"overflow":"hidden"});
-        }else {
-          $(".case").each(function (index,ele) {
-            $(ele).css("height", ($(".moxIndex").eq(index).height()) + "px");
-          });
-        }
-      },
       goFilmDetail(filmId) {
         goPage('/detail/'+filmId);
       },
       registerPage() {
         this.$router.push('register');
       },
+      // 直接跳转
+      goUrl(url) {
+        console.log(url);
+        window.open(url, '_blank');
+      }
     }
   }
 </script>

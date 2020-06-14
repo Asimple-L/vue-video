@@ -7,12 +7,19 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 
 const state = {
+  // 登录框是否显示
   dialogLoginModelVisible: false,
+  // 首页头部active栏
   activeIndex: '9',
+  // 登录的用户信息
   user: {id: '', userName: '',isVip: '', isManager: '', expireDate: '', userEmail: ''},
+  // 是否显示加载中
   fullscreenLoading: true,
+  // 后台管理是否折叠
   isCollapse: false,
+  // 首页头部是否显示
   headerDisplay: false,
+  // 后端菜单
   menu: [
     {
       name: "后台首页",
@@ -81,6 +88,44 @@ const state = {
       icon: "el-icon-s-data",
       relative: true,
       children: []
+    }
+  ],
+  // 首页横幅展示
+  banner: [
+    {
+      name: "第一个横屏广告",
+      title: "我命由我不由天", // 图片标题
+      url: "http://localhost:7001/static/img/1.jpg",
+      link: "http://localhost:7001/#/detail/f39c979857a4c8c50157a9020fb8001d", // 跳转地址
+      content: "", // 展示的文字
+    },
+    {
+      name: "第二个横屏广告",
+      title: "七夕", // 图片标题
+      url: "http://localhost:7001/static/img/2.jpg",
+      link: "http://localhost:7001/#/detail/f39c979857ad7e8c0157ae8ad2c80012", // 跳转地址
+      content: "", // 展示的文字
+    },
+    {
+      name: "第三个横屏广告",
+      title: "", // 图片标题
+      url: "http://localhost:7001/static/img/3.jpg",
+      link: "http://localhost:7001/#/detail/f39c979857b48a2a0157bddaa8f70056", // 跳转地址
+      content: "", // 展示的文字
+    },
+    {
+      name: "第四个横屏广告",
+      title: "", // 图片标题
+      url: "http://localhost:7001/static/img/4.jpg",
+      link: "http://localhost:7001/#/detail/f39c979857ad7e8c0157b39c4f9b002a", // 跳转地址
+      content: "", // 展示的文字
+    },
+    {
+      name: "第五个横屏广告",
+      title: "", // 图片标题
+      url: "",
+      link: "https://www.baidu.com", // 跳转地址
+      content: "这是一个纯文字的横屏广告", // 展示的文字
     }
   ],
 };
