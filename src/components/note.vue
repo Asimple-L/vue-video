@@ -96,7 +96,6 @@
           getNotes(params).then( res => {
             const data = dealResult(res.data);
             if( data != null ) {
-              console.log(data);
               this.commentList = data.pb.beanList;
               this.total = data.pb.tr;
               this.page = data.pb.pc;

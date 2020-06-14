@@ -54,10 +54,38 @@ const state = {
     {
       name: "目录管理",
       name_en: "catalog",
-      router: "catalog",
+      router: "/catalog",
       icon: "el-icon-s-operation",
-      relative: true,
-      children: []
+      children: [
+        {
+          name: "分类管理",
+          name_en: "catalog manager",
+          router: "catalog",
+          relative: true,
+          icon: "el-icon-right"
+        },
+        {
+          name: "年份管理",
+          name_en: "decade manager",
+          router: "decade",
+          relative: true,
+          icon: "el-icon-right"
+        },
+        {
+          name: "地区管理",
+          name_en: "loc manager",
+          router: "loc",
+          relative: true,
+          icon: "el-icon-right"
+        },
+        {
+          name: "等级管理",
+          name_en: "level manager",
+          router: "level",
+          relative: true,
+          icon: "el-icon-right"
+        }
+      ]
     },
     {
       name: "账户管理",

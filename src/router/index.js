@@ -20,6 +20,9 @@ import userManager from '@/components/manager/userManager'
 import vipManager from '@/components/manager/vipManager'
 import dataManager from '@/components/manager/dataManager'
 import logManager from '@/components/manager/logManager'
+import decadeManager from '@/components/manager/decadeManager'
+import locManager from '@/components/manager/locManager'
+import levelManager from '@/components/manager/levelManager'
 
 Vue.use(Router);
 
@@ -42,10 +45,13 @@ export default new Router({
     { path: '/manager', name: 'manager-page', component: managerPage, children: [
         // 后台管理子页面
         { path: 'index', name: 'manager-index', component: managerIndex},
-        { path: 'film', name: 'film-manager', component: filmManager},//TODO 影片管理
-        { path: 'catalog', name: 'catalog-manager', component: catalogManager},//TODO 目录管理
-        { path: 'user', name: 'user-manager', component: userManager},//TODO 用户管理
-        { path: 'vip', name: 'vip-manager', component: vipManager},//TODO VIP卡管理
+        { path: 'film', name: 'film-manager', component: filmManager},//影片管理
+        { path: 'catalog', name: 'catalog-manager', component: catalogManager},//目录管理
+        { path: 'decade', name: 'decade-manager', component: decadeManager},// 年份管理
+        { path: 'loc', name: 'loc-manager', component: locManager},// 年份管理
+        { path: 'level', name: 'level-manager', component: levelManager},// 年份管理
+        { path: 'user', name: 'user-manager', component: userManager},//用户管理
+        { path: 'vip', name: 'vip-manager', component: vipManager},//VIP卡管理
         { path: 'data', name: 'data-manager', component: dataManager},//TODO 数据管理
         { path: 'log', name: 'log-manager', component: logManager},//TODO 日志管理
         { path: '', component: managerIndex},// 默认访问首页

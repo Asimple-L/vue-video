@@ -143,7 +143,6 @@
       },
       // 直接跳转
       goUrl(url) {
-        console.log(url);
         window.open(url, '_blank');
       }
     }
