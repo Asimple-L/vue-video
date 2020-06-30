@@ -178,3 +178,11 @@ export const vipPage = (urlStr, param) => {
   const url = baseManagerUrl + urlStr;
   return axios.post(url, Qs.stringify(param));
 };
+
+export const getFilm = params => {
+  let url = baseProfileUrl + '/share';
+  if( params.isAdmin ) {
+    url = baseManagerUrl + '/film';
+  }
+  return axios.post(url, Qs.stringify(params));
+};

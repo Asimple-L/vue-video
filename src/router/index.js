@@ -56,7 +56,7 @@ export default new Router({
         { path: 'log', name: 'log-manager', component: logManager},//TODO 日志管理
         { path: '', component: managerIndex},// 默认访问首页
       ] },// 后台管理页面
-    { path: '/error', name: 'error', component: Error},// TODO 错误页
+    { path: '/error', name: 'error', component: Error},
     { path: '/**', redirect: '/index'}// 默认访问首页
   ]
 })

@@ -1,8 +1,7 @@
 <template>
   <div>
     <div class="text-center" style="width: 100%;">
-      <!--<a href="/video/profile/share">-->
-      <el-button type="primary" round @click="test('点击了上传按钮')" class="margin-top-10">
+      <el-button type="primary" round @click="goUploadPage()" class="margin-top-10">
         我要上传<i class="el-icon-upload el-icon--right"></i>
       </el-button>
     </div>
@@ -90,6 +89,12 @@
           let routeData = this.$router.resolve({ path: '/detail/'+filmId });
           window.open(routeData.href, '_blank');
         },
+        // 进入影片上传页面
+        goUploadPage() {
+          // TODO 这里记得修改，为了方便测试，先写好了一个影片id
+          let routeData = this.$router.resolve({ path: '/upload', query: {filmId: "f39c979857b48a2a0157c2c5ca3500b4", isAdmin: false}});
+          window.open(routeData.href, '_blank');
+        }
       }
     }
 </script>
