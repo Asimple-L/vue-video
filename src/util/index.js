@@ -112,3 +112,7 @@ export const ThunderEncode = t_url => {
   let thunderTitle = "thunder://";
   return thunderTitle + encode64(strUnicode2Ansi(thunderPrefix + t_url + thunderPosix));
 };
+
+export const stringIsEmpty = str => {
+  return str === null || str === '';
+};

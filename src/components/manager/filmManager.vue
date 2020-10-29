@@ -15,7 +15,7 @@
         <el-col>
           <ul v-if="total>0" class="film-list">
             <li class="float-left" v-for=" li in films">
-              <a @click="goFilmDetail(li.id)" :alt="li.name" :title="li.name">
+              <a @click="goUploadPage(li.id)" :alt="li.name" :title="li.name">
                 <el-image :src="HOME+li.image" lazy class="lazy rounded img-fluids" fit="contain">
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
@@ -64,19 +64,19 @@
         // 获取影片信息
         getFilms(pageNo) {
           const param = this.getInitParam(pageNo);
-          managerFilm(param).then( res => {
+          managerFilm(param).then(res => {
             const data = dealResult(res.data);
-            if( data!==null ) {
+            if (data !== null) {
               this.films = data.pageBean.beanList;
               this.total = data.pageBean.tr;
             }
-          }).catch( function (error) {
+          }).catch(function (error) {
             console.log(error);
           })
         },
         // 获取列表请求参数
         getInitParam(pageNo) {
-          if( pageNo === null ) {
+          if (pageNo === null) {
             pageNo = "1";
           }
           return {
@@ -84,21 +84,27 @@
             "ps": this.pageSize
           }
         },
+        // 影片搜索
         searchFilm() { // 搜索影片
-          if( this.oldFilmName === this.filmName ) {
-            return ;
+          if (this.oldFilmName === this.filmName) {
+            return;
           }
-          const param = {"ps":this.pageSize, "name": this.filmName};
-          managerFilm(param).then( res => {
+          const param = {"ps": this.pageSize, "name": this.filmName};
+          managerFilm(param).then(res => {
             const data = dealResult(res.data);
-            if( data!==null ) {
+            if (data !== null) {
               this.films = data.pageBean.beanList;
               this.total = data.pageBean.tr;
               this.oldFilmName = this.filmName;
             }
-          }).catch( function (error) {
+          }).catch(function (error) {
             console.log(error);
           })
+        },
+        // 进入影片上传页面
+        goUploadPage(filmId) {
+          let routeData = this.$router.resolve({path: '/upload', query: {filmId: filmId, isAdmin: true}});
+          window.open(routeData.href, '_blank');
         }
       }
     }

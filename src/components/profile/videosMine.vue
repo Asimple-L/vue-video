@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-center" style="width: 100%;">
-      <el-button type="primary" round @click="goUploadPage()" class="margin-top-10">
+      <el-button type="primary" round @click="goUploadPage('')" class="margin-top-10">
         我要上传<i class="el-icon-upload el-icon--right"></i>
       </el-button>
     </div>
@@ -9,7 +9,7 @@
       <div class="center" v-if="filmList && filmList.length>0">
         <ul class="film-list" >
           <li v-for="item in filmList">
-            <a @click="detailPage(item.id)">
+            <a @click="goUploadPage(item.id)">
               <div :title="item.name">
                 <img :src="HOME+item.image" style="height: 175px;width: 126px;">
               </div>
@@ -90,9 +90,8 @@
           window.open(routeData.href, '_blank');
         },
         // 进入影片上传页面
-        goUploadPage() {
-          // TODO 这里记得修改，为了方便测试，先写好了一个影片id
-          let routeData = this.$router.resolve({ path: '/upload', query: {filmId: "f39c979857b48a2a0157c2c5ca3500b4", isAdmin: false}});
+        goUploadPage(filmId) {
+          let routeData = this.$router.resolve({ path: '/upload', query: {filmId: filmId, isAdmin: false}});
           window.open(routeData.href, '_blank');
         }
       }

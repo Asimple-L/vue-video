@@ -186,3 +186,19 @@ export const getFilm = params => {
   }
   return axios.post(url, Qs.stringify(params));
 };
+
+export const getCatagLog = params => {
+  const url = baseProfileUrl + '/getCatalog';
+  return axios.post(url, Qs.stringify(params));
+};
+
+export const addFilm = params => {
+  const url = baseProfileUrl + '/addFilm';
+  return axios.post(url, params);
+};
+
+export const addRes = params => {
+  const url = baseProfileUrl + '/addRes';
+  params['res'] = JSON.stringify(params['res']);
+  return axios.post(url, Qs.stringify(params));
+};
