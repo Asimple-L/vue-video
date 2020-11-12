@@ -67,9 +67,9 @@
 </template>
 
 <script>
-    export default {
-        name: "manager-index"
-    }
+export default {
+  name: 'manager-index'
+}
 </script>
 
 <style scoped>

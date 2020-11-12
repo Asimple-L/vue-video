@@ -121,97 +121,96 @@
 </template>
 
 <script>
-  import { userProfile, dealResult } from '../api/api';
-  import { goPage } from "../util/index";
-  import "../assets/js/jquery-2.0.0.min.js";
-  import "../assets/plugins/bootflat-admin/js/bootstrap.min.js";
-  import "../assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js";
-  import "../assets/plugins/bootflat-admin/js/klorofil-common.js";
-    export default {
-      name: "user-profile",
-      data() {
-        return {
-          loginUser: { // 登录用户
-            id: this.$route.params.uid,
-            name: ""
-          },
-          myFilmsCount: 0, // 上传视频数
-          commentCount: 0, // 评论数据
-          totalLike: 0, // 点赞数
-          viewCount: 0, // 观看视频数目
-          filmList: [],// 上传的视频列表
-          activeIndex: '1',// 选择的页面
-        }
+import { userProfile, dealResult } from '../api/api'
+import { goPage } from '../util/index'
+import '../assets/js/jquery-2.0.0.min.js'
+import '../assets/plugins/bootflat-admin/js/bootstrap.min.js'
+import '../assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js'
+import '../assets/plugins/bootflat-admin/js/klorofil-common.js'
+export default {
+  name: 'user-profile',
+  data () {
+    return {
+      loginUser: { // 登录用户
+        id: this.$route.params.uid,
+        name: ''
       },
-      mounted() {
-        if( this.checkUid() ) {
-          this.init();
-          this.textToImg(this.$store.state.user.userName);
-        }
-      },
-      methods: {
-        init() {
-          const param = this.getInitParam();
-          userProfile(param).then( res => {
-            const data = dealResult(res.data);
-            if( data!==null ) {
-              this.myFilmsCount = data.myFilmsCount;
-              this.commentCount = data.commentCount;
-              this.viewCount = data.viewCount;
-              this.totalLike = data.totalLike;
-            }
-          }).catch(function (err) {
-            console.log(err);
-          });
-        },
-        // 头像显示处理函数
-        textToImg(uname) {
-          let name = uname.charAt(0).toUpperCase();
-          let fontSize = 37;
-          let fontWeight = 'bold';
-
-          let canvas = document.getElementById('headImg');
-          let img1 = document.getElementById('headImg');
-          canvas.width = 75;
-          canvas.height = 75;
-          let context = canvas.getContext('2d');
-          context.fillStyle = 'rgb(153, 169, 191)';
-          context.fillRect(0, 0, canvas.width, canvas.height);
-          context.fillStyle = '#fff';
-          context.font = fontWeight + ' ' + fontSize + 'px sans-serif';
-          context.textAlign = 'center';
-          context.textBaseline="middle";
-          context.fillText(name, fontSize, fontSize);
-          $('.headImg').attr('src',canvas.toDataURL("image/png"));
-        },
-        // 初始化参数获取
-        getInitParam() {
-          return {
-            uid: this.loginUser.id
-          }
-        },
-        // 检查是否登录
-        checkUid() {
-          if( null==this.loginUser.id ||
-            ''===this.loginUser.id.trim() ||
-            !this.$store.state.user.id ) {
-            this.$message.error({
-              message: '系统错误,请重试!',
-              duration: 2000,
-            });
-            goPage("/index");
-            return false;
-          } else {
-            return true;
-          }
-        },
-        // 进入详情页
-        detailPage(filmId) {
-          let routeData = this.$router.resolve({ path: '/detail/'+filmId });
-          window.open(routeData.href, '_blank');
-        },
-      }
+      myFilmsCount: 0, // 上传视频数
+      commentCount: 0, // 评论数据
+      totalLike: 0, // 点赞数
+      viewCount: 0, // 观看视频数目
+      filmList: [], // 上传的视频列表
+      activeIndex: '1'// 选择的页面
     }
+  },
+  mounted () {
+    if (this.checkUid()) {
+      this.init()
+      this.textToImg(this.$store.state.user.userName)
+    }
+  },
+  methods: {
+    init () {
+      const param = this.getInitParam()
+      userProfile(param).then(res => {
+        const data = dealResult(res.data)
+        if (data !== null) {
+          this.myFilmsCount = data.myFilmsCount
+          this.commentCount = data.commentCount
+          this.viewCount = data.viewCount
+          this.totalLike = data.totalLike
+        }
+      }).catch(function (err) {
+        console.log(err)
+      })
+    },
+    // 头像显示处理函数
+    textToImg (uname) {
+      let name = uname.charAt(0).toUpperCase()
+      let fontSize = 37
+      let fontWeight = 'bold'
+
+      let canvas = document.getElementById('headImg')
+      canvas.width = 75
+      canvas.height = 75
+      let context = canvas.getContext('2d')
+      context.fillStyle = 'rgb(153, 169, 191)'
+      context.fillRect(0, 0, canvas.width, canvas.height)
+      context.fillStyle = '#fff'
+      context.font = fontWeight + ' ' + fontSize + 'px sans-serif'
+      context.textAlign = 'center'
+      context.textBaseline = 'middle'
+      context.fillText(name, fontSize, fontSize)
+      $('.headImg').attr('src', canvas.toDataURL('image/png'))
+    },
+    // 初始化参数获取
+    getInitParam () {
+      return {
+        uid: this.loginUser.id
+      }
+    },
+    // 检查是否登录
+    checkUid () {
+      if (this.loginUser.id == null ||
+            this.loginUser.id.trim() === '' ||
+            !this.$store.state.user.id) {
+        this.$message.error({
+          message: '系统错误,请重试!',
+          duration: 2000
+        })
+        goPage('/index')
+        return false
+      } else {
+        return true
+      }
+    },
+    // 进入详情页
+    detailPage (filmId) {
+      let routeData = this.$router.resolve({ path: '/detail/' + filmId })
+      window.open(routeData.href, '_blank')
+    }
+  }
+}
 </script>
 
 <style scoped>

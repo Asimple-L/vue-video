@@ -11,4 +11,4 @@ export const m = {
     cube: '魔幻立方',
     authority: '权限测试'
   }
-};
+}

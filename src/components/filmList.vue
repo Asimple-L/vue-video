@@ -198,134 +198,134 @@
 </template>
 
 <script>
-  import { searchFilm, dealResult } from '../api/api';
-  import { goPage, goPageParam } from "../util/index";
-    export default {
-      name: "film-list",
-      data() {
-        return {
-          cataLogList: [], // 分类列表
-          cataLog_id: this.$route.query.cataLog_id, // 当前选择的分类id
-          subClassList: [], // 子类列表
-          subClass_id: "", // 当前选择的子类id
-          typeList: [], // 类型列表
-          type_id: "", // 当前选择类型id
-          locList: [], // 地区列表
-          loc_id: "", // 当前选择的地区id
-          decadeList: [], // 年份列表
-          filmList: [], // 影片列表
-          name: "",// 影片名
-          actor: "", // 演员
-          onDecade: "", // 选择的年份
-          evaluation: "",// 评分
-          pageBean: null, // 分页信息
-          ps: 15, // 分页展示条数
-        }
-      },
-      mounted() {
-        if( this.checkInit() ) {
-          this.$store.state.activeIndex = this.$route.query.index;
-          this.cataLog_id = this.$route.query.cataLog_id;
-          this.init();
-          this.$store.state.fullscreenLoading = false;
-        }
-      },
-      methods : {
-        checkInit() {
-          if( null==this.cataLog_id || ''===this.cataLog_id.trim() ) {
-            this.$message.error({
-              message: '系统错误,请重试!',
-              duration: 2000,
-            });
-            this.$router.go(-1);
-          } else {
-            return true;
+import { searchFilm, dealResult } from '../api/api'
+import { goPage, goPageParam } from '../util/index'
+export default {
+  name: 'film-list',
+  data () {
+    return {
+      cataLogList: [], // 分类列表
+      cataLog_id: this.$route.query.cataLog_id, // 当前选择的分类id
+      subClassList: [], // 子类列表
+      subClass_id: '', // 当前选择的子类id
+      typeList: [], // 类型列表
+      type_id: '', // 当前选择类型id
+      locList: [], // 地区列表
+      loc_id: '', // 当前选择的地区id
+      decadeList: [], // 年份列表
+      filmList: [], // 影片列表
+      name: '', // 影片名
+      actor: '', // 演员
+      onDecade: '', // 选择的年份
+      evaluation: '', // 评分
+      pageBean: null, // 分页信息
+      ps: 15 // 分页展示条数
+    }
+  },
+  mounted () {
+    if (this.checkInit()) {
+      this.$store.state.activeIndex = this.$route.query.index
+      this.cataLog_id = this.$route.query.cataLog_id
+      this.init()
+      this.$store.state.fullscreenLoading = false
+    }
+  },
+  methods: {
+    checkInit () {
+      if (this.cataLog_id == null || this.cataLog_id.trim() === '') {
+        this.$message.error({
+          message: '系统错误,请重试!',
+          duration: 2000
+        })
+        this.$router.go(-1)
+      } else {
+        return true
+      }
+    },
+    init (pc, ps) {
+      const param = this.getFilmListParams(pc, ps)
+      searchFilm(param).then(res => {
+        const data = dealResult(res.data)
+        if (data !== null) {
+          this.cataLogList = data.cataLogList
+          this.subClassList = data.subClassList
+          this.typeList = data.typeList
+          this.locList = data.locList
+          this.decadeList = data.decadeList
+          this.pageBean = data.pageBean
+          if (this.pageBean != null) {
+            this.filmList = data.pageBean.beanList
           }
-        },
-        init(pc, ps) {
-          const param = this.getFilmListParams(pc, ps);
-          searchFilm(param).then( res => {
-            const data = dealResult(res.data);
-            if( null!==data ) {
-              this.cataLogList = data.cataLogList;
-              this.subClassList = data.subClassList;
-              this.typeList = data.typeList;
-              this.locList = data.locList;
-              this.decadeList = data.decadeList;
-              this.pageBean = data.pageBean;
-              if( this.pageBean != null ) {
-                this.filmList = data.pageBean.beanList;
-              }
-            }
-          }).catch(function (error) {
-            console.log(error);
-          })
-        },
-        registerPage() {
-          this.$router.push('register');
-        },
-        reloadPage(name, value, index) {
-          if( null!==index && index>=10 ) {
-            this.$store.state.activeIndex = index;
-          }
-          switch (name) {
-            case "cataLog_id":
-              this.cataLog_id = value;
-              this.typeList = [];
-              this.subClass_id = "";
-              break;
-            case "subClass_id":
-              this.subClass_id = value;
-              this.type_id = "";
-              break;
-            case "type_id":
-              this.type_id = value;
-              break;
-            case "loc_id":
-              this.loc_id = value;
-              break;
-            case "onDecade":
-              this.onDecade = value;
-              break;
-          }
-          this.init();
-        },
-        prevPage() {
-          let pc = this.pageBean.pc;
-          this.init(pc-1, this.ps);
-        },
-        nextPage() {
-          let pc = this.pageBean.pc;
-          this.init(pc+1, this.ps);
-        },
-        toNote() {
-          goPage('note');
-        },
-        detailPage(filmId) {
-          let routeData = this.$router.resolve({ path: '/detail/'+filmId });
-          window.open(routeData.href, '_blank');
-        },
-        selectPage(selectedPageNo) {
-          this.init(selectedPageNo, this.ps);
-        },
-        getFilmListParams(pc, ps) {
-          if( pc == null ) pc = 1;
-          if( ps == null) ps = 15;
-          return {
-            cataLog_id: this.cataLog_id,
-            subClass_id: this.subClass_id,
-            type_id: this.type_id,
-            name: this.name,
-            loc_id: this.loc_id,
-            actor: this.actor,
-            onDecade: this.onDecade,
-            evaluation: this.evaluation,
-            pc: pc,
-            ps: ps,
-          };
         }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    registerPage () {
+      this.$router.push('register')
+    },
+    reloadPage (name, value, index) {
+      if (index !== null && index >= 10) {
+        this.$store.state.activeIndex = index
+      }
+      switch (name) {
+        case 'cataLog_id':
+          this.cataLog_id = value
+          this.typeList = []
+          this.subClass_id = ''
+          break
+        case 'subClass_id':
+          this.subClass_id = value
+          this.type_id = ''
+          break
+        case 'type_id':
+          this.type_id = value
+          break
+        case 'loc_id':
+          this.loc_id = value
+          break
+        case 'onDecade':
+          this.onDecade = value
+          break
+      }
+      this.init()
+    },
+    prevPage () {
+      let pc = this.pageBean.pc
+      this.init(pc - 1, this.ps)
+    },
+    nextPage () {
+      let pc = this.pageBean.pc
+      this.init(pc + 1, this.ps)
+    },
+    toNote () {
+      goPage('note')
+    },
+    detailPage (filmId) {
+      let routeData = this.$router.resolve({ path: '/detail/' + filmId })
+      window.open(routeData.href, '_blank')
+    },
+    selectPage (selectedPageNo) {
+      this.init(selectedPageNo, this.ps)
+    },
+    getFilmListParams (pc, ps) {
+      if (pc == null) pc = 1
+      if (ps == null) ps = 15
+      return {
+        cataLog_id: this.cataLog_id,
+        subClass_id: this.subClass_id,
+        type_id: this.type_id,
+        name: this.name,
+        loc_id: this.loc_id,
+        actor: this.actor,
+        onDecade: this.onDecade,
+        evaluation: this.evaluation,
+        pc: pc,
+        ps: ps
       }
     }
+  }
+}
 </script>
 
 <style scoped>

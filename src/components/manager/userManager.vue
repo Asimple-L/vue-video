@@ -90,98 +90,98 @@
 </template>
 
 <script>
-  import {getUsers, dealResult, updateUserInfo, dealResultWithoutData} from '../../api/api';
-    export default {
-      name: "user-manager",
-      data() {
-        return {
-          tableData: [{
-          }], // 表格数据
-          pageSize: 5, // 分类大小
-          page: 10, // 当前页
-          total: 0, // 用户总数
-          title: "修改用户信息", // 弹窗标题
-          form: {
-            // 表单信息
-            id: '',
-            userName: '',
-            userEmail: '',
-            isVip: true,
-            isManager: true,
-            isManagerValue: true,
-            isVipValue: true,
-          },
-          dialogFormVisible: false, // 弹窗是否显示
-          formLabelWidth: '20%',
-        }
+import {getUsers, dealResult, updateUserInfo, dealResultWithoutData} from '../../api/api'
+export default {
+  name: 'user-manager',
+  data () {
+    return {
+      tableData: [{
+      }], // 表格数据
+      pageSize: 5, // 分类大小
+      page: 10, // 当前页
+      total: 0, // 用户总数
+      title: '修改用户信息', // 弹窗标题
+      form: {
+        // 表单信息
+        id: '',
+        userName: '',
+        userEmail: '',
+        isVip: true,
+        isManager: true,
+        isManagerValue: true,
+        isVipValue: true
       },
-      mounted() {
-        this.init(1);
-      },
-      methods: {
-        // 初始化页面
-        init(pageNo) {
-          const param = { "page": pageNo, "pageSize": this.pageSize};
-          getUsers(param).then( res => {
-            const data = dealResult(res.data);
-            if( data !== null ) {
-              this.page = data.pb.pc;
-              this.pageSize = data.pb.ps;
-              this.total = data.pb.tr;
-              this.tableData = data.pb.beanList;
-            }
-          }).catch(function (error) {
-            console.log(error);
-          })
-        },
-        // 格式化日期
-        formatterDate(row) {
-          return this.$moment(row.expireDate).format('YYYY-MM-DD HH:mm:ss');
-        },
-        // 编辑用户
-        updateUser(index, row) {
-          this.dialogFormVisible = true;
-          this.form.id = row.id;
-          this.form.userName = row.userName;
-          this.form.userEmail = row.userEmail;
-          this.form.isManagerValue = row.isManager===1;
-          this.form.isVipValue = row.isVip===1;
-          this.form.isVip = row.isVip === 1;
-          this.form.isManager = row.isManager === 1;
-        },
-        // 提交弹屏操作
-        submitDialog(flag) {
-          if( flag ) {
-            // 如果是提交，调用后端接口修改用户信息
-            let key = '';
-            if( this.form.isManagerValue!==this.form.isManager && this.form.isVip!==this.form.isVipValue ) {
-              key = 'both';
-            } else if( this.form.isManager!==this.form.isManagerValue ) {
-              key = 'manager';
-            } else if ( this.form.isVipValue!==this.form.isVip ) {
-              key = 'vip';
-            }
-            if( key!=='' ) {
-              const param = {"uid": this.form.id, "key": key};
-              updateUserInfo(param).then( res => {
-                dealResultWithoutData(res.data);
-                this.init(this.pc);
-              }).catch(function (error) {
-                console.log(error);
-              })
-            }
-          }
-          this.dialogFormVisible = false;
-          this.form.id = '';
-          this.form.userName = '';
-          this.form.userEmail = '';
-          this.form.isVip = true;
-          this.form.isManager = true;
-          this.form.isManagerValue = true;
-          this.form.isVipValue = true;
-        }
-      },
+      dialogFormVisible: false, // 弹窗是否显示
+      formLabelWidth: '20%'
     }
+  },
+  mounted () {
+    this.init(1)
+  },
+  methods: {
+    // 初始化页面
+    init (pageNo) {
+      const param = { 'page': pageNo, 'pageSize': this.pageSize}
+      getUsers(param).then(res => {
+        const data = dealResult(res.data)
+        if (data !== null) {
+          this.page = data.pb.pc
+          this.pageSize = data.pb.ps
+          this.total = data.pb.tr
+          this.tableData = data.pb.beanList
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    // 格式化日期
+    formatterDate (row) {
+      return this.$moment(row.expireDate).format('YYYY-MM-DD HH:mm:ss')
+    },
+    // 编辑用户
+    updateUser (index, row) {
+      this.dialogFormVisible = true
+      this.form.id = row.id
+      this.form.userName = row.userName
+      this.form.userEmail = row.userEmail
+      this.form.isManagerValue = row.isManager === 1
+      this.form.isVipValue = row.isVip === 1
+      this.form.isVip = row.isVip === 1
+      this.form.isManager = row.isManager === 1
+    },
+    // 提交弹屏操作
+    submitDialog (flag) {
+      if (flag) {
+        // 如果是提交，调用后端接口修改用户信息
+        let key = ''
+        if (this.form.isManagerValue !== this.form.isManager && this.form.isVip !== this.form.isVipValue) {
+          key = 'both'
+        } else if (this.form.isManager !== this.form.isManagerValue) {
+          key = 'manager'
+        } else if (this.form.isVipValue !== this.form.isVip) {
+          key = 'vip'
+        }
+        if (key !== '') {
+          const param = {'uid': this.form.id, 'key': key}
+          updateUserInfo(param).then(res => {
+            dealResultWithoutData(res.data)
+            this.init(this.pc)
+          }).catch(function (error) {
+            console.log(error)
+          })
+        }
+      }
+      this.dialogFormVisible = false
+      this.form.id = ''
+      this.form.userName = ''
+      this.form.userEmail = ''
+      this.form.isVip = true
+      this.form.isManager = true
+      this.form.isManagerValue = true
+      this.form.isVipValue = true
+    }
+  }
+}
 </script>
 
 <style scoped>

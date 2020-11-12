@@ -91,31 +91,31 @@
           </el-menu-item>
         </el-menu>
       </el-header>
-      <router-view></router-view>
+      <router-view/>
     </el-container>
   </div>
 </template>
 
 <script>
-  import { getIndexHeaderInfo, login, dealResult, vipCodeVerification,logOut } from "../api/api";
-  import { goPage, goPageParam } from "../util/index";
+import { getIndexHeaderInfo, login, dealResult, vipCodeVerification, logOut } from '../api/api'
+import { goPage, goPageParam } from '../util/index'
 export default {
-  data() {
+  data () {
     return {
-      code: "000000",
-      clientHeight:'',
+      code: '000000',
+      clientHeight: '',
       cataLogList: [],
       form: {
         account: '',
-        password: '',
+        password: ''
       },
       formLabelWidth: '120px',
       loginRules: {
         account: [
           {
             required: true,
-            message: "请输入用户名",
-            trigger: "blur"
+            message: '请输入用户名',
+            trigger: 'blur'
           }
         ],
         password: [
@@ -127,7 +127,7 @@ export default {
         ]
       },
       vipCode: '',
-      showUserVipCode: false,
+      showUserVipCode: false
     }
   },
   watch: {
@@ -137,107 +137,107 @@ export default {
     }
   },
   mounted: function () {
-    this.init();
+    this.init()
     // 获取浏览器可视区域高度
-    this.clientHeight = `${document.documentElement.clientHeight}`;
-    window.onresize = function temp() {
-      this.clientHeight = `${document.documentElement.clientHeight}`;
+    this.clientHeight = `${document.documentElement.clientHeight}`
+    window.onresize = function temp () {
+      this.clientHeight = `${document.documentElement.clientHeight}`
     }
   },
   methods: {
-    init() {
+    init () {
       getIndexHeaderInfo().then(res => {
-        const data = dealResult(res.data);
-        if( null!==data ) {
-          this.cataLogList = data.cataLogList;
-          this.$store.state.user = data.user;
+        const data = dealResult(res.data)
+        if (data !== null) {
+          this.cataLogList = data.cataLogList
+          this.$store.state.user = data.user
         }
       }).catch(function (err) {
-        console.log(err);
+        console.log(err)
       })
     },
-    handleSelect(key) {// 点击后显示下划线
-      if( null===key || ''===key.trim() ) {
-        key = 9;
+    handleSelect (key) { // 点击后显示下划线
+      if (key === null || key.trim() === '') {
+        key = 9
       }
-      this.$store.state.activeIndex = ''+key;
+      this.$store.state.activeIndex = '' + key
     },
-    collect() {// 点击收藏方法
-      this.goIndexPage();
+    collect () { // 点击收藏方法
+      this.goIndexPage()
       this.$message({
         message: '请点击Ctrl+D收藏',
-        duration: 2000,
-      });
-    },
-    changeFixed(clientHeight){
-      this.$refs.homePage.$el.style.height = clientHeight-20+'px';
-    },
-    userLogin() {// 用户登录
-      if( !( this.form.account && this.form.password) ) {
-        return ;
-      }
-      login(this.form).then( res => {
-        const data = dealResult(res.data);
-        if( null!==data ) {
-          this.$store.state.user = data.user;
-          this.cancelUserLogin();
-        }
-      }).catch( function (err) {
-        console.log(err);
+        duration: 2000
       })
     },
-    useVipCode() {// 使用加油卡
-      vipCodeVerification(this.vipCode).then( res => {
-        const data = dealResult(res.data);
-        if( null !== data ) {
+    changeFixed (clientHeight) {
+      this.$refs.homePage.$el.style.height = clientHeight - 20 + 'px'
+    },
+    userLogin () { // 用户登录
+      if (!(this.form.account && this.form.password)) {
+        return
+      }
+      login(this.form).then(res => {
+        const data = dealResult(res.data)
+        if (data !== null) {
+          this.$store.state.user = data.user
+          this.cancelUserLogin()
+        }
+      }).catch(function (err) {
+        console.log(err)
+      })
+    },
+    useVipCode () { // 使用加油卡
+      vipCodeVerification(this.vipCode).then(res => {
+        const data = dealResult(res.data)
+        if (data !== null) {
           this.$message.success({
             message: '加油成功,继续前行!',
-            duration: 2000,
-          });
-          this.showUserVipCode = false;
+            duration: 2000
+          })
+          this.showUserVipCode = false
         }
       }).catch(function (err) {
-        console.log(err);
+        console.log(err)
       })
     },
-    cancelShowUserVipCode() {// 取消使用
-      this.showUserVipCode = false;
-      this.vipCode = '';
+    cancelShowUserVipCode () { // 取消使用
+      this.showUserVipCode = false
+      this.vipCode = ''
     },
-    userLoginOut() {// 用户登出
-      logOut().then( res => {
-        this.$store.state.user = null;
-        this.$message('登出成功!');
-        this.goIndexPage();
+    userLoginOut () { // 用户登出
+      logOut().then(res => {
+        this.$store.state.user = null
+        this.$message('登出成功!')
+        this.goIndexPage()
       }).catch(function (err) {
-        console.log(err);
+        console.log(err)
       })
     },
-    registerPage() {// 去注册
-      this.$router.push('register');
-      this.$store.state.dialogLoginModelVisible = false;
+    registerPage () { // 去注册
+      this.$router.push('register')
+      this.$store.state.dialogLoginModelVisible = false
     },
-    goIndexPage() {// 去首页
-      this.$store.state.activeIndex = ''+9;
-      goPage('/');
+    goIndexPage () { // 去首页
+      this.$store.state.activeIndex = '' + 9
+      goPage('/')
     },
-    cancelUserLogin() {// 取消登录
-      this.$store.state.dialogLoginModelVisible = false;
-      this.$refs.form.resetFields();
+    cancelUserLogin () { // 取消登录
+      this.$store.state.dialogLoginModelVisible = false
+      this.$refs.form.resetFields()
     },
-    toSearchPage(cataLog_id) {// 影片搜索页
-      const param = {cataLog_id: cataLog_id};
-      goPageParam("/xl", param);
+    toSearchPage (cataLog_id) { // 影片搜索页
+      const param = {cataLog_id: cataLog_id}
+      goPageParam('/xl', param)
     },
-    toNote() {// 留言页
-      goPage('/note');
+    toNote () { // 留言页
+      goPage('/note')
     },
-    toProfile(user_id) {// 个人中心页面
-      goPage("/userProfile/"+user_id)
+    toProfile (user_id) { // 个人中心页面
+      goPage('/userProfile/' + user_id)
     },
-    goBackendPage() {// 后台管理页面
-      let routeData = this.$router.resolve({ path: '/manager' });
-      window.open(routeData.href, '_blank');
+    goBackendPage () { // 后台管理页面
+      let routeData = this.$router.resolve({ path: '/manager' })
+      window.open(routeData.href, '_blank')
     }
   },
   components: {

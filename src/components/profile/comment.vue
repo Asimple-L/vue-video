@@ -29,7 +29,8 @@
       hide-on-single-page
       @current-change="getComments"
       class="center"
-    ></el-pagination>
+    >
+    </el-pagination>
     <div v-else class="cur-pointer center">
       暂无评论，请先去
       <router-link :to="{'name': 'note'}" class="font-blue">
@@ -40,46 +41,46 @@
 </template>
 
 <script>
-  import { getMyComments, dealResult } from '../../api/api';
-    export default {
-      // 我的评论页面
-      name: "comment",
-      data() {
-        return {
-          comments: [], // 我的评论列表
-          total: 0, // 总数
-          pageSize: 5, // 一页展示数量
-          uid: '', // 当前登录人id
+import { getMyComments, dealResult } from '../../api/api'
+export default {
+  // 我的评论页面
+  name: 'comment',
+  data () {
+    return {
+      comments: [], // 我的评论列表
+      total: 0, // 总数
+      pageSize: 5, // 一页展示数量
+      uid: '' // 当前登录人id
+    }
+  },
+  mounted () {
+    // 初始化
+    this.uid = this.$store.state.user.id
+    this.getComments(1)
+  },
+  methods: {
+    // 获取页面信息
+    getComments (pageNo) {
+      const param = this.getParams(pageNo)
+      getMyComments(param).then(res => {
+        const data = dealResult(res.data)
+        if (data != null) {
+          this.total = data.total
+          this.comments = data.comments
         }
-      },
-      mounted(){
-        // 初始化
-        this.uid = this.$store.state.user.id;
-        this.getComments(1);
-      },
-      methods: {
-        // 获取页面信息
-        getComments(pageNo) {
-          const param = this.getParams(pageNo);
-          getMyComments(param).then( res => {
-            const data = dealResult(res.data);
-            if( data != null ) {
-              this.total = data.total;
-              this.comments = data.comments;
-            }
-          }).catch(function (err) {
-            console.log(err);
-          })
-        },
-        // 获取参数列表
-        getParams(pageNo) {
-          return {
-            "pc": pageNo,
-            "uid": this.uid,
-          }
-        }
+      }).catch(function (err) {
+        console.log(err)
+      })
+    },
+    // 获取参数列表
+    getParams (pageNo) {
+      return {
+        'pc': pageNo,
+        'uid': this.uid
       }
     }
+  }
+}
 </script>
 
 <style scoped>

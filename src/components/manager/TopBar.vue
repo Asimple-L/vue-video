@@ -30,73 +30,73 @@
   </div>
 </template>
 <script>
-import "@/assets/libs/screenfull.js";
-import "../../../static/css/iconfont.css";
-import { logOut } from "../../api/api";
-import { goPage } from "../../util/index";
+import '@/assets/libs/screenfull.js'
+import '../../../static/css/iconfont.css'
+import { logOut } from '../../api/api'
+import { goPage } from '../../util/index'
 export default {
-  name: "topbar",
-  data() {
+  name: 'topbar',
+  data () {
     return {
-      userName: "",
+      userName: '',
       isFullscreen: false
-    };
+    }
   },
-  mounted() {
-    this.userName = this.$store.state.user.userName;
+  mounted () {
+    this.userName = this.$store.state.user.userName
   },
   computed: {
-    isCollapse() {
-      return this.$store.state.isCollapse;
+    isCollapse () {
+      return this.$store.state.isCollapse
     },
-    iconStyle() {
+    iconStyle () {
       return {
-        display: "block",
-        width: "20px",
-        transform: this.isCollapse ? "rotate(0deg)" : "rotate(180deg)"
-      };
+        display: 'block',
+        width: '20px',
+        transform: this.isCollapse ? 'rotate(0deg)' : 'rotate(180deg)'
+      }
     }
   },
   methods: {
-    toggleSiderBar() {
-      this.$store.state.isCollapse = !this.$store.state.isCollapse;
+    toggleSiderBar () {
+      this.$store.state.isCollapse = !this.$store.state.isCollapse
     },
-    toggleLanguage() {
-      let locale = this.$i18n.locale;
-      locale === "zh" ? (this.$i18n.locale = "en") : (this.$i18n.locale = "zh");
-      let info = locale === "en" ? "切换成功" : "change language successfully";
-      this.$message.success(info);
+    toggleLanguage () {
+      let locale = this.$i18n.locale
+      locale === 'zh' ? (this.$i18n.locale = 'en') : (this.$i18n.locale = 'zh')
+      let info = locale === 'en' ? '切换成功' : 'change language successfully'
+      this.$message.success(info)
     },
-    toggleFullscreen() {
+    toggleFullscreen () {
       if (!screenfull.enabled) {
-        this.$message.warning("您的浏览器不支持全屏");
-        return false;
+        this.$message.warning('您的浏览器不支持全屏')
+        return false
       }
-      screenfull.toggle();
-      this.isFullscreen = !screenfull.isFullscreen;
+      screenfull.toggle()
+      this.isFullscreen = !screenfull.isFullscreen
     },
-    logout() {
-      this.$bus.$emit("stopMusic");
-      logOut().then( res => {
-        this.$store.state.user = null;
-        this.$message('登出成功!');
-        this.$store.state.headerDisplay = false;
-        this.goIndexPage();
+    logout () {
+      this.$bus.$emit('stopMusic')
+      logOut().then(res => {
+        this.$store.state.user = null
+        this.$message('登出成功!')
+        this.$store.state.headerDisplay = false
+        this.goIndexPage()
       }).catch(function (err) {
-        console.log(err);
+        console.log(err)
       })
     },
-    goIndexPage() {
-      goPage('/');
+    goIndexPage () {
+      goPage('/')
     }
   },
   watch: {
-    $route(to, from) {
-      this.pathName = this.$route.path.substring(1);
-      this.nowPath = this.$route.path;
+    $route (to, from) {
+      this.pathName = this.$route.path.substring(1)
+      this.nowPath = this.$route.path
     }
   }
-};
+}
 </script>
 <style scoped type="css">
 #topbar-wrap {

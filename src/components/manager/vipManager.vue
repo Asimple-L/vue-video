@@ -44,52 +44,52 @@
 </template>
 
 <script>
-  import {vipPage, dealResult} from '../../api/api';
-    export default {
-      name: "vip-manager",
-      data() {
-        return {
-          isUserTotal: 0, // 可用VIP卡数量
-          useVipCode: [],// 可用VIP卡列表
-          pageSize: 10, // 一页显示大小
-          isUserPage: 1, // 可用VIP卡页
-          createNum: 0, // 生成的VIP卡数目
-          createVipCodeList: [], // 生成的VIP卡
-        }
-      },
-      mounted() {
-        this.init(1);
-      },
-      methods: {
-        // 初始化方法
-        init(pageNo) {
-          const param = {"page": pageNo, "pageSize": this.pageSize};
-          vipPage('/vipCode', param).then( res => {
-            const data = dealResult(res.data);
-            if( data!==null ) {
-              this.useVipCode = data.beanList;
-              this.isUserPage = data.pc;
-              this.isUserTotal = data.tr;
-            }
-          }).catch(function (error) {
-            console.log(error);
-          })
-        },
-        // 生成VIP卡
-        createVipCode() {
-          vipPage('/createVipCode', {"num": this.pageSize}).then( res => {
-            const data = dealResult(res.data);
-            this.createNum = 0;
-            if( data!==null ) {
-              this.createVipCodeList = data.data;
-              this.createNum = this.pageSize;
-            }
-          }).catch(function (error) {
-            console.log(error);
-          })
-        }
-      }
+import {vipPage, dealResult} from '../../api/api'
+export default {
+  name: 'vip-manager',
+  data () {
+    return {
+      isUserTotal: 0, // 可用VIP卡数量
+      useVipCode: [], // 可用VIP卡列表
+      pageSize: 10, // 一页显示大小
+      isUserPage: 1, // 可用VIP卡页
+      createNum: 0, // 生成的VIP卡数目
+      createVipCodeList: [] // 生成的VIP卡
     }
+  },
+  mounted () {
+    this.init(1)
+  },
+  methods: {
+    // 初始化方法
+    init (pageNo) {
+      const param = {'page': pageNo, 'pageSize': this.pageSize}
+      vipPage('/vipCode', param).then(res => {
+        const data = dealResult(res.data)
+        if (data !== null) {
+          this.useVipCode = data.beanList
+          this.isUserPage = data.pc
+          this.isUserTotal = data.tr
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    // 生成VIP卡
+    createVipCode () {
+      vipPage('/createVipCode', {'num': this.pageSize}).then(res => {
+        const data = dealResult(res.data)
+        this.createNum = 0
+        if (data !== null) {
+          this.createVipCodeList = data.data
+          this.createNum = this.pageSize
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>

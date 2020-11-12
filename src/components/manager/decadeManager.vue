@@ -44,88 +44,66 @@
 </template>
 
 <script>
-  import {managerCatalog, dealResult, updateCatalog, dealResultWithoutData} from '../../api/api';
-    export default {
-      name: "decade-manager",
-      data() {
-          return {
-            dialogFormVisible: false, // 弹框是否显示
-            tableData: [], // 表格显示内容
-            form: {
-              name: "", // 年份
-            }
-          }
-      },
-      mounted() {
-        this.getTableData();
-      },
-      methods: {
-        // 获取表格数据
-        getTableData() {
-          managerCatalog().then( res => {
-            const data = dealResult(res.data);
-            if (data != null) {
-              this.tableData = data.decadeList;
-            }
-          }).catch(function (error) {
-            console.log(error);
-          })
-        },
-        // 新增年份弹框
-        addDecade() {
-          this.dialogFormVisible = true;
-        },
-        // 提交/取消 新增
-        submitDialog(flag) {
-          this.dialogFormVisible = false;
-          if( flag ) {
-            // 提交到后端
-            const param = {name: this.form.name};
-            updateCatalog('/addDecade', param).then( res=> {
-              dealResultWithoutData(res.data);
-              this.getTableData();
-            }).catch(function (error) {
-              console.log(error);
-            })
-          }
-        },
-        // 处理删除
-        handleDelete(obj) {
-          obj.isUse = 0;
-          updateCatalog('/addDecade', obj).then( res=> {
-            dealResultWithoutData(res.data);
-            this.getTableData();
-          }).catch(function (error) {
-            console.log(error);
-          });
-        }
+import {managerCatalog, dealResult, updateCatalog, dealResultWithoutData} from '../../api/api'
+export default {
+  name: 'decade-manager',
+  data () {
+    return {
+      dialogFormVisible: false, // 弹框是否显示
+      tableData: [], // 表格显示内容
+      form: {
+        name: '' // 年份
       }
     }
+  },
+  mounted () {
+    this.getTableData()
+  },
+  methods: {
+    // 获取表格数据
+    getTableData () {
+      managerCatalog().then(res => {
+        const data = dealResult(res.data)
+        if (data != null) {
+          this.tableData = data.decadeList
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    // 新增年份弹框
+    addDecade () {
+      this.dialogFormVisible = true
+    },
+    // 提交/取消 新增
+    submitDialog (flag) {
+      this.dialogFormVisible = false
+      if (flag) {
+        // 提交到后端
+        const param = {name: this.form.name}
+        updateCatalog('/addDecade', param).then(res => {
+          dealResultWithoutData(res.data)
+          this.getTableData()
+        }).catch(function (error) {
+          console.log(error)
+        })
+      }
+    },
+    // 处理删除
+    handleDelete (obj) {
+      obj.isUse = 0
+      updateCatalog('/addDecade', obj).then(res => {
+        dealResultWithoutData(res.data)
+        this.getTableData()
+      }).catch(function (error) {
+        console.log(error)
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>
-  .item_info{
-  border-radius: 20px;
-  padding: 12px 23px;
-  display: inline-block;
-  line-height: 1;
-  white-space: nowrap;
-  cursor: pointer;
-  background: #fff;
-  border: 1px solid #dcdfe6;
-  color: #606266;
-  -webkit-appearance: none;
-  text-align: center;
-  box-sizing: border-box;
-  outline: none;
-  margin: 0;
-  transition: .1s;
-  font-weight: 500;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  font-size: 14px;
-}
   ul li {
     width: 22%;
     margin-right: 3%;

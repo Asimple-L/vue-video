@@ -44,64 +44,64 @@
 </template>
 
 <script>
-  import {managerCatalog, dealResult, updateCatalog, dealResultWithoutData} from '../../api/api';
-    export default {
-      name: "loc-manager",
-      data() {
-        return {
-          dialogFormVisible: false, // 弹框是否显示
-          tableData: [], // 表格显示内容
-          form: {
-            name: "", // 年份
-          },
-          visible: false, // 删除框是否显示
-        }
+import {managerCatalog, dealResult, updateCatalog, dealResultWithoutData} from '../../api/api'
+export default {
+  name: 'loc-manager',
+  data () {
+    return {
+      dialogFormVisible: false, // 弹框是否显示
+      tableData: [], // 表格显示内容
+      form: {
+        name: '' // 年份
       },
-      mounted() {
-        this.getTableData();
-      },
-      methods: {
-        // 获取表格数据
-        getTableData() {
-          managerCatalog().then( res => {
-            const data = dealResult(res.data);
-            if (data != null) {
-              this.tableData = data.locList;
-            }
-          }).catch(function (error) {
-            console.log(error);
-          })
-        },
-        // 新增地区弹框
-        addDecade() {
-          this.dialogFormVisible = true;
-        },
-        // 提交/取消 新增
-        submitDialog(flag) {
-          this.dialogFormVisible = false;
-          if( flag ) {
-            // 提交到后端
-            const param = {name: this.form.name};
-            updateCatalog('/addLoc', param).then( res=> {
-              dealResultWithoutData(res.data);
-              this.getTableData();
-            }).catch(function (error) {
-              console.log(error);
-            })
-          }
-        },
-        // 处理删除
-        handleDelete(obj) {
-          obj.isUse = 0;
-          updateCatalog('/addLoc', obj).then( res=> {
-            dealResultWithoutData(res.data);
-            this.getTableData();
-          }).catch(function (error) {
-            console.log(error);
-          });
-        }
-      }
+      visible: false // 删除框是否显示
     }
+  },
+  mounted () {
+    this.getTableData()
+  },
+  methods: {
+    // 获取表格数据
+    getTableData () {
+      managerCatalog().then(res => {
+        const data = dealResult(res.data)
+        if (data != null) {
+          this.tableData = data.locList
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    // 新增地区弹框
+    addDecade () {
+      this.dialogFormVisible = true
+    },
+    // 提交/取消 新增
+    submitDialog (flag) {
+      this.dialogFormVisible = false
+      if (flag) {
+        // 提交到后端
+        const param = {name: this.form.name}
+        updateCatalog('/addLoc', param).then(res => {
+          dealResultWithoutData(res.data)
+          this.getTableData()
+        }).catch(function (error) {
+          console.log(error)
+        })
+      }
+    },
+    // 处理删除
+    handleDelete (obj) {
+      obj.isUse = 0
+      updateCatalog('/addLoc', obj).then(res => {
+        dealResultWithoutData(res.data)
+        this.getTableData()
+      }).catch(function (error) {
+        console.log(error)
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>

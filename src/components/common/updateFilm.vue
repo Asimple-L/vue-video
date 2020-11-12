@@ -313,291 +313,291 @@
 </template>
 
 <script>
-  import {getFilm,dealResultWithoutData, dealResult, getCatagLog, addFilm, addRes} from '../../api/api';
-  import {stringIsEmpty} from '../../util/index'
-    export default {
-      name: "update-film",
-      data() {
-        return {
-          film: {
-            // 主键
-            id: "",
-            // 片名
-            name: "",
-            // 海报图地址
-            image: "",
-            // 上映年代
-            onDecade: "",
-            // 状态
-            status: "",
-            // 分辨率
-            resolution: "",
-            // 类型名称
-            typeName: "",
-            // 类型Id
-            type_id: "",
-            // 演员
-            actor: "",
-            // 地区名称
-            locName: "",
-            // 地区Id
-            loc_id: "",
-            // 更新时间
-            updateTime: "",
-            // 是否在使用
-            isUse: "",
-            // 一级目录
-            cataLog_id: "",
-            // 一级目录名称
-            cataLogName: "",
-            // 二级目录
-            subClass_id: "",
-            // 二级目录名称
-            subClassName: "",
-            // 是否vip资源
-            isVip: "1",
-            // 剧情介绍
-            plot: "",
-            // 评分
-            evaluation: 0.0,
-            // 浏览数目
-            view_number: 0,
-          }, // 电影主体
-          filmId: '', // 影片id
-          isAdmin: '', // 是否来自于后台管理页面
-          res: [], // 资源列表
-          locList: [], // 地区列表
-          levelList: [], // 等级列表
-          decadeList: [], // 年份列表
-          cataLogList: [], // 分类信息
-          subClassList: [], // 二级分类信息
-          typeList: [], // 类型分类信息
-          resolution: ["1080p", "720p", "480p"], // 分辨率信息
-          linkTypes: [
-            { type: "Flh", name: "在线"},
-            { type: "ed2k", name: "电驴"},
-            { type: "thunder", name: "迅雷"},
-            {type: "http", name: "离线"},
-            {type: "dupan", name: "度盘"},
-            {type: "other", name: "其它"}], // 链接类型
-          uploadRes: {
-            // 主键
-            id: "",
-            // 集数
-            episodes: "",
-            // 资源名称
-            name: "",
-            // 资源链接
-            link: "",
-            // 资源类型
-            linkType:"",
-            // 是否有用
-            isUse: "1",
-          },// 等待上传的资源
-        }
-      },
-      mounted() {
-        this.init();
-      },
-      methods: {
-        init() {// 初始化信息
-          this.$store.state.fullscreenLoading = false;
-          this.$store.state.activeIndex = '9';
-          this.$store.state.headerDisplay = false;
-          this.filmId = this.$route.query.filmId;
-          this.isAdmin = this.$route.query.isAdmin;
-          if( this.filmId!=='' ) {
-            this.getFilmInfo();
-          }
-          getCatagLog().then( res => {
-            const data = dealResult(res.data);
-            if( data!=null ) {
-              this.locList = data.locList;
-              this.levelList = data.levelList;
-              this.decadeList = data.decadeList;
-              this.cataLogList = data.cataLogList;
-            }
-          }).catch(function (error) {
-            console.log(error);
-          })
-        },
-        getFilmInfo() {
-          // 如果有传过来影片ID说明是编辑，需要获取影片信息
-          getFilm({"filmId": this.filmId}).then( res => {
-            const data = dealResult(res.data);
-            if( data!==null ) {
-              this.film = data.film;
-              this.res = data.res;
-            } else {
-              setTimeout(function () {
-                window.close();
-              }, 2000);
-            }
-          }).catch(function (error) {
-            console.log(error);
-          })
-        },
-        // 资源上传成功后调用的方法
-        uploadResSuccess(response) {
-          if( response==null || response.length === 0 ) {
-            return ;
-          }
-          let res = response[0];
-          if( res.filePath.startsWith("/") ) {
-            this.uploadRes.link = res.filePath.substring(1);
-          }
-          this.uploadRes.name = res.name;
-          this.uploadRes.link = res.filePath;
-          this.uploadRes.linkType = "Flh";
-        },
-        // 海报上传成功后的方法
-        uploadImgSuccess(response) {
-          if( response==null || response.length === 0 ) {
-            return ;
-          }
-          let res = response[0];
-          this.film.image = res.filePath;
-          if( res.filePath.startsWith("/") ) {
-            this.film.image = res.filePath.substring(1);
-          }
-        },
-        // 分类选择器变化调用方法
-        cataLogChange(value) {
-          this.cataLogList.forEach( item => {
-            if( item.id === value ) {
-              this.subClassList = item.subClassList;
-              this.film.cataLogName = item.name;
-              this.film.subClass_id = '';
-              this.film.type_id='';
-              this.typeList = [];
-            }
-          });
-        },
-        // 二级分类选择器变化调用方法
-        subClassChange(value) {
-          this.subClassList.forEach( item => {
-            if( item.id === value ) {
-              this.film.subClassName = item.name;
-              this.film.type_id='';
-              this.typeList = item.types;
-            }
-          })
-        },
-        // 上传/修改视频
-        submitFilm() {
-          if( this.checkSubmit() ) {
-            this.film.isVip = this.film.isVip?"0":"1";
-            this.film.isUse = "1";
-            addFilm(this.film).then( res => {
-              const data = dealResult(res.data);
-              if( data!=null ) {
-                this.film.id = data.id;
-                this.uploadRes.filmId = data.id;
-              }
-            }).catch(function (error) {
-              console.log(error);
-            });
-            alert("上传了视频");
-          }
-        },
-        // 检查是否满足提交条件,可能不全，但是基本都一样，就这样了
-        checkSubmit() {
-          if( stringIsEmpty(this.film.name ) ) {
-            this.errorMessage("请输入片名");
-            return false;
-          }
-          if( stringIsEmpty(this.film.image) ) {
-            this.errorMessage("请上传海报");
-            return false;
-          }
-          if( stringIsEmpty(this.film.onDecade ) ) {
-            this.errorMessage("请选择上映年代");
-            return false;
-          }
-          if( stringIsEmpty(this.film.status ) ) {
-            this.errorMessage("请选择状态");
-            return false;
-          }
-          if( stringIsEmpty(this.film.resolution ) ) {
-            this.errorMessage("请选择分辨率");
-            return false;
-          }
-          if( stringIsEmpty(this.film.typeName ) ) {
-            this.errorMessage("请选择类型");
-            return false;
-          }
-          if( stringIsEmpty(this.film.actor ) ) {
-            this.errorMessage("请填写演员");
-            return false;
-          }
-          if( stringIsEmpty(this.film.locName ) ) {
-            this.errorMessage("请选择地区");
-            return false;
-          }
-          if( stringIsEmpty(this.film.plot ) ) {
-            this.errorMessage("请输入剧情");
-            return false;
-          }
-          return true;
-        },
-        errorMessage(message) {
-          this.$message.error({
-            message: message,
-            duration: 2000,
-          });
-        },
-        setTypeName(value) {
-          this.typeList.forEach(item => {
-            if( item.id === value ) {
-              this.film.typeName = item.name;
-            }
-          });
-        },
-        setLocName(value) {
-          this.locList.forEach(item => {
-            if( item.name === value ) {
-              this.film.loc_id = item.id;
-            }
-          });
-        },
-        fullText() {
-          this.uploadRes.name = 'xxxx@@集##1##集数结束##分割符号';
-        },
-        clearText() {
-          this.uploadRes = {
-            id: "",
-            episodes: "",
-            name: "",
-            link: "",
-            linkType:"",
-            isUse: "1",
-            filmId: this.film.id
-          }
-        },
-        submitRes() {
-          if( stringIsEmpty(this.uploadRes.link) ) {
-            this.errorMessage("请输入资源链接");
-          }
-          if( stringIsEmpty(this.uploadRes.name) ) {
-            this.errorMessage("请输入资源名称");
-          }
-          if( stringIsEmpty(this.uploadRes.linkType) ) {
-            this.errorMessage("请选择资源类型");
-          }
-          if( stringIsEmpty(this.uploadRes.episodes) ) {
-            this.errorMessage("请选择集数");
-          }
-          const params = {'res': this.uploadRes, 'filmId':this.film.id};
-          addRes(params).then( res => {
-            if( dealResultWithoutData(res.data) ) {
-              this.getFilmInfo();
-            }
-          }).catch(function (error) {
-            console.log(error);
-          })
-        }
-      }
+import {getFilm, dealResultWithoutData, dealResult, getCatagLog, addFilm, addRes} from '../../api/api'
+import {stringIsEmpty} from '../../util/index'
+export default {
+  name: 'update-film',
+  data () {
+    return {
+      film: {
+        // 主键
+        id: '',
+        // 片名
+        name: '',
+        // 海报图地址
+        image: '',
+        // 上映年代
+        onDecade: '',
+        // 状态
+        status: '',
+        // 分辨率
+        resolution: '',
+        // 类型名称
+        typeName: '',
+        // 类型Id
+        type_id: '',
+        // 演员
+        actor: '',
+        // 地区名称
+        locName: '',
+        // 地区Id
+        loc_id: '',
+        // 更新时间
+        updateTime: '',
+        // 是否在使用
+        isUse: '',
+        // 一级目录
+        cataLog_id: '',
+        // 一级目录名称
+        cataLogName: '',
+        // 二级目录
+        subClass_id: '',
+        // 二级目录名称
+        subClassName: '',
+        // 是否vip资源
+        isVip: '1',
+        // 剧情介绍
+        plot: '',
+        // 评分
+        evaluation: 0.0,
+        // 浏览数目
+        view_number: 0
+      }, // 电影主体
+      filmId: '', // 影片id
+      isAdmin: '', // 是否来自于后台管理页面
+      res: [], // 资源列表
+      locList: [], // 地区列表
+      levelList: [], // 等级列表
+      decadeList: [], // 年份列表
+      cataLogList: [], // 分类信息
+      subClassList: [], // 二级分类信息
+      typeList: [], // 类型分类信息
+      resolution: ['1080p', '720p', '480p'], // 分辨率信息
+      linkTypes: [
+        {type: 'Flh', name: '在线'},
+        {type: 'ed2k', name: '电驴'},
+        {type: 'thunder', name: '迅雷'},
+        {type: 'http', name: '离线'},
+        {type: 'dupan', name: '度盘'},
+        {type: 'other', name: '其它'}], // 链接类型
+      uploadRes: {
+        // 主键
+        id: '',
+        // 集数
+        episodes: '',
+        // 资源名称
+        name: '',
+        // 资源链接
+        link: '',
+        // 资源类型
+        linkType: '',
+        // 是否有用
+        isUse: '1'
+      }// 等待上传的资源
     }
+  },
+  mounted () {
+    this.init()
+  },
+  methods: {
+    init () { // 初始化信息
+      this.$store.state.fullscreenLoading = false
+      this.$store.state.activeIndex = '9'
+      this.$store.state.headerDisplay = false
+      this.filmId = this.$route.query.filmId
+      this.isAdmin = this.$route.query.isAdmin
+      if (this.filmId !== '') {
+        this.getFilmInfo()
+      }
+      getCatagLog().then(res => {
+        const data = dealResult(res.data)
+        if (data != null) {
+          this.locList = data.locList
+          this.levelList = data.levelList
+          this.decadeList = data.decadeList
+          this.cataLogList = data.cataLogList
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    getFilmInfo () {
+      // 如果有传过来影片ID说明是编辑，需要获取影片信息
+      getFilm({'filmId': this.filmId}).then(res => {
+        const data = dealResult(res.data)
+        if (data !== null) {
+          this.film = data.film
+          this.res = data.res
+        } else {
+          setTimeout(function () {
+            window.close()
+          }, 2000)
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    // 资源上传成功后调用的方法
+    uploadResSuccess (response) {
+      if (response == null || response.length === 0) {
+        return
+      }
+      let res = response[0]
+      if (res.filePath.startsWith('/')) {
+        this.uploadRes.link = res.filePath.substring(1)
+      }
+      this.uploadRes.name = res.name
+      this.uploadRes.link = res.filePath
+      this.uploadRes.linkType = 'Flh'
+    },
+    // 海报上传成功后的方法
+    uploadImgSuccess (response) {
+      if (response == null || response.length === 0) {
+        return
+      }
+      let res = response[0]
+      this.film.image = res.filePath
+      if (res.filePath.startsWith('/')) {
+        this.film.image = res.filePath.substring(1)
+      }
+    },
+    // 分类选择器变化调用方法
+    cataLogChange (value) {
+      this.cataLogList.forEach(item => {
+        if (item.id === value) {
+          this.subClassList = item.subClassList
+          this.film.cataLogName = item.name
+          this.film.subClass_id = ''
+          this.film.type_id = ''
+          this.typeList = []
+        }
+      })
+    },
+    // 二级分类选择器变化调用方法
+    subClassChange (value) {
+      this.subClassList.forEach(item => {
+        if (item.id === value) {
+          this.film.subClassName = item.name
+          this.film.type_id = ''
+          this.typeList = item.types
+        }
+      })
+    },
+    // 上传/修改视频
+    submitFilm () {
+      if (this.checkSubmit()) {
+        this.film.isVip = this.film.isVip ? '0' : '1'
+        this.film.isUse = '1'
+        addFilm(this.film).then(res => {
+          const data = dealResult(res.data)
+          if (data != null) {
+            this.film.id = data.id
+            this.uploadRes.filmId = data.id
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+        alert('上传了视频')
+      }
+    },
+    // 检查是否满足提交条件,可能不全，但是基本都一样，就这样了
+    checkSubmit () {
+      if (stringIsEmpty(this.film.name)) {
+        this.errorMessage('请输入片名')
+        return false
+      }
+      if (stringIsEmpty(this.film.image)) {
+        this.errorMessage('请上传海报')
+        return false
+      }
+      if (stringIsEmpty(this.film.onDecade)) {
+        this.errorMessage('请选择上映年代')
+        return false
+      }
+      if (stringIsEmpty(this.film.status)) {
+        this.errorMessage('请选择状态')
+        return false
+      }
+      if (stringIsEmpty(this.film.resolution)) {
+        this.errorMessage('请选择分辨率')
+        return false
+      }
+      if (stringIsEmpty(this.film.typeName)) {
+        this.errorMessage('请选择类型')
+        return false
+      }
+      if (stringIsEmpty(this.film.actor)) {
+        this.errorMessage('请填写演员')
+        return false
+      }
+      if (stringIsEmpty(this.film.locName)) {
+        this.errorMessage('请选择地区')
+        return false
+      }
+      if (stringIsEmpty(this.film.plot)) {
+        this.errorMessage('请输入剧情')
+        return false
+      }
+      return true
+    },
+    errorMessage (message) {
+      this.$message.error({
+        message: message,
+        duration: 2000
+      })
+    },
+    setTypeName (value) {
+      this.typeList.forEach(item => {
+        if (item.id === value) {
+          this.film.typeName = item.name
+        }
+      })
+    },
+    setLocName (value) {
+      this.locList.forEach(item => {
+        if (item.name === value) {
+          this.film.loc_id = item.id
+        }
+      })
+    },
+    fullText () {
+      this.uploadRes.name = 'xxxx@@集##1##集数结束##分割符号'
+    },
+    clearText () {
+      this.uploadRes = {
+        id: '',
+        episodes: '',
+        name: '',
+        link: '',
+        linkType: '',
+        isUse: '1',
+        filmId: this.film.id
+      }
+    },
+    submitRes () {
+      if (stringIsEmpty(this.uploadRes.link)) {
+        this.errorMessage('请输入资源链接')
+      }
+      if (stringIsEmpty(this.uploadRes.name)) {
+        this.errorMessage('请输入资源名称')
+      }
+      if (stringIsEmpty(this.uploadRes.linkType)) {
+        this.errorMessage('请选择资源类型')
+      }
+      if (stringIsEmpty(this.uploadRes.episodes)) {
+        this.errorMessage('请选择集数')
+      }
+      const params = {'res': this.uploadRes, 'filmId': this.film.id}
+      addRes(params).then(res => {
+        if (dealResultWithoutData(res.data)) {
+          this.getFilmInfo()
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>

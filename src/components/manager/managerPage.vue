@@ -12,31 +12,30 @@
 </template>
 
 <script>
-  import TopBar from '@/components/manager/TopBar';
-  import SideBar from '@/components/manager/SideBar';
-  import { goPage } from "../../util/index";
-    export default {
-      name: "manager-page",
-      data() {
-          return {
-            menu: [],// 菜单动态配置
-          }
-      },
-      components: {
-        'top-bar': TopBar,
-        'side-bar': SideBar
-      },
-      mounted() {
-        this.init();
-      },
-      methods: {
-        init() {// 初始化检查
-          this.$store.state.fullscreenLoading = false;
-          this.$store.state.activeIndex = '7';
-          this.$store.state.headerDisplay = true;
-        },
-      }
+import TopBar from '@/components/manager/TopBar'
+import SideBar from '@/components/manager/SideBar'
+export default {
+  name: 'manager-page',
+  data () {
+    return {
+      menu: []// 菜单动态配置
     }
+  },
+  components: {
+    'top-bar': TopBar,
+    'side-bar': SideBar
+  },
+  mounted () {
+    this.init()
+  },
+  methods: {
+    init () { // 初始化检查
+      this.$store.state.fullscreenLoading = false
+      this.$store.state.activeIndex = '7'
+      this.$store.state.headerDisplay = true
+    }
+  }
+}
 </script>
 
 <style type="scss">

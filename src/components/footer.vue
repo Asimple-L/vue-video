@@ -5,14 +5,14 @@
 </template>
 
 <script>
-    export default {
-        name: "videoFooter",
-        data() {
-            return {
-              author: 'simple_lc@126.com',
-            }
-        }
+export default {
+  name: 'videoFooter',
+  data () {
+    return {
+      author: 'simple_lc@126.com'
     }
+  }
+}
 </script>
 
 <style scoped>

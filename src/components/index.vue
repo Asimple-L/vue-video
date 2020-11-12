@@ -78,75 +78,75 @@
 </template>
 
 <script type="es6">
-   import {getIndexData} from "../api/api";
-   import {goPage} from "../util/index";
+import {getIndexData} from '../api/api'
+import {goPage} from '../util/index'
 
-  export default {
-    name: 'index',
-    data() {
-      return {
-        code: "初始化",
-        filmTuijian: [],
-        filmPaiHang: [],
+export default {
+  name: 'index',
+  data () {
+    return {
+      code: '初始化',
+      filmTuijian: [],
+      filmPaiHang: []
+    }
+  },
+  mounted: function () {
+    this.init()
+    this.$store.state.activeIndex = '9'
+    $('.case ul li a').each(function (i) {
+      $(this).hover(function () {
+        $(this).parent().find('.tips').addClass('hover')
+        $(this).parent().addClass('lihover')
+      }, function () {
+        $(this).parent().find('.tips').removeClass('hover')
+        $(this).parent().removeClass('lihover')
+      })
+    })
+    $(window).resize(function () {
+      var w = $('.col-sm-8').width() / 6
+      var isLi = false
+      if ($('.col-sm-8').width() < 500) {
+        w = $('.col-sm-8').width() / 3
+        isLi = true
       }
-    },
-    mounted: function () {
-      this.init();
-      this.$store.state.activeIndex = '9';
-      $(".case ul li a").each(function(i){
-        $(this).hover(function(){
-          $(this).parent().find(".tips").addClass("hover");
-          $(this).parent().addClass("lihover");
-        },function(){
-          $(this).parent().find(".tips").removeClass("hover");
-          $(this).parent().removeClass("lihover");
-        });
-      });
-      $(window).resize(function(){
-        var w = $(".col-sm-8").width() / 6;
-        var isLi = false;
-        if ($(".col-sm-8").width() < 500) {
-          w = $(".col-sm-8").width() / 3;
-          isLi = true;
-        }
-        w = parseInt(w - 0.5);
-        $(".moxIndex ul li").css("width", w + "px");
-        var h = (w * 160) / 115;
-        $(".t_img").css("height", h + "px");
-        if(isLi){
-          $(".case").css("height", "auto");
-          $(".case").css({"overflow":"hidden"});
-        }else {
-          $(".case").each(function (index,ele) {
-            $(ele).css("height", ($(".moxIndex").eq(index).height()) + "px");
-          });
-        }
-      });
-    },
-    methods: {
-      init() {
-        this.$store.state.fullscreenLoading = true;
-        getIndexData().then(res => {
-          this.code = res.data.code;
-          this.filmTuijian = res.data.data.filmTuijian;
-          this.filmPaiHang = res.data.data.filmPaiHang;
-          this.$store.state.fullscreenLoading = false;
-        }).catch(function (err) {
-          console.log(err);
+      w = parseInt(w - 0.5)
+      $('.moxIndex ul li').css('width', w + 'px')
+      var h = (w * 160) / 115
+      $('.t_img').css('height', h + 'px')
+      if (isLi) {
+        $('.case').css('height', 'auto')
+        $('.case').css({'overflow': 'hidden'})
+      } else {
+        $('.case').each(function (index, ele) {
+          $(ele).css('height', ($('.moxIndex').eq(index).height()) + 'px')
         })
-      },
-      goFilmDetail(filmId) {
-        goPage('/detail/'+filmId);
-      },
-      registerPage() {
-        this.$router.push('register');
-      },
-      // 直接跳转
-      goUrl(url) {
-        window.open(url, '_blank');
       }
+    })
+  },
+  methods: {
+    init () {
+      this.$store.state.fullscreenLoading = true
+      getIndexData().then(res => {
+        this.code = res.data.code
+        this.filmTuijian = res.data.data.filmTuijian
+        this.filmPaiHang = res.data.data.filmPaiHang
+        this.$store.state.fullscreenLoading = false
+      }).catch(function (err) {
+        console.log(err)
+      })
+    },
+    goFilmDetail (filmId) {
+      goPage('/detail/' + filmId)
+    },
+    registerPage () {
+      this.$router.push('register')
+    },
+    // 直接跳转
+    goUrl (url) {
+      window.open(url, '_blank')
     }
   }
+}
 </script>
 
 <style scoped>

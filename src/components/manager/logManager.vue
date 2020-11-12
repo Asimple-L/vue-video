@@ -3,9 +3,9 @@
 </template>
 
 <script>
-    export default {
-        name: "log-manager"
-    }
+export default {
+  name: 'log-manager'
+}
 </script>
 
 <style scoped>

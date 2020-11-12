@@ -3,9 +3,9 @@
 </template>
 
 <script>
-    export default {
-        name: "data-manager"
-    }
+export default {
+  name: 'data-manager'
+}
 </script>
 
 <style scoped>

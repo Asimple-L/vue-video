@@ -287,187 +287,187 @@
 </template>
 
 <script>
-  import { getFilmDetail, errorDeal, dealResult, saveRaty } from '../api/api';
-  import {goPage, ThunderEncode} from "../util/index";
-  import {toFixed} from "../filter/numberFilter";
-  export default {
-      name: "film-detail",
-      data() {
-        return {
-          film: {
-            id: this.$route.params.filmId,
-            name: '',
-            image: '',
-            onDecade: '',
-            status: '',
-            typeName: '',
-            type_id: '',
-            actor: '',
-            locName: '',
-            loc_id: '',
-            updateTime: '',
-            isUse: '',
-            cataLog_id: '',
-            cataLogName: '',
-            subClass_id: '',
-            subClassName: '',
-            isVip: '',
-            plot: '',
-            evaluation: 0.0,
-            resList: [],
-            view_number: '',
-          },
-          userRaty: null,
-          colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
-          totalRatys: 0,
-          resListDupan: [],
-          disabled_flag: false,
-          films:[],
-          resListFlh:[],
-          src: null,
-          resListHttp:[],
-          resListOther:[],
-          resListThunder:[],
-          resListEd2k:[],
-          playerOptions: { // 播放器设置
-            playbackRates: [ 0.5, 0.75, 1.0, 1.5, 2.0, 3.0], //播放速度
-            autoplay: false, //如果true,浏览器准备好时开始回放。
-            muted: false, // 默认情况下将会消除任何音频。
-            loop: false, // 导致视频一结束就重新开始。
-            preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-            language: 'zh-CN',
-            aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-            fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-            sources: [{
-              // type: "video/mp4",
-              type: "video/ogg",
-              src: this.src //url地址
-            }],
-            width: document.documentElement.clientWidth,
-            notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
-            controlBar: {
-              timeDivider: true,
-              durationDisplay: true,
-              remainingTimeDisplay: false,
-              fullscreenToggle: true  //全屏按钮
-            }
-          }
-        }
+import { getFilmDetail, errorDeal, dealResult, saveRaty } from '../api/api'
+import {goPage, ThunderEncode} from '../util/index'
+import {toFixed} from '../filter/numberFilter'
+export default {
+  name: 'film-detail',
+  data () {
+    return {
+      film: {
+        id: this.$route.params.filmId,
+        name: '',
+        image: '',
+        onDecade: '',
+        status: '',
+        typeName: '',
+        type_id: '',
+        actor: '',
+        locName: '',
+        loc_id: '',
+        updateTime: '',
+        isUse: '',
+        cataLog_id: '',
+        cataLogName: '',
+        subClass_id: '',
+        subClassName: '',
+        isVip: '',
+        plot: '',
+        evaluation: 0.0,
+        resList: [],
+        view_number: ''
       },
-      mounted() {
-        if( this.checkFilmId() ) {
-          this.init();
-        }
-      },
-      methods: {
-        checkFilmId() {// 检查初始化参数
-          if( null==this.film.id || ''===this.film.id.trim() ) {
-            this.$message.error({
-              message: '系统错误,请重试!',
-              duration: 2000,
-            });
-            this.$router.go(-1);
-          } else {
-            return true;
-          }
-        },
-        init() { // 初始化
-          this.$store.state.fullscreenLoading = true;
-          getFilmDetail({'filmId':this.film.id}).then( res => {
-            const data = dealResult(res.data);
-            if( null!=data ) {
-              this.film = data.film;
-              this.totalRatys = data.totalRatys;
-              this.resListDupan = data.resListDupan;
-              this.films = data.films;
-              this.resListFlh=data.resListFlh;
-              this.src = data.src;
-              this.resListHttp = data.resListHttp;
-              this.resListOther = data.resListOther;
-              this.resListThunder = data.resListThunder;
-              this.resListEd2k = data.resListEd2k;
-              this.$store.state.fullscreenLoading = false;
-            }
-          }).catch(function (err) {
-            errorDeal(err);
-          })
-        },
-        saveRaty() {// 保存评分
-          const params = {"film_id": this.film.id, "score": this.userRaty*2};
-          saveRaty(params).then( res => {
-            const data = dealResult(res.data);
-            if( null!=data ) {
-              this.film.evaluation = data;
-              this.totalRatys ++;
-              this.$message.success({
-                message: '提交成功',
-                duration: 2000,
-              });
-              this.disabled_flag = true;
-            }
-          }).catch( function (err) {
-            console.log(err);
-          })
-        },
-        goFilmDetail(filmId) {
-          goPage('/detail/'+filmId);
-        },
-        checkListAll() {
-          return ( this.resListHttp!==null && this.resListHttp.length!==0) || (this.resListOther!==null && this.resListOther.length!==0) || (this.resListThunder!==null && this.resListThunder.length!==0) || (this.resListEd2k!==null && this.resListEd2k.length!==0);
-        },
-        checkList() {
-          return ( this.resListHttp!==null && this.resListHttp.length!==0) || (this.resListOther!==null && this.resListOther.length!==0) || (this.resListThunder!==null && this.resListThunder.length!==0);
-        },
-        fk(type) {// TODO 反馈接口，页面迁移完成之后会调用后端接口
-          this.$message.success('反馈成功...');
-        },
-        goAnchor(selector) {
-          this.$el.querySelector(selector).scrollIntoView()
-        },
-        getSubstr(downurl) {
-          let resultStr = downurl;
-          if (downurl.indexOf("ed2k://|file|") === 0) {
-            const tmpStr = resultStr.split('|');
-            if (tmpStr.length > 3) {
-              if (tmpStr[2].length > 0) {
-                resultStr = decodeURIComponent(tmpStr[2]);
-              }
-            }
-            return resultStr;
-          } else {
-            return resultStr;
-          }
-        },
-        Flh() {
-          // TODO 方法待完成
-        },
-        palyVideo(url) {
-          this.playerOptions.sources[0].src = url;
-          this.src = url;
-        },
-        get_movie_name(filename, arsg) {// 获取视频名称
-          let tname = filename.split(arsg);
-          if(tname.length>2) {
-            return this.get_movie_name(tname[(tname.length-1)], ']');
-          }  else {
-            return tname[(tname.length-1)];
-          }
-        }
-      },
-      watch :{
-        '$route': function (to) {
-          this.film.id = to.params.filmId;
-          if( this.checkFilmId() ) {
-            this.init();
-          } else {
-            this.$message.error({
-              message: '系统错误,请重试!',
-              duration: 2000,
-            });
-          }
+      userRaty: null,
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
+      totalRatys: 0,
+      resListDupan: [],
+      disabled_flag: false,
+      films: [],
+      resListFlh: [],
+      src: null,
+      resListHttp: [],
+      resListOther: [],
+      resListThunder: [],
+      resListEd2k: [],
+      playerOptions: { // 播放器设置
+        playbackRates: [ 0.5, 0.75, 1.0, 1.5, 2.0, 3.0], // 播放速度
+        autoplay: false, // 如果true,浏览器准备好时开始回放。
+        muted: false, // 默认情况下将会消除任何音频。
+        loop: false, // 导致视频一结束就重新开始。
+        preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+        language: 'zh-CN',
+        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+        sources: [{
+          // type: "video/mp4",
+          type: 'video/ogg',
+          src: this.src // url地址
+        }],
+        width: document.documentElement.clientWidth,
+        notSupportedMessage: '此视频暂无法播放，请稍后再试', // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
+        controlBar: {
+          timeDivider: true,
+          durationDisplay: true,
+          remainingTimeDisplay: false,
+          fullscreenToggle: true // 全屏按钮
         }
       }
     }
+  },
+  mounted () {
+    if (this.checkFilmId()) {
+      this.init()
+    }
+  },
+  methods: {
+    checkFilmId () { // 检查初始化参数
+      if (this.film.id == null || this.film.id.trim() === '') {
+        this.$message.error({
+          message: '系统错误,请重试!',
+          duration: 2000
+        })
+        this.$router.go(-1)
+      } else {
+        return true
+      }
+    },
+    init () { // 初始化
+      this.$store.state.fullscreenLoading = true
+      getFilmDetail({'filmId': this.film.id}).then(res => {
+        const data = dealResult(res.data)
+        if (data != null) {
+          this.film = data.film
+          this.totalRatys = data.totalRatys
+          this.resListDupan = data.resListDupan
+          this.films = data.films
+          this.resListFlh = data.resListFlh
+          this.src = data.src
+          this.resListHttp = data.resListHttp
+          this.resListOther = data.resListOther
+          this.resListThunder = data.resListThunder
+          this.resListEd2k = data.resListEd2k
+          this.$store.state.fullscreenLoading = false
+        }
+      }).catch(function (err) {
+        errorDeal(err)
+      })
+    },
+    saveRaty () { // 保存评分
+      const params = {'film_id': this.film.id, 'score': this.userRaty * 2}
+      saveRaty(params).then(res => {
+        const data = dealResult(res.data)
+        if (data != null) {
+          this.film.evaluation = data
+          this.totalRatys++
+          this.$message.success({
+            message: '提交成功',
+            duration: 2000
+          })
+          this.disabled_flag = true
+        }
+      }).catch(function (err) {
+        console.log(err)
+      })
+    },
+    goFilmDetail (filmId) {
+      goPage('/detail/' + filmId)
+    },
+    checkListAll () {
+      return (this.resListHttp !== null && this.resListHttp.length !== 0) || (this.resListOther !== null && this.resListOther.length !== 0) || (this.resListThunder !== null && this.resListThunder.length !== 0) || (this.resListEd2k !== null && this.resListEd2k.length !== 0)
+    },
+    checkList () {
+      return (this.resListHttp !== null && this.resListHttp.length !== 0) || (this.resListOther !== null && this.resListOther.length !== 0) || (this.resListThunder !== null && this.resListThunder.length !== 0)
+    },
+    fk (type) { // TODO 反馈接口，页面迁移完成之后会调用后端接口
+      this.$message.success('反馈成功...')
+    },
+    goAnchor (selector) {
+      this.$el.querySelector(selector).scrollIntoView()
+    },
+    getSubstr (downurl) {
+      let resultStr = downurl
+      if (downurl.indexOf('ed2k://|file|') === 0) {
+        const tmpStr = resultStr.split('|')
+        if (tmpStr.length > 3) {
+          if (tmpStr[2].length > 0) {
+            resultStr = decodeURIComponent(tmpStr[2])
+          }
+        }
+        return resultStr
+      } else {
+        return resultStr
+      }
+    },
+    Flh () {
+      // TODO 方法待完成
+    },
+    palyVideo (url) {
+      this.playerOptions.sources[0].src = url
+      this.src = url
+    },
+    get_movie_name (filename, arsg) { // 获取视频名称
+      let tname = filename.split(arsg)
+      if (tname.length > 2) {
+        return this.get_movie_name(tname[(tname.length - 1)], ']')
+      } else {
+        return tname[(tname.length - 1)]
+      }
+    }
+  },
+  watch: {
+    '$route': function (to) {
+      this.film.id = to.params.filmId
+      if (this.checkFilmId()) {
+        this.init()
+      } else {
+        this.$message.error({
+          message: '系统错误,请重试!',
+          duration: 2000
+        })
+      }
+    }
+  }
+}
 </script>
 
 <style lang="css">

@@ -59,60 +59,60 @@
   </div>
 </template>
 <script>
-import Rythm from "rythm.js";
-const rythm = new Rythm();
-const music = require("../../../static/audio/romeostune.mp3");
+import Rythm from 'rythm.js'
+const rythm = new Rythm()
+const music = require('../../../static/audio/romeostune.mp3')
 
 export default {
-  name: "sidebar",
-  data() {
+  name: 'sidebar',
+  data () {
     return {
       isMusicOn: false,
-      menu: [],
-    };
-  },
-  computed: {
-    langType() {
-      return this.$i18n.locale;
+      menu: []
     }
   },
-  created() {
-    this.initRythm();
-    this.$bus.$on("stopMusic", () => {
-      this.isMusicOn = false;
-      rythm.stop();
-    });
+  computed: {
+    langType () {
+      return this.$i18n.locale
+    }
+  },
+  created () {
+    this.initRythm()
+    this.$bus.$on('stopMusic', () => {
+      this.isMusicOn = false
+      rythm.stop()
+    })
     // 初始化侧边栏
-    this.menu = this.$store.state.menu;
+    this.menu = this.$store.state.menu
   },
   methods: {
-    initRythm() {
-      rythm.setMusic(music);
-      rythm.addRythm("twist1", "twist", 0, 10);
-      rythm.addRythm("pulse3", "pulse", 0, 10, {
+    initRythm () {
+      rythm.setMusic(music)
+      rythm.addRythm('twist1', 'twist', 0, 10)
+      rythm.addRythm('pulse3', 'pulse', 0, 10, {
         min: 0.75,
         max: 1.5
-      });
+      })
     },
-    toggleDance() {
+    toggleDance () {
       if (this.isMusicOn) {
-        this.isMusicOn = false;
-        rythm.stop();
+        this.isMusicOn = false
+        rythm.stop()
       } else {
-        this.isMusicOn = true;
-        rythm.start();
+        this.isMusicOn = true
+        rythm.start()
       }
     },
-    goPageByPath(router,relative) {
-      if( !relative ) {
-        let routeData = this.$router.resolve({ path: router });
-        window.open(routeData.href, '_blank');
+    goPageByPath (router, relative) {
+      if (!relative) {
+        let routeData = this.$router.resolve({ path: router })
+        window.open(routeData.href, '_blank')
       } else {
-        this.$router.push({ path: '/manager/'+ router });
+        this.$router.push({ path: '/manager/' + router })
       }
     }
   }
-};
+}
 </script>
 <style scoped type="css">
 .logo {

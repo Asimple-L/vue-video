@@ -38,76 +38,77 @@
             :page-size="pageSize"
             hide-on-single-page
             @current-change="getFilms"
-            class="center"></el-pagination>
+            class="center">
+          </el-pagination>
         </el-col>
       </el-row>
     </div>
 </template>
 
 <script>
-  import {managerFilm, dealResult} from '../../api/api';
-    export default {
-      name: "film-manager",
-      data() {
-          return {
-            filmName: "",// 搜索影片名称
-            total: 0, // 影片总数
-            pageSize: 15,// 一页显示的影片数目
-            films: [], // 影片列表
-            oldFilmName: "", // 保存之前的搜索名称，防止多次刷新
-          }
-      },
-      mounted(){
-        this.getFilms();
-      },
-      methods: {
-        // 获取影片信息
-        getFilms(pageNo) {
-          const param = this.getInitParam(pageNo);
-          managerFilm(param).then(res => {
-            const data = dealResult(res.data);
-            if (data !== null) {
-              this.films = data.pageBean.beanList;
-              this.total = data.pageBean.tr;
-            }
-          }).catch(function (error) {
-            console.log(error);
-          })
-        },
-        // 获取列表请求参数
-        getInitParam(pageNo) {
-          if (pageNo === null) {
-            pageNo = "1";
-          }
-          return {
-            "pc": pageNo,
-            "ps": this.pageSize
-          }
-        },
-        // 影片搜索
-        searchFilm() { // 搜索影片
-          if (this.oldFilmName === this.filmName) {
-            return;
-          }
-          const param = {"ps": this.pageSize, "name": this.filmName};
-          managerFilm(param).then(res => {
-            const data = dealResult(res.data);
-            if (data !== null) {
-              this.films = data.pageBean.beanList;
-              this.total = data.pageBean.tr;
-              this.oldFilmName = this.filmName;
-            }
-          }).catch(function (error) {
-            console.log(error);
-          })
-        },
-        // 进入影片上传页面
-        goUploadPage(filmId) {
-          let routeData = this.$router.resolve({path: '/upload', query: {filmId: filmId, isAdmin: true}});
-          window.open(routeData.href, '_blank');
-        }
-      }
+import {managerFilm, dealResult} from '../../api/api'
+export default {
+  name: 'film-manager',
+  data () {
+    return {
+      filmName: '', // 搜索影片名称
+      total: 0, // 影片总数
+      pageSize: 15, // 一页显示的影片数目
+      films: [], // 影片列表
+      oldFilmName: '' // 保存之前的搜索名称，防止多次刷新
     }
+  },
+  mounted () {
+    this.getFilms()
+  },
+  methods: {
+    // 获取影片信息
+    getFilms (pageNo) {
+      const param = this.getInitParam(pageNo)
+      managerFilm(param).then(res => {
+        const data = dealResult(res.data)
+        if (data !== null) {
+          this.films = data.pageBean.beanList
+          this.total = data.pageBean.tr
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    // 获取列表请求参数
+    getInitParam (pageNo) {
+      if (pageNo === null) {
+        pageNo = '1'
+      }
+      return {
+        'pc': pageNo,
+        'ps': this.pageSize
+      }
+    },
+    // 影片搜索
+    searchFilm () { // 搜索影片
+      if (this.oldFilmName === this.filmName) {
+        return
+      }
+      const param = {'ps': this.pageSize, 'name': this.filmName}
+      managerFilm(param).then(res => {
+        const data = dealResult(res.data)
+        if (data !== null) {
+          this.films = data.pageBean.beanList
+          this.total = data.pageBean.tr
+          this.oldFilmName = this.filmName
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    // 进入影片上传页面
+    goUploadPage (filmId) {
+      let routeData = this.$router.resolve({path: '/upload', query: {filmId: filmId, isAdmin: true}})
+      window.open(routeData.href, '_blank')
+    }
+  }
+}
 </script>
 
 <style scoped>
