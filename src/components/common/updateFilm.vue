@@ -6,7 +6,7 @@
           修改视频信息
         </el-col>
         <el-col :span="4">
-          <el-button type="danger">删除影片</el-button>
+          <el-button type="danger" @click="deleteFilm()">删除影片</el-button>
         </el-col>
         <el-col :span="4">
           <el-button type="primary">保存修改信息</el-button>
@@ -29,7 +29,7 @@
             v-model="film.name"
             clearable
             placeholder="请输入影片名称"
-            maxlength="20"></el-input>
+            maxlength="20"/>
         </el-col>
       </el-row>
       <el-row>
@@ -139,7 +139,7 @@
         <el-col :span="21">
           <el-input
             v-model="film.actor"
-            placeholder="请填写演员名称，多个演员请用逗号隔开"></el-input>
+            placeholder="请填写演员名称，多个演员请用逗号隔开"/>
         </el-col>
       </el-row>
       <el-row>
@@ -162,7 +162,7 @@
           剧情:
         </el-col>
         <el-col :span="21">
-          <el-input type="textarea" autosize v-model="film.plot"></el-input>
+          <el-input type="textarea" autosize v-model="film.plot"/>
         </el-col>
       </el-row>
       <el-row>
@@ -245,7 +245,8 @@
             placeholder="请填写资源名"
             v-model="uploadRes.name"
             id="res_name"
-            style="width: 60%;"></el-input>
+            style="width: 60%;">
+          </el-input>
           <span style="color:red;">*</span>
           <span style="color:#ddd;">(若百度资源请将密码填在此处，无需填写名称)</span>
           <el-button type="text" @click="fullText">多资源模板</el-button>
@@ -280,7 +281,8 @@
             class="input contentType addResInput"
             placeholder="请填写资源链接，并在下个选择栏选择正确的资源类型"
             autocomplete="off"
-            style="width: 95%"></el-input>
+            style="width: 95%">
+          </el-input>
           <span style="color:red;">*</span>
         </el-col>
       </el-row>
@@ -293,7 +295,8 @@
               v-for="item in linkTypes"
               :key="item.type"
               :value="item.type"
-              :label="item.name"></el-option>
+              :label="item.name">
+            </el-option>
           </el-select>
           <span style="color:red;">*</span>
         </el-col>
@@ -313,7 +316,7 @@
 </template>
 
 <script>
-import {getFilm, dealResultWithoutData, dealResult, getCatagLog, addFilm, addRes} from '../../api/api'
+import {getFilm, dealResultWithoutData, dealResult, getCatagLog, addFilm, addRes, delFilm} from '../../api/api'
 import {stringIsEmpty} from '../../util/index'
 export default {
   name: 'update-film',
@@ -497,7 +500,6 @@ export default {
         }).catch(function (error) {
           console.log(error)
         })
-        alert('上传了视频')
       }
     },
     // 检查是否满足提交条件,可能不全，但是基本都一样，就这样了
@@ -591,6 +593,19 @@ export default {
       addRes(params).then(res => {
         if (dealResultWithoutData(res.data)) {
           this.getFilmInfo()
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    // 删除电影
+    deleteFilm () {
+      const params = {'id': this.filmId}
+      delFilm(params).then(res => {
+        if (dealResultWithoutData(res)) {
+          setTimeout(function () {
+            window.close()
+          }, 2000)
         }
       }).catch(function (error) {
         console.log(error)
