@@ -9,7 +9,7 @@
           <el-button type="danger" @click="deleteFilm()">删除影片</el-button>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary">保存修改信息</el-button>
+          <el-button type="primary" @click="updateFilm()">保存修改信息</el-button>
         </el-col>
       </el-row>
       <el-row v-else>
@@ -316,7 +316,7 @@
 </template>
 
 <script>
-import {getFilm, dealResultWithoutData, dealResult, getCatagLog, addFilm, addRes, delFilm} from '../../api/api'
+import {getFilm, dealResultWithoutData, dealResult, getCatagLog, addFilm, addRes, delFilm, updateFilmInfo} from '../../api/api'
 import {stringIsEmpty} from '../../util/index'
 export default {
   name: 'update-film',
@@ -496,6 +496,10 @@ export default {
           if (data != null) {
             this.film.id = data.id
             this.uploadRes.filmId = data.id
+            this.$message.success({
+              message: '提交成功',
+              duration: 2000
+            })
           }
         }).catch(function (error) {
           console.log(error)
@@ -600,9 +604,9 @@ export default {
     },
     // 删除电影
     deleteFilm () {
-      const params = {'id': this.filmId}
+      const params = {'filmId': this.filmId}
       delFilm(params).then(res => {
-        if (dealResultWithoutData(res)) {
+        if (dealResultWithoutData(res.data)) {
           setTimeout(function () {
             window.close()
           }, 2000)
@@ -610,6 +614,17 @@ export default {
       }).catch(function (error) {
         console.log(error)
       })
+    },
+    updateFilm () {
+      if (this.checkSubmit()) {
+        this.film.isVip = this.film.isVip ? '0' : '1'
+        this.film.isUse = '1'
+        updateFilmInfo(this.film).then(res => {
+          dealResultWithoutData(res.data)
+        }).catch(function (error) {
+          console.log(error)
+        })
+      }
     }
   }
 }

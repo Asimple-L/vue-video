@@ -20,91 +20,91 @@
 </template>
 
 <script>
-  import {updatePassword, dealResultWithoutData } from '../../api/api';
-  import {goPage } from '../../util/index';
-    export default {
-      // 更新信息页面
-      name: "update-info",
-      data() {
-        let validatePass = (rule, value, callback) => {
-          if (value === '') {
-            callback(new Error('请输入密码'));
-          } else {
-            if (this.ruleForm.checkPass !== '') {
-              this.$refs.ruleForm.validateField('checkPass');
-            }
-            callback();
-          }
-        };
-        let validatePass2 = (rule, value, callback) => {
-          if (value === '') {
-            callback(new Error('请再次输入密码'));
-          } else if (value !== this.ruleForm.pass) {
-            callback(new Error('两次输入密码不一致!'));
-          } else {
-            callback();
-          }
-        };
-        let validatePass3 = (rule, value, callback) => {
-          if (value === '') {
-            callback(new Error('请输入旧密码'));
-          } else {
-            callback();
-          }
-        };
-        return {
-          ruleForm: {// 表单信息
-            oldPwd: '',
-            pass: '',
-            checkPass: '',
-          },
-          rules: { // 校验规则
-            oldPwd: [
-              { validator: validatePass3, trigger: 'blur' }
-            ],
-            pass: [
-              { validator: validatePass, trigger: 'blur' }
-            ],
-            checkPass: [
-              { validator: validatePass2, trigger: 'blur' }
-            ],
-          },
+import {updatePassword, dealResultWithoutData} from '../../api/api'
+import {goPage} from '../../util/index'
+export default {
+  // 更新信息页面
+  name: 'update-info',
+  data () {
+    let validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.ruleForm.checkPass !== '') {
+          this.$refs.ruleForm.validateField('checkPass')
         }
-      },
-      methods: {
-        submitForm(formName) {
-          this.$refs[formName].validate((valid) => {
-            if (valid) {
-              const param = this.getParam();
-              updatePassword(param).then( res => {
-                const data = dealResultWithoutData(res.data);
-                if( data === true ) {
-                  this.$store.state.user = null;
-                  this.goIndexPage();
-                }
-              }).catch(function (err) {
-                console.log(err);
-              })
-            } else {
-              return false;
-            }
-          });
-        },
-        resetForm(formName) {
-          this.$refs[formName].resetFields();
-        },
-        getParam() {
-          return {
-            "oldPwd": this.ruleForm.oldPwd,
-            "newPwd": this.ruleForm.newPwd,
-            "uid": this.$store.state.user.id,
-          }
-        },
-        goIndexPage() {
-          goPage('/');
-        }
+        callback()
       }
     }
+    let validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.ruleForm.pass) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
+    let validatePass3 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入旧密码'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      ruleForm: {// 表单信息
+        oldPwd: '',
+        pass: '',
+        checkPass: ''
+      },
+      rules: { // 校验规则
+        oldPwd: [
+          { validator: validatePass3, trigger: 'blur' }
+        ],
+        pass: [
+          { validator: validatePass, trigger: 'blur' }
+        ],
+        checkPass: [
+          { validator: validatePass2, trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  methods: {
+    submitForm (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          const param = this.getParam()
+          updatePassword(param).then(res => {
+            const data = dealResultWithoutData(res.data)
+            if (data === true) {
+              this.$store.state.user = null
+              this.goIndexPage()
+            }
+          }).catch(function (err) {
+            console.log(err)
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    resetForm (formName) {
+      this.$refs[formName].resetFields()
+    },
+    getParam () {
+      return {
+        'oldPwd': this.ruleForm.oldPwd,
+        'newPwd': this.ruleForm.newPwd,
+        'uid': this.$store.state.user.id
+      }
+    },
+    goIndexPage () {
+      goPage('/')
+    }
+  }
+}
 </script>
 
 <style scoped>

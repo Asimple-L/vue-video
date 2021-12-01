@@ -208,3 +208,8 @@ export const delFilm = params => {
   const url = baseProfileUrl + '/delFilm'
   return axios.post(url, Qs.stringify(params))
 }
+
+export const updateFilmInfo = params => {
+  const url = baseProfileUrl + '/updateFilmInfo'
+  return axios.post(url, Qs.stringify(params))
+}
