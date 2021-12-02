@@ -174,7 +174,9 @@
           <el-switch
             v-model="film.isVip"
             active-text="是"
-            inactive-text="否">
+            inactive-text="否"
+            :active-value="1"
+            :inactive-value="0">
           </el-switch>
         </el-col>
       </el-row>
@@ -358,7 +360,7 @@ export default {
         // 二级目录名称
         subClassName: '',
         // 是否vip资源
-        isVip: '1',
+        isVip: 1,
         // 剧情介绍
         plot: '',
         // 评分
@@ -396,7 +398,7 @@ export default {
         linkType: '',
         // 是否有用
         isUse: '1'
-      }// 等待上传的资源
+      } // 等待上传的资源
     }
   },
   mounted () {
@@ -489,7 +491,6 @@ export default {
     // 上传/修改视频
     submitFilm () {
       if (this.checkSubmit()) {
-        this.film.isVip = this.film.isVip ? '0' : '1'
         this.film.isUse = '1'
         addFilm(this.film).then(res => {
           const data = dealResult(res.data)
@@ -617,10 +618,10 @@ export default {
     },
     updateFilm () {
       if (this.checkSubmit()) {
-        this.film.isVip = this.film.isVip ? '0' : '1'
         this.film.isUse = '1'
         updateFilmInfo(this.film).then(res => {
           dealResultWithoutData(res.data)
+          this.getFilmInfo()
         }).catch(function (error) {
           console.log(error)
         })
