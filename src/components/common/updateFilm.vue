@@ -427,20 +427,22 @@ export default {
       })
     },
     getFilmInfo () {
-      // 如果有传过来影片ID说明是编辑，需要获取影片信息
-      getFilm({'filmId': this.filmId}).then(res => {
-        const data = dealResult(res.data)
-        if (data !== null) {
-          this.film = data.film
-          this.res = data.res
-        } else {
-          setTimeout(function () {
-            window.close()
-          }, 2000)
-        }
-      }).catch(function (error) {
-        console.log(error)
-      })
+      if (this.filmId) {
+        // 如果有传过来影片ID说明是编辑，需要获取影片信息
+        getFilm({'filmId': this.filmId}).then(res => {
+          const data = dealResult(res.data)
+          if (data !== null) {
+            this.film = data.film
+            this.res = data.res
+          } else {
+            setTimeout(function () {
+              window.close()
+            }, 2000)
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+      }
     },
     // 资源上传成功后调用的方法
     uploadResSuccess (response) {
