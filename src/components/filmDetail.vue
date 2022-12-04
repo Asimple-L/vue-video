@@ -387,6 +387,8 @@ export default {
           this.resListThunder = data.resListThunder
           this.resListEd2k = data.resListEd2k
           this.$store.state.fullscreenLoading = false
+        } else {
+          this.$router.go(-1)
         }
       }).catch(function (err) {
         errorDeal(err)
